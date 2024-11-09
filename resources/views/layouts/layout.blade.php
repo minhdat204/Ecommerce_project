@@ -30,7 +30,7 @@
 <body>
     @include('partials.header')
 
-   @include('partials.shop.breadcrumb')
+   @include('partials.breadcrumb')
 
     @yield('content')
 

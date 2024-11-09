@@ -66,10 +66,10 @@
                 <div class="col-lg-5">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="./index.html">Home</a></li>
-                            <li class="active"><a href="./shop-grid.html">Shop</a></li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                            <li><a href="{{route('users.home')}}">Home</a></li>
+                            <li class="active"><a href="{{route('users.shop')}}">Shop</a></li>
+                            <li><a href="{{route('users.blog')}}">Blog</a></li>
+                            <li><a href="{{route('users.contact')}}">Contact</a></li>
                         </ul>
                     </nav>
                 </div>

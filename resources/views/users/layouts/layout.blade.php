@@ -28,15 +28,15 @@
 </head>
 
 <body>
-    @include('partials.header')
+    @include('users.partials.header')
 
-   @include('partials.breadcrumb')
+   @include('users.partials.breadcrumb')
 
     @yield('content')
 
-    @include('partials.footer')
+    @include('users.partials.footer')
 
-    @include('partials.chat-widget')
+    @include('users.partials.chat-widget')
 
     <!--Bootstrap Js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

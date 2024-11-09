@@ -1,4 +1,4 @@
-@extends('layouts.layout')
+@extends('users.layouts.layout')
 
 @section('content')
     <!-- Product Section Begin -->
@@ -8,21 +8,21 @@
                 <div class="col-lg-3 col-md-5">
                     <div class="sidebar">
                         <div class="sidebar__item">
-                            @include('partials.shop.department')
+                            @include('users.partials.shop.department')
                         </div>
                         <div class="sidebar__item">
-                            @include('partials.shop.price-filter')
+                            @include('users.partials.shop.price-filter')
                         </div>
                         <div class="sidebar__item">
-                            @include('partials.shop.latest-products')
+                            @include('users.partials.shop.latest-products')
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-9 col-md-7">
                     <div class="product__discount">
-                        @include('partials.shop.products-discount')
+                        @include('users.partials.shop.products-discount')
                     </div>
-                    @include('partials.shop.products-content')
+                    @include('users.partials.shop.products-content')
                 </div>
             </div>
         </div>

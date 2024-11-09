@@ -20,9 +20,9 @@
                 </div>
                 <div class="col-lg-9 col-md-7">
                     <div class="product__discount">
-                        @include('partials.shop.product-discount')
+                        @include('partials.shop.products-discount')
                     </div>
-                    @include('partials.shop.product-content')
+                    @include('partials.shop.products-content')
                 </div>
             </div>
         </div>

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
 
-use App\Models\Statistical;
 use Illuminate\Http\Request;
 
-class StatisticalController extends Controller
+class ProductController
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +33,7 @@ class StatisticalController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Statistical $statistical)
+    public function show(string $id)
     {
         //
     }
@@ -42,7 +41,7 @@ class StatisticalController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Statistical $statistical)
+    public function edit(string $id)
     {
         //
     }
@@ -50,7 +49,7 @@ class StatisticalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Statistical $statistical)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -58,7 +57,7 @@ class StatisticalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Statistical $statistical)
+    public function destroy(string $id)
     {
         //
     }

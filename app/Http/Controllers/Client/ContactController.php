@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Models\Contact;
+
 use Illuminate\Http\Request;
 
 class ContactController
@@ -27,7 +29,22 @@ class ContactController
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'ten' => 'required|string|max:100',
+            'email' => 'required|email|max:100',
+            'sodienthoai' => 'nullable|string|max:20', 
+            'noidung' => 'required|string',
+        ]);
+
+        Contact::create([
+            'id_nguoidung'=>NULL,
+            'ten'=>$request->input('ten'),
+            'email'=>$request-> input('email'),
+            'sodienthoai'=>$request->input('sodienthoai', '000000000'),
+            'noidung'=>$request->input('noidung'),
+            'trangthai'=>'new',
+        ]); 
+        return view('users.pages.contact');
     }
 
     /**

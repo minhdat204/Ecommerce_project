@@ -17,9 +17,11 @@ use App\Http\Controllers\Client\DashboardController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\StatisticalController;
-Route::get('/profile', function () {
-    return view('users.pages.profile');
-});
+use App\Http\Controllers\Client\ProfileController;
+Route::resource('profile', ProfileController::class); // Case ID = 2 Test 
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+// }); 
 Route::get('/', function () {
     return view('users.pages.home');
 })->name('users.home');

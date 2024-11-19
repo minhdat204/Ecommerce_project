@@ -17,7 +17,9 @@ use App\Http\Controllers\Client\DashboardController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\StatisticalController;
-
+Route::get('/profile', function () {
+    return view('users.pages.profile');
+});
 Route::get('/', function () {
     return view('users.pages.home');
 })->name('users.home');

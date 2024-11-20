@@ -9,24 +9,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const tabs = document.querySelectorAll('.profile-navigation a');
-            const tabPanes = document.querySelectorAll('.profile-tab-pane');
+    const tabs = document.querySelectorAll('.profile-navigation a');
+    const tabPanes = document.querySelectorAll('.profile-tab-pane');
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', function (e) {
+                e.preventDefault();
 
-            tabs.forEach((tab, index) => {
-                tab.addEventListener('click', function (e) {
-                    e.preventDefault();
+                // Loại bỏ lớp active khỏi tất cả tab và ẩn các pane
+                tabs.forEach((t) => t.classList.remove('active'));
+                tabPanes.forEach((pane) => pane.style.display = 'none');
 
-                    // Remove active class from all tabs
-                    tabs.forEach((t) => t.classList.remove('active'));
-                    // Hide all panes
-                    tabPanes.forEach((pane) => pane.style.display = 'none');
-
-                    // Add active class to clicked tab and show respective pane
-                    tab.classList.add('active');
-                    tabPanes[index].style.display = 'block';
-                });
+                // Thêm lớp active vào tab được nhấn và hiển thị nội dung pane
+                tab.classList.add('active');
+                tabPanes[index].style.display = 'block';
             });
         });
+
+        // Đảm bảo tab Favorites hiển thị nếu có lỗi khi reload lại
+        if (window.location.hash === '#favorites') {
+            tabs[1].click();
+    }
+});
     </script>
 @endpush
 
@@ -35,9 +38,7 @@
     <!-- Navigation Tabs -->
     <ul class="profile-navigation">
         <li><a href="#" class="active">Personal Info</a></li>
-        <li><a href="#">Orders</a></li>
-        <li><a href="#">Favorites</a></li>
-        <li><a href="#">Reviews</a></li>
+        <li><a href="#">Favorites List</a></li>
     </ul>
 
     <!-- Tab Content -->
@@ -51,7 +52,7 @@
                         <div class="row">
                             <div class="col-md-4 text-center">
                                 <div class="profile-avatar">
-                                    <img src="{{  asset('img/logo.png') }}" alt="User Avatar" class="img-fluid rounded-circle" width="150">
+                                    <img src="{{  asset('img/avatar.jpg') }}" alt="User Avatar" class="img-fluid rounded-circle" width="150">
                                 </div>
                             </div>
                             <div class="col-md-8">
@@ -62,7 +63,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="user-id" class="form-label">User ID</label>
-                                        <input type="text" class="form-control" id="user-id" name="id_nguoidung" value="{{ $user->id_nguoidung }}">
+                                        <input type="text" class="form-control" id="user-id" name="id_nguoidung" value="{{ $user->id_nguoidung }}" readonly>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -110,33 +111,36 @@
             </form>
         </div>
 
-        <!-- Favorites Tab -->
-        <div class="profile-tab-pane" style="display: none;">
-            <div class="favorite-page-container">
-                <div class="favorite-page-list">
-                    @for ($i = 0; $i < 2; $i++)
-                        <div class="favorite-page-item">
-                            <div class="favorite-page-item-info">
-                                <img src="#" alt="Image" class="favorite-page-item-image">
-                                <div>
-                                    <h3>Bò Wagyu</h3>
-                                    <p>Thành tiền: 1.000.000đ</p>
-                                </div>
-                            </div>
-                            <div class="favorite-page-item-actions">
-                                <button class="favorite-page-btn-redeem">Redeem again</button>
-                                <button class="favorite-page-btn-contact">Contact Seller</button>
+       <!-- Favorites List Tab -->
+       <div class="profile-tab-pane" style="display: none;">
+    <div class="favorite-page-container">
+        <div class="row">
+            @forelse ($favorites as $favorite)
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                    <img src="{{ asset('img/product/'.$favorite->image) }}" class="card-img-top" alt="{{ $favorite->tensanpham }}" style="height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $favorite->tensanpham }}</h5>
+                            <p class="card-text text-muted">{{ number_format($favorite->gia, 0, ',', '.') }}đ</p>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-primary">Redeem Again</button>
+                                <button class="btn btn-sm btn-secondary">Contact Seller</button>
                             </div>
                         </div>
-                    @endfor
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Reviews Tab -->
-        <div class="profile-tab-pane" style="display: none;">
-            <p>Content for Reviews tab goes here.</p>
+            @empty
+                <div class="col-12">
+                    <p class="text-center">No favorites found ! Thanks </p>
+                </div>
+            @endforelse
         </div>
     </div>
+    <!-- Pagination -->
+    <div class="pagination-container mt-4">
+        {{ $favorites->links() }}
+    </div>
 </div>
+
+
 @endsection

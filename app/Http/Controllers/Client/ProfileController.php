@@ -79,5 +79,10 @@ class ProfileController extends Controller
     {
         //
     }
+    public function favorite()
+    {
+    // Thực hiện các logic cần thiết cho trang Favorites
+        return view('users.profile.favorite'); // Trả về view cho trang Favorites
+    }
 }
 // node : Sẽ làm cn Edit nếu có thời gian !.

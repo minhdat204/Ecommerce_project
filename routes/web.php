@@ -18,7 +18,11 @@ use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\StatisticalController;
 use App\Http\Controllers\Client\ProfileController;
-Route::resource('profile', ProfileController::class); // Case ID = 2 Test 
+Route::get('/profile/favorite', [ProfileController::class, 'favorite'])->name('users.profile.favorite');
+Route::resource('profile', ProfileController::class)->names([
+    'index'   => 'profile.index',
+]);
+// Case ID = 2 Test 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 // }); 

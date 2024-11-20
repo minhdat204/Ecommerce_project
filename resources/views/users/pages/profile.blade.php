@@ -2,15 +2,12 @@
 
 @section('content')
 <div class="container mt-5">
-    <!-- Tabs -->
-    <ul class="nav nav-tabs" id="profileTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="information-tab" data-bs-toggle="tab" data-bs-target="#information" type="button" role="tab" aria-controls="information" aria-selected="true">
-                Information
-            </button>
-        </li>
+    <ul class="tabs">
+        <li><a href="{{ route('profile.index') }}">Imformation</a></li>
+        <li><a href="#">Order</a></li>
+        <li><a href="{{ route('users.profile.favorite') }}">Favorites</a></li>
+        <li><a href="#">Ratings</a></li>
     </ul>
-
     <div class="tab-content mt-4" id="profileTabsContent">
         <form method="POST" action="{{ route('profile.update', $user->id_nguoidung) }}">
             @csrf
@@ -86,7 +83,9 @@
 
                 <div class="d-flex justify-content-center mt-4">
                     <button class="btn btn-lg me-3 btn-hover-shadow rounded-pill px-5 btn-order">Your Order</button>
-                    <button class="btn btn-danger btn-lg me-3 btn-hover-shadow rounded-pill px-5">Favorite List</button>
+                    <a href="{{ route('users.profile.favorite') }}" class="btn btn-danger btn-lg me-3 btn-hover-shadow rounded-pill px-5">
+                        Favorite List
+                    </a>                    
                     <button class="btn btn-success btn-lg btn-hover-shadow rounded-pill px-5">Score List</button>
                 </div>
             </div>

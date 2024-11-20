@@ -1,152 +1,101 @@
-/* Container Styling */
-.container {
+/* Profile Navigation */
+.profile-navigation {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    border-bottom: 2px solid #ddd;
+}
+
+.profile-navigation li {
+    margin-right: 15px;
+}
+
+.profile-navigation a {
+    text-decoration: none;
+    padding: 10px 20px;
     background: #f9f9f9;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-bottom: none;
+    color: #333;
+    transition: background 0.3s ease;
 }
 
-/* Tabs Styling */
-.nav-tabs .nav-link {
-    color: #6c757d;
-}
-
-.nav-tabs .nav-link.active {
-    color: #495057;
-    font-weight: bold;
-    border-color: transparent transparent #ddd;
-}
-
-/* Profile Picture Section */
-.profile-picture img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid #ddd;
-}
-
-.profile-picture button {
-    margin-top: -40px;
-    margin-left: 50%;
-    transform: translateX(-50%);
+.profile-navigation a.active,
+.profile-navigation a:hover {
     background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    padding: 5px 7px;
+    color: #007bff;
+    border-color: #007bff;
 }
 
-/* Form Labels and Inputs */
-label {
-    font-weight: bold;
-    color: #555;
-}
-
-input, select {
+.profile-tab-pane {
+    display: none;
+    padding: 20px;
     background: #fff;
     border: 1px solid #ddd;
+    border-top: none;
+}
+
+.profile-tab-pane.active {
+    display: block;
+}
+
+/* Profile Avatar */
+.profile-avatar img {
+    border: 3px solid #007bff;
+    padding: 5px;
+    transition: transform 0.3s ease;
+}
+
+.profile-avatar img:hover {
+    transform: scale(1.1);
+}
+
+/* Form Styles */
+.form-control,
+.form-select {
+    border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
-    font-size: 14px;
-    height: 38px;
-    line-height: 1.5;
+    transition: border-color 0.3s ease;
 }
 
-/* Align Form Fields */
-.row .col-md-6 {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+.form-control:focus,
+.form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-.form-label {
-    margin-bottom: 5px;
-}
-
-/* Button Styling */
-button {
-    font-size: 14px;
-}
-
-.btn-outline-secondary {
-    color: #6c757d;
-    border-color: #ddd;
-}
-
-.btn-outline-secondary:hover {
-    background-color: #f9f9f9;
-    border-color: #ccc;
-}
-
-.text-end .btn-primary {
-    background-color: #4a90e2;
-    border-color: #4a90e2;
-}
-
-.text-end .btn-primary:hover {
-    background-color: #3a78c2;
-}
-
-/* Email Section */
-.my-email-address {
-    background: #fff;
+/* Email Address Section */
+.email-address-section {
+    background-color: #f8f9fa;
     padding: 15px;
-    border: 1px solid #ddd;
     border-radius: 10px;
-    margin-top: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.my-email-address p {
+.email-address-section h5 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.email-address-section p {
     margin: 0;
-    font-size: 14px;
-    color: #555;
+    font-weight: bold;
 }
 
-.my-email-address small {
-    color: #999;
+.email-address-section small {
+    font-size: 0.85rem;
+    color: #6c757d;
 }
 
-hr {
-    border: 0;
-    border-top: 2px solid #ccc; /* Dòng kẻ ngang màu xám */
-    margin-top: 10px; /* Giảm khoảng cách trên để dòng kẻ xích lên */
-    margin-bottom: 20px;
-}
-.btn-hover-shadow {
-    transition: all 0.3s ease;
+/* Action Buttons */
+.action-buttons .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-.btn-hover-shadow:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transform: translateY(-4px);
-}
-
-/* Nút "Your Order" nổi bật */
-.btn-order {
-    background-color: #007bff; /* Màu nền xanh dương */
-    border-color: #000000; /* Viền đen */
-    font-weight: 900; /* In đậm chữ */
-    text-transform: uppercase; /* Chữ in hoa */
-    letter-spacing: 1px; /* Khoảng cách giữa các chữ */
-    border-width: 2%; /* Độ dày viền */
-}
-
-.btn-order:hover {
-    background-color: #0056b3; /* Đổi màu nền khi hover */
-    border-color: #000000; /* Giữ viền đen khi hover */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Tăng hiệu ứng shadow khi hover */
-    transform: translateY(-6px); /* Nâng nút lên khi hover */
-}
-
-/* Nút "Favorite List" */
-.btn-danger {
-    background-color: #dc3545; /* Đỏ tươi */
-    border-color: #dc3545;
-}
-
-/* Nút "Score List" */
-.btn-success {
-    background-color: #28a745; /* Xanh lá cây */
-    border-color: #28a745;
+.action-buttons .btn:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
 }

@@ -1,168 +1,144 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 0;
-}
-
-.favorites {
-    width: 90%;
+/* Container chính */
+.favorite-page-container {
+    margin: 20px auto;
     max-width: 800px;
-    margin: 40px auto;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    animation: fadeIn 0.5s ease;
+    font-family: Arial, sans-serif;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.tabs {
+/* Tabs */
+.favorite-page-tabs {
     display: flex;
-    justify-content: space-around;
-    list-style: none;
+    list-style-type: none;
     padding: 0;
     margin: 0 0 20px;
-    border-bottom: 2px solid #e0e0e0;
+    border-bottom: 2px solid #ddd;
 }
 
-.tabs li {
-    margin: 0;
+.favorite-page-tabs li {
+    margin-right: 15px;
 }
 
-.tabs li a {
+.favorite-page-tabs a {
     text-decoration: none;
-    color: #666;
-    padding: 10px 20px;
-    font-size: 16px;
-    transition: color 0.3s, border-bottom 0.3s;
+    color: #555;
+    padding: 10px 15px;
+    display: inline-block;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
 }
 
-.tabs li a:hover {
-    color: #007bff;
-}
-
-.tabs .active a {
-    color: #007bff;
+.favorite-page-tab-active a {
+    color: #000;
+    background-color: #f9f9f9;
+    border-color: #ddd;
     font-weight: bold;
-    border-bottom: 3px solid #007bff;
 }
 
-.favorite-list {
-    margin-top: 20px;
+/* Danh sách yêu thích */
+.favorite-page-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.favorite-item {
+.favorite-page-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    border-bottom: 1px solid #e0e0e0;
-    transition: background-color 0.3s;
-}
-
-.favorite-item:hover {
-    background-color: #f9f9f9;
-}
-
-.item-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.item-image {
-    width: 70px;
-    height: 70px;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    background: #e0e0e0;
+    background-color: #fff;
+}
+
+.favorite-page-item-info {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.favorite-page-item-image {
+    width: 80px;
+    height: 80px;
     object-fit: cover;
+    border-radius: 4px;
 }
 
-.item-info h3 {
-    margin: 0;
+.favorite-page-item-info h3 {
+    margin: 0 0 5px;
     font-size: 18px;
-    color: #333;
+    font-weight: bold;
 }
 
-.item-info p {
-    margin: 5px 0 0;
-    color: #666;
+.favorite-page-item-info p {
+    margin: 0;
     font-size: 14px;
+    color: #777;
 }
 
-.item-actions {
+/* Hành động trên từng mục */
+.favorite-page-item-actions {
     display: flex;
     gap: 10px;
 }
 
-.item-actions .btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+.favorite-page-btn-redeem,
+.favorite-page-btn-contact {
+    padding: 8px 12px;
     font-size: 14px;
-    transition: all 0.3s;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-.btn-redeem {
+.favorite-page-btn-redeem {
     background-color: #28a745;
     color: #fff;
 }
 
-.btn-redeem:hover {
+.favorite-page-btn-redeem:hover {
     background-color: #218838;
-    transform: scale(1.05);
 }
 
-.btn-contact {
+.favorite-page-btn-contact {
     background-color: #007bff;
     color: #fff;
 }
 
-.btn-contact:hover {
+.favorite-page-btn-contact:hover {
     background-color: #0056b3;
-    transform: scale(1.05);
 }
 
-.pagination {
+/* Phân trang */
+.favorite-page-pagination {
     margin-top: 20px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 }
 
-.pagination button {
-    border: 1px solid #ddd;
-    background: #fff;
+.favorite-page-pagination button {
     padding: 8px 12px;
-    margin: 0 5px;
-    border-radius: 6px;
-    cursor: pointer;
     font-size: 14px;
-    transition: all 0.3s;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    color: #555;
+    cursor: pointer;
+    border-radius: 4px;
 }
 
-.pagination button:hover {
+.favorite-page-pagination button:hover {
     background-color: #f0f0f0;
-    transform: scale(1.1);
 }
 
-.pagination .active {
-    background: #007bff;
+.favorite-page-pagination-active {
+    background-color: #007bff;
     color: #fff;
     border-color: #007bff;
 }
 
-.pagination .prev,
-.pagination .next {
+.favorite-page-prev,
+.favorite-page-next {
     font-weight: bold;
 }

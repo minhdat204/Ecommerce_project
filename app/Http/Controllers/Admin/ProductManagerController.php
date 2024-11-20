@@ -21,32 +21,37 @@ class ProductManagerController
      * Show the form for creating a new product.
      */
     public function create()
-    {
-        $categories = Category::all(); // Fetch all categories
-        return view('admin.pages.product.create', compact('categories'));
-    }
+{
+    $categories = Category::all(); // Lấy tất cả danh mục từ bảng danh_muc
+    return view('admin.pages.product.create', compact('categories'));
+}
+
+
 
     /**
      * Store a newly created product in storage.
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'tensanpham' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:san_pham',
-            'mota' => 'required|string',
-            'gia' => 'required|numeric',
-            'gia_khuyen_mai' => 'nullable|numeric',
-            'donvitinh' => 'required|string',
-            'xuatxu' => 'required|string',
-            'soluong' => 'required|integer',
-            'trangthai' => 'required|boolean',
-            'luotxem' => 'nullable|integer',
-        ]);
+{
+    $request->validate([
+        'tensanpham' => 'required|string|max:255',
+        'slug' => 'required|string|max:255|unique:san_pham',
+        'mota' => 'required|string',
+        'gia' => 'required|numeric',
+        'gia_khuyen_mai' => 'nullable|numeric',
+        'donvitinh' => 'required|string',
+        'thongtin_kythuat'=> 'required|string',
+        'xuatxu' => 'required|string',
+        'soluong' => 'required|integer',
+        'trangthai' => 'required|boolean',
+        'luotxem' => 'nullable|integer',
+        'id_danhmuc' => 'required|exists:danh_muc,id_danhmuc', // Kiểm tra id_danhmuc có tồn tại
+    ]);
 
-        Product::create($request->all());
-        return redirect()->route('admin.product.index');
-    }
+    Product::create($request->all());
+    return redirect()->route('admin.product.index')->with('success', 'Sản phẩm được thêm thành công!');
+}
+
 
     /**
      * Show the specified product.

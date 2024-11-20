@@ -24,9 +24,9 @@ class Product extends Model
         'xuatxu',
         'soluong',
         'trangthai',
-        'luotxem'
+        'luotxem',
     ];
-
+    
     // Relationship with Category
     public function category()
     {

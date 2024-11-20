@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Client;
-
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController
@@ -12,6 +12,8 @@ class ProductController
     public function index()
     {
         //
+        $products = Product::paginate(10); // 10 products per page
+        return view('client.pages.product.index', compact('products'));
     }
 
     /**

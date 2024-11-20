@@ -8,16 +8,17 @@
                 </div>
             </div>
         </div>
-        <form action="#">
+        <form action="{{route('client.contact.store')}}" method="POST">
+            @csrf
             <div class="row">
                 <div class="col-lg-6 col-md-6">
-                    <input type="text" placeholder="Your name">
+                    <input type="text" name="ten" placeholder="Your name" required>
                 </div>
                 <div class="col-lg-6 col-md-6">
-                    <input type="text" placeholder="Your Email">
+                    <input type="text" name="email" placeholder="Your Email" required>
                 </div>
                 <div class="col-lg-12 text-center">
-                    <textarea placeholder="Your message"></textarea>
+                    <textarea name="noidung" placeholder="Your message" required></textarea>
                     <button type="submit" class="site-btn">SEND MESSAGE</button>
                 </div>
             </div>

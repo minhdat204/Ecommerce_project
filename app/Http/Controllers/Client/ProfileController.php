@@ -2,8 +2,8 @@
 namespace App\Http\Controllers\Client;
 
 use Illuminate\Http\Request;
-use App\Models\NguoiDung;
-use App\Models\SanPhamYeuThich;
+use App\Models\FavoriteProduct;
+use App\Models\User;
 use Illuminate\Routing\Controller;
 class ProfileController extends Controller
 {
@@ -12,10 +12,10 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $user = NguoiDung::findOrFail(4);
+        $user = User::findOrFail(4);
         // Lấy người dùng hiện tại đang đăng nhập
         // $user = Auth::user();
-        $favorites = SanPhamYeuThich::where('id_nguoidung', 4)
+        $favorites = FavoriteProduct::where('id_nguoidung', 4)
         ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
         ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia')
         ->paginate(10);  // Phân trang cho danh sách sản phẩm yêu thích
@@ -38,14 +38,14 @@ class ProfileController extends Controller
 
     public function show($userId)
 {
-    $user = NguoiDung::find($userId);
+    $user = User::find($userId);
 
     if (!$user) {
         return redirect()->route('profile.index')->with('error', 'Người dùng không tồn tại');
     }
 
     // Lấy sản phẩm yêu thích của người dùng
-    $favorites = SanPhamYeuThich::where('id_nguoidung', $userId)
+    $favorites = FavoriteProduct::where('id_nguoidung', $userId)
         ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
         ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia', 'san_pham.image')
         ->paginate(10);

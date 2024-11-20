@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Client;
 
 use Illuminate\Http\Request;
 use App\Models\NguoiDung;
+use App\Models\SanPhamYeuThich;
 use Illuminate\Routing\Controller;
 class ProfileController extends Controller
 {
@@ -11,10 +12,15 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $user = NguoiDung::findOrFail(2);
+        $user = NguoiDung::findOrFail(4);
         // Lấy người dùng hiện tại đang đăng nhập
         // $user = Auth::user();
-        return view('users.pages.profile', compact('user'));
+        $favorites = SanPhamYeuThich::where('id_nguoidung', 4)
+        ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
+        ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia')
+        ->paginate(10);  // Phân trang cho danh sách sản phẩm yêu thích
+
+    return view('users.pages.profile', compact('user', 'favorites'));
     }
     
 
@@ -30,11 +36,22 @@ class ProfileController extends Controller
     }
 
 
-    public function show($id)
-    {
-        $user = NguoiDung::findOrFail($id);
-        return view('profile.show', compact('user'));
+    public function show($userId)
+{
+    $user = NguoiDung::find($userId);
+
+    if (!$user) {
+        return redirect()->route('profile.index')->with('error', 'Người dùng không tồn tại');
     }
+
+    // Lấy sản phẩm yêu thích của người dùng
+    $favorites = SanPhamYeuThich::where('id_nguoidung', $userId)
+        ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
+        ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia', 'san_pham.image')
+        ->paginate(10);
+
+    return view('users.pages.profile', compact('user', 'favorites'));
+}
 
     /**
      * Show the form for editing the specified resource.
@@ -49,26 +66,7 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $request->validate([
-        //     'hoten' => 'required|max:255',
-        //     'email' => 'required|email',
-        //     'sodienthoai' => 'required|digits_between:10,11',
-        //     'diachi' => 'nullable|max:255',
-        //     'gioitinh' => 'required|in:0,1',
-        //     'ngaysinh' => 'nullable|date',
-        //     'avatar' => 'nullable|image|max:2048',
-        // ]);
-    
-        // $user = NguoiDung::findOrFail($id);
-        // $user->update($request->all());
-    
-        // if ($request->hasFile('avatar')) {
-        //     $avatarPath = $request->file('avatar')->store('avatars', 'public');
-        //     $user->avatar = $avatarPath;
-        //     $user->save();
-        // }
-    
-        // return redirect()->route('profile.show', $user->id_nguoidung)->with('success', 'Cập nhật thành công!');
+        
     }
     
 

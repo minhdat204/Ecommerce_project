@@ -23,6 +23,21 @@
             </div>
 
             <div class="mb-3">
+                <label for="thongtin_kythuat" class="form-label">Mô Tả Kỹ Thuật</label>
+                <textarea class="form-control" id="thongtin_kythuat" name="thongtin_kythuat" required></textarea>
+            </div>
+
+            <div class="mb-3">
+    <label for="id_danhmuc" class="form-label">Danh Mục</label>
+    <select class="form-control" id="id_danhmuc" name="id_danhmuc" required>
+        <option value="" disabled selected>Chọn danh mục</option>
+        @foreach ($categories as $category)
+            <option value="{{ $category->id_danhmuc }}">{{ $category->ten_danhmuc }}</option>
+        @endforeach
+    </select>
+</div>
+
+            <div class="mb-3">
                 <label for="gia" class="form-label">Giá</label>
                 <input type="number" class="form-control" id="gia" name="gia" required>
             </div>

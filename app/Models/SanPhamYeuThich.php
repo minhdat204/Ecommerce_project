@@ -17,7 +17,7 @@ class SanPhamYeuThich extends Model
     ];
     public function sanpham()
     {
-        return $this->belongsTo(SanPham::class, 'id_sanpham');
+        return $this->belongsTo( Product::class, 'id_sanpham');
     }
     
     public function nguoidung()

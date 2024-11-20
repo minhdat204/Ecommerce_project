@@ -24,13 +24,70 @@ class Product extends Model
         'luotxem'
     ];
 
-    public function danhMuc()
+    protected $casts = [
+        'gia' => 'decimal:2',
+        'gia_khuyen_mai' => 'decimal:2',
+        'soluong' => 'integer',
+        'luotxem' => 'integer'
+    ];
+
+    public function category()
     {
         return $this->belongsTo(Category::class, 'id_danhmuc', 'id_danhmuc');
     }
 
-    public function hinhAnh()
+    public function images()
     {
-        return $this->hasMany(ProductImages::class, 'id_sanpham', 'id_sanpham');
+        return $this->hasMany(ProductImage::class, 'id_sanpham', 'id_sanpham');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'id_sanpham', 'id_sanpham');
+    }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class, 'id_sanpham', 'id_sanpham');
+    }
+
+    public function favoriteProducts()
+    {
+        return $this->hasMany(FavoriteProduct::class, 'id_sanpham', 'id_sanpham');
+    }
+
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class, 'id_sanpham', 'id_sanpham');
+    }
+
+    // Thuộc tính ảo để lấy giá hiển thị (ưu tiên giá khuyến mãi nếu có)
+    public function getCurrentPriceAttribute()
+    {
+        return $this->gia_khuyen_mai ?? $this->gia;
+    }
+
+    // Check if product is in stock
+    public function isInStock()
+    {
+        return $this->soluong > 0;
+    }
+
+    // Check if product is active
+    public function isActive()
+    {
+        return $this->trangthai === 'active';
+    }
+
+    // Scope to get only active products
+    public function scopeActive($query)
+    {
+        return $query->where('trangthai', 'active');
+    }
+
+    // Increment view count
+    public function incrementViewCount()
+    {
+        $this->increment('luotxem');
     }
 }

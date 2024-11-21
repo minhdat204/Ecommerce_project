@@ -44,13 +44,18 @@ class ProfileController extends Controller
         return redirect()->route('profile.index')->with('error', 'Người dùng không tồn tại');
     }
 
-    // Lấy sản phẩm yêu thích của người dùng
+    // sp yeu thich
     $favorites = FavoriteProduct::where('id_nguoidung', $userId)
         ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
         ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia', 'san_pham.image')
         ->paginate(10);
+    // sp danh gia 
+    $scores= ScoreProduct::where ('id_nguoidung',$userID)
+        ->join ('binh_luan','nguoi_dung.id_nguoidung','=','binh_luan.id_nguoidung')
+        ->select('binh_luan.id_sanpham','binh_luan.noidung','binh_luan.danhgia')
+        ->paginate(10);
+    return view('users.pages.profile', compact('user', 'favorites','scores'));
 
-    return view('users.pages.profile', compact('user', 'favorites'));
 }
 
     /**

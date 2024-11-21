@@ -7,30 +7,7 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-    const tabs = document.querySelectorAll('.profile-navigation a');
-    const tabPanes = document.querySelectorAll('.profile-tab-pane');
-        tabs.forEach((tab, index) => {
-            tab.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                // Loại bỏ lớp active khỏi tất cả tab và ẩn các pane
-                tabs.forEach((t) => t.classList.remove('active'));
-                tabPanes.forEach((pane) => pane.style.display = 'none');
-
-                // Thêm lớp active vào tab được nhấn và hiển thị nội dung pane
-                tab.classList.add('active');
-                tabPanes[index].style.display = 'block';
-            });
-        });
-
-        // Đảm bảo tab Favorites hiển thị nếu có lỗi khi reload lại
-        if (window.location.hash === '#favorites') {
-            tabs[1].click();
-    }
-});
-    </script>
+    <script src="{{ asset('js/favorite.js') }}"></script>
 @endpush
 
 @section('content')
@@ -39,11 +16,12 @@
     <ul class="profile-navigation">
         <li><a href="#" class="active">Personal Info</a></li>
         <li><a href="#">Favorites List</a></li>
+        <li><a href="#">Scored List</a></li>
     </ul>
 
     <!-- Tab Content -->
     <div class="profile-content mt-4">
-        <!-- Personal Info Tab -->
+        <!-- Personal Tab -->
         <div class="profile-tab-pane" style="display: block;">
             <form method="POST" action="{{ route('profile.update', $user->id_nguoidung) }}">
                 @csrf
@@ -113,34 +91,67 @@
 
        <!-- Favorites List Tab -->
        <div class="profile-tab-pane" style="display: none;">
-    <div class="favorite-page-container">
-        <div class="row">
-            @forelse ($favorites as $favorite)
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                    <img src="{{ asset('img/product/'.$favorite->image) }}" class="card-img-top" alt="{{ $favorite->tensanpham }}" style="height: 150px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $favorite->tensanpham }}</h5>
-                            <p class="card-text text-muted">{{ number_format($favorite->gia, 0, ',', '.') }}đ</p>
-                            <div class="d-flex justify-content-between">
-                                <button class="btn btn-sm btn-primary">Redeem Again</button>
-                                <button class="btn btn-sm btn-secondary">Contact Seller</button>
+        <div class="favorite-page-container">
+            <div class="row">
+                @forelse ($favorites as $favorite)
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                        <img src="{{ asset('img/product/'.$favorite->image) }}" class="card-img-top" alt="{{ $favorite->tensanpham }}" style="height: 150px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $favorite->tensanpham }}</h5>
+                                <p class="card-text text-muted">{{ number_format($favorite->gia, 0, ',', '.') }}đ</p>
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-sm btn-primary">Redeem Again</button>
+                                    <button class="btn btn-sm btn-secondary">Contact Seller</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @empty
-                <div class="col-12">
-                    <p class="text-center">No favorites found ! Thanks </p>
-                </div>
-            @endforelse
-        </div>
-    </div>
+                @empty
+                    <div class="col-12">
+                        <p class="text-center">Không tìm thấy sản phẩm yêu thích !</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>  
+        
+        
     <!-- Pagination -->
     <div class="pagination-container mt-4">
         {{ $favorites->links() }}
     </div>
-</div>
-
-
+        </div>
+        <!-- Score List -->
+       <div class="profile-tab-pane" style="display: none;">
+        <div class="favorite-page-container">
+            <div class="row">
+                @forelse ($favorites as $favorite)
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                        <img src="{{ asset('img/product/'.$favorite->image) }}" class="card-img-top" alt="{{ $favorite->tensanpham }}" style="height: 150px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $favorite->tensanpham }}</h5>
+                                <p class="card-text text-muted">{{ number_format($favorite->gia, 0, ',', '.') }}đ</p>
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-sm btn-primary">Redeem Again</button>
+                                    <button class="btn btn-sm btn-secondary">Contact Seller</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-12">
+                        <p class="text-center">Không tìm thấy sản phẩm yêu thích !</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>  
+        
+        
+    <!-- Pagination -->
+            <div class="pagination-container mt-4">
+                {{ $favorites->links() }}
+            </div>
+        </div>
+    </div>
 @endsection

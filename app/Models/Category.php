@@ -10,9 +10,9 @@ class Category extends Model
     use HasFactory;
 
     protected $table = 'danh_muc';
+    protected $primaryKey = 'id_danhmuc';
 
     protected $fillable = [
-        'id_danhmuc',
         'id_danhmuc_cha',
         'tendanhmuc',
         'slug',
@@ -24,5 +24,17 @@ class Category extends Model
     public function parentCategory()
     {
         return $this->belongsTo(Category::class, 'id_danhmuc_cha', 'id_danhmuc');
+    }
+
+    // Thêm relationship với products
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'id_danhmuc', 'id_danhmuc');
+    }
+
+    // Thêm relationship với child categories
+    public function childCategories()
+    {
+        return $this->hasMany(Category::class, 'id_danhmuc_cha', 'id_danhmuc');
     }
 }

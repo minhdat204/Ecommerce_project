@@ -18,10 +18,10 @@ use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\StatisticalController;
 use App\Http\Controllers\Client\ProfileController;
-Route::get('/profile/favorite', [ProfileController::class, 'favorite'])->name('users.profile.favorite');
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
 ]);
+Route::get('/profile/fav', [ProfileController::class, 'favorite'])->name('users.profile.favorite');
 // Case ID = 2 Test 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Statistical extends Model
+class ScoreProduct extends Model
 {
     //
 }

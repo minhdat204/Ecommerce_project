@@ -2,6 +2,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/slideshow.css')}}">
+    <link rel="stylesheet" href="{{asset('css/services.css')}}">
 @endpush
 @push('scripts')
     <script src="{{asset('js/slideshow.js')}}"></script>
@@ -14,5 +15,6 @@
     @include('users.partials.home.featured-products')
     @include('users.partials.home.banner')
     @include('users.partials.home.lastest-products')
+    @include('users.partials.home.our-services')
 
 @endsection

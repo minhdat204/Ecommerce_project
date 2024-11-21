@@ -6,6 +6,7 @@ use App\Models\FavoriteProduct;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 class ProfileController extends Controller
 {
     /**
@@ -13,21 +14,17 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        // Lấy thông tin người dùng theo ID 4 (hoặc ID của người dùng đang đăng nhập)
-        $user = User::findOrFail(4); // Đây có thể được thay thế bằng Auth::user() nếu sử dụng tính năng đăng nhập.
-
+        
+        $user = User::findOrFail(3); // Đây có thể được thay thế bằng Auth::user() nếu sử dụng tính năng đăng nhập.
         // Lấy các sản phẩm yêu thích của người dùng (ID = 4)
-        $favorites = FavoriteProduct::where('id_nguoidung', 4)
+        $favorites = FavoriteProduct::where('id_nguoidung', $user->id_nguoidung)
             ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
             ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia')
-            ->paginate(10); // Phân trang cho danh sách sản phẩm yêu thích
-
-        // Lấy đánh giá của người dùng đối với các sản phẩm
-        $scores = Comment::where('id_nguoidung', 4)
-            ->join('binh_luan', 'binh_luan.id_sanpham', '=', 'san_pham.id_sanpham') // Liên kết với bảng binh_luan
-            ->select('binh_luan.id_sanpham', 'binh_luan.noidung', 'binh_luan.danhgia')
+            ->paginate(10); 
+        $scores = Comment::with('product') 
+            ->where('id_nguoidung', $user->id_nguoidung)
+            ->select('noidung', 'id_sanpham','danhgia') 
             ->paginate(10);
-
         return view('users.pages.profile', compact('user', 'favorites', 'scores'));
     }
 
@@ -36,26 +33,7 @@ class ProfileController extends Controller
      */
     public function show($userId)
     {
-        // Lấy thông tin người dùng theo ID
-        $user = User::find($userId);
-
-        // Kiểm tra nếu người dùng không tồn tại
-        if (!$user) {
-            return redirect()->route('profile.index')->with('error', 'Người dùng không tồn tại');
-        }
-
-        // Lấy các sản phẩm yêu thích của người dùng
-        $favorites = FavoriteProduct::where('id_nguoidung', $userId)
-            ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
-            ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia', 'san_pham.image')
-            ->paginate(10);
-
-        // Lấy các đánh giá của người dùng đối với các sản phẩm
-        $scores = Comment::where('id_nguoidung', $userId)
-            ->join('binh_luan', 'binh_luan.id_sanpham', '=', 'san_pham.id_sanpham') // Sửa bảng theo quan hệ đúng
-            ->select('binh_luan.id_sanpham', 'binh_luan.noidung', 'binh_luan.danhgia')
-            ->paginate(10);
-
+       
         return view('users.pages.profile', compact('user', 'favorites', 'scores'));
     }
     /**

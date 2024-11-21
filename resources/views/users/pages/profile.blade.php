@@ -121,34 +121,40 @@
         {{ $favorites->links() }}
     </div>
         </div>
-        <!-- Score List -->
-       <div class="profile-tab-pane" style="display: none;">
-        <div class="favorite-page-container">
-            <div class="row">
-                @forelse ($favorites as $favorite)
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                        <img src="{{ asset('img/product/'.$favorite->image) }}" class="card-img-top" alt="{{ $favorite->tensanpham }}" style="height: 150px; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $favorite->tensanpham }}</h5>
-                                <p class="card-text text-muted">{{ number_format($favorite->gia, 0, ',', '.') }}đ</p>
-                                <div class="d-flex justify-content-between">
-                                    <button class="btn btn-sm btn-primary">Redeem Again</button>
-                                    <button class="btn btn-sm btn-secondary">Contact Seller</button>
-                                </div>
+<!-- Score List -->
+<div class="profile-tab-pane" style="display: none;">
+    <div class="favorite-page-container">
+        <div class="row">
+            @forelse ($scores as $score)
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $score->product->tensanpham }}</h5>
+                            <p class="card-text text-muted">{{ number_format($score->product->gia, 0, ',', '.') }}đ</p>
+                            <p><strong>Điểm đánh giá:</strong> {{ $score->danhgia }}</p>
+                            <p><strong>Nội dung:</strong> {{ $score->noidung }}</p>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-primary">Redeem Again</button>
+                                <button class="btn btn-sm btn-secondary">Contact Seller</button>
                             </div>
                         </div>
                     </div>
-                @empty
-                    <div class="col-12">
-                        <p class="text-center">Không tìm thấy sản phẩm yêu thích !</p>
-                    </div>
-                @endforelse
-            </div>
-        </div>  
+                </div>
+            @empty
+                <div class="col-12">
+                    <p class="text-center">Không tìm thấy sản phẩm đã đánh giá!</p>
+                </div>
+            @endforelse
+        </div>
+    </div>   
+</div>
         
         
+    <!-- Pagination -->
 
+            <div class="pagination-container mt-4">
+                {{ $scores->links() }}
+            </div>
         </div>
     </div>
 @endsection

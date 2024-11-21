@@ -148,10 +148,7 @@
         </div>  
         
         
-    <!-- Pagination -->
-            <div class="pagination-container mt-4">
-                {{ $favorites->links() }}
-            </div>
+
         </div>
     </div>
 @endsection

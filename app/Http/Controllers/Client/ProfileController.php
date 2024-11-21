@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Client;
 
 use Illuminate\Http\Request;
 use App\Models\FavoriteProduct;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Routing\Controller;
 class ProfileController extends Controller
@@ -20,7 +21,11 @@ class ProfileController extends Controller
         ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia')
         ->paginate(10);  // Phân trang cho danh sách sản phẩm yêu thích
 
-    return view('users.pages.profile', compact('user', 'favorites'));
+        $scores = Comment::where('id_nguoidung', $user->id_nguoidung)
+        ->join('binh_luan', 'binh_luan.id_sanpham', '=', 'score_products.id_sanpham') // Sửa bảng theo quan hệ đúng
+        ->select('binh_luan.id_sanpham', 'binh_luan.noidung', 'binh_luan.danhgia')
+        ->paginate(10);
+    return view('users.pages.profile', compact('user', 'favorites', 'scores'));
     }
     
 
@@ -50,7 +55,7 @@ class ProfileController extends Controller
         ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia', 'san_pham.image')
         ->paginate(10);
     // sp danh gia 
-    $scores= ScoreProduct::where ('id_nguoidung',$userID)
+    $scores=Comment::where ('id_nguoidung',$userID)
         ->join ('binh_luan','nguoi_dung.id_nguoidung','=','binh_luan.id_nguoidung')
         ->select('binh_luan.id_sanpham','binh_luan.noidung','binh_luan.danhgia')
         ->paginate(10);
@@ -86,6 +91,9 @@ class ProfileController extends Controller
     {
     // Thực hiện các logic cần thiết cho trang Favorites
         return view('users.profile.favorite'); // Trả về view cho trang Favorites
+    }
+    public function Score(){
+        return view('users.profile.score');
     }
 }
 // node : Sẽ làm cn Edit nếu có thời gian !.

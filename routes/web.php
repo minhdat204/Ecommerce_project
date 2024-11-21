@@ -14,13 +14,13 @@ use App\Http\Controllers\Client\CategoryController;
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\DashboardController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\StatisticalController;
 
-Route::get('/', function () {
-    return view('users.pages.home');
-})->name('users.home');
+Route::get('/', [HomeController::class, 'index'])->name('users.home');
+
 Route::get('/shop', function () {
     return view('users.pages.shop');
 })->name('users.shop');
@@ -119,45 +119,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('statistics', [StatisticalManagerController::class, 'index'])->name('statistics.index');
     Route::get('statistics/sales', [StatisticalManagerController::class, 'sales'])->name('statistics.sales');
     Route::get('statistics/products', [StatisticalManagerController::class, 'products'])->name('statistics.products');
-});
-
-// Client Routes
-Route::name('client.')->group(function () {
-    // Category Routes
-    Route::resource('categories', CategoryController::class)->names([
-        'index'   => 'category.index',
-        'show'    => 'category.show',
-    ])->only(['index', 'show']);
-
-    // Product Routes
-    Route::resource('products', ProductController::class)->names([
-        'index'   => 'product.index',
-        'show'    => 'product.show',
-    ])->only(['index', 'show']);
-
-    // Comment Routes
-    Route::resource('comments', CommentController::class)->names([
-        'store'   => 'comment.store',
-        'update'  => 'comment.update',
-        'destroy' => 'comment.destroy',
-    ])->only(['store', 'update', 'destroy']);
-
-    // Contact Routes
-    Route::resource('contacts', ContactController::class)->names([
-        'create'  => 'contact.create',
-        'store'   => 'contact.store',
-    ])->only(['create', 'store']);
-
-    // Order Routes
-    Route::resource('orders', OrderController::class)->names([
-        'create'  => 'order.create',
-        'store'   => 'order.store',
-        'show'    => 'order.show',
-    ])->only(['create', 'store', 'show']);
-
-    // Dashboard Routes
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-
-    // Statistical Routes (if needed for clients)
-    Route::get('statistics', [StatisticalController::class, 'index'])->name('statistics.index');
 });

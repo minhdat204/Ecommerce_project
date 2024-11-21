@@ -120,4 +120,3 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('statistics/sales', [StatisticalManagerController::class, 'sales'])->name('statistics.sales');
     Route::get('statistics/products', [StatisticalManagerController::class, 'products'])->name('statistics.products');
 });
-

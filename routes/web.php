@@ -14,13 +14,13 @@ use App\Http\Controllers\Client\CategoryController;
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\DashboardController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\StatisticalController;
 
-Route::get('/', function () {
-    return view('users.pages.home');
-})->name('users.home');
+Route::get('/', [HomeController::class, 'index'])->name('users.home');
+
 Route::get('/shop', function () {
     return view('users.pages.shop');
 })->name('users.shop');

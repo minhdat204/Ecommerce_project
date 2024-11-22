@@ -17,12 +17,13 @@ class Category extends Model
         'tendanhmuc',
         'slug',
         'mota',
+        'thumbnail',
+        'trangthai'
     ];
-
-    // Quan hệ 1-N: Một danh mục có nhiều sản phẩm
-    public function products()
+    // Quan hệ với chính bảng Category
+    public function parentCategory()
     {
-        return $this->hasMany(Product::class, 'id_danhmuc', 'id_danhmuc');
+        return $this->belongsTo(Category::class, 'id_danhmuc_cha', 'id_danhmuc');
     }
 
     // Thêm relationship với products

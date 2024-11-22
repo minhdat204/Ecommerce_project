@@ -334,8 +334,8 @@ class ComposerStaticInit589cc0f65c3aaa7d4e9024d545bc1974
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -509,7 +509,26 @@ class ComposerStaticInit589cc0f65c3aaa7d4e9024d545bc1974
     );
 
     public static $classMap = array (
-        'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\Admin\\CategoryManagerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CategoryManagerController.php',
+        'App\\Http\\Controllers\\Admin\\CommentManagerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CommentManagerController.php',
+        'App\\Http\\Controllers\\Admin\\ContactManagerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ContactManagerController.php',
+        'App\\Http\\Controllers\\Admin\\DashboardManagerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/DashboardManagerController.php',
+        'App\\Http\\Controllers\\Admin\\OrderManagerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/OrderManagerController.php',
+        'App\\Http\\Controllers\\Admin\\ProductManagerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ProductManagerController.php',
+        'App\\Http\\Controllers\\Admin\\StatisticalManagerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/StatisticalManagerController.php',
+        'App\\Http\\Controllers\\Client\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Client/CategoryController.php',
+        'App\\Http\\Controllers\\Client\\CommentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Client/CommentController.php',
+        'App\\Http\\Controllers\\Client\\ContactController' => __DIR__ . '/../..' . '/app/Http/Controllers/Client/ContactController.php',
+        'App\\Http\\Controllers\\Client\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Client/DashboardController.php',
+        'App\\Http\\Controllers\\Client\\OrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/Client/OrderController.php',
+        'App\\Http\\Controllers\\Client\\ProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/Client/ProductController.php',
+        'App\\Http\\Controllers\\Client\\StatisticalController' => __DIR__ . '/../..' . '/app/Http/Controllers/Client/StatisticalController.php',
+        'App\\Models\\Category' => __DIR__ . '/../..' . '/app/Models/Category.php',
+        'App\\Models\\Comment' => __DIR__ . '/../..' . '/app/Models/Comment.php',
+        'App\\Models\\Contact' => __DIR__ . '/../..' . '/app/Models/Contact.php',
+        'App\\Models\\Order' => __DIR__ . '/../..' . '/app/Models/Order.php',
+        'App\\Models\\Product' => __DIR__ . '/../..' . '/app/Models/Product.php',
+        'App\\Models\\Statistical' => __DIR__ . '/../..' . '/app/Models/Statistical.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',

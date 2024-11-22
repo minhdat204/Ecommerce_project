@@ -37,9 +37,9 @@ Route::get('/shop-details', function () {
     return view('users.pages.shop-details');
 })->name('users.shop_details');
 
-Route::get('/shoping-cart', function () {
-    return view('users.pages.shoping-cart');
-})->name('users.shoping-cart');
+Route::get('/shoping-cart', [CartController::class, 'showCart'])->name('users.shoping-cart');
+Route::patch('/shoping-cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
+
 
 Route::get('/checkout', function () {
     return view('users.pages.checkout');

@@ -15,7 +15,8 @@ class ProfileController extends Controller
     public function index()
     {
         
-        $user = User::findOrFail(3); // Đây có thể được thay thế bằng Auth::user() nếu sử dụng tính năng đăng nhập.
+        $user = User::findOrFail(3); 
+        // Đây có thể được thay thế bằng Auth::user() :
         // Lấy các sản phẩm yêu thích của người dùng (ID = 4)
         $favorites = FavoriteProduct::where('id_nguoidung', $user->id_nguoidung)
             ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
@@ -27,33 +28,17 @@ class ProfileController extends Controller
             ->paginate(10);
         return view('users.pages.profile', compact('user', 'favorites', 'scores'));
     }
-
-    /**
-     * Show the profile of a specific user.
-     */
     public function show($userId)
     {
-       
         return view('users.pages.profile', compact('user', 'favorites', 'scores'));
     }
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
+        
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
-    {
-        // Logic cập nhật thông tin người dùng (nếu có)
+    {        
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         // Logic xóa người dùng hoặc các sản phẩm yêu thích, đánh giá, nếu cần

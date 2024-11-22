@@ -21,11 +21,6 @@ use App\Http\Controllers\Client\ProfileController;
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
 ]);
-Route::get('/profile/fav', [ProfileController::class, 'favorite'])->name('users.profile.favorite');
-// Case ID = 2 Test 
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-// }); 
 Route::get('/', function () {
     return view('users.pages.home');
 })->name('users.home');
@@ -60,8 +55,6 @@ Route::get('/administrator', function () {
 Route::get('/mau', function () {
     return view('admin.pages.category'); // giao diện mẫu = Category
 })->name('mau');
-
-
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {

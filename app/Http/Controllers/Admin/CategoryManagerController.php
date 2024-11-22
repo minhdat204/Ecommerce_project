@@ -45,7 +45,6 @@ class CategoryManagerController
      */
     public function edit(string $id)
     {
-        //
     }
 
     /**

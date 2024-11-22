@@ -18,6 +18,11 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\StatisticalController;
+use App\Http\Controllers\Client\ProfileController;
+
+Route::resource('profile', ProfileController::class)->names([
+    'index'   => 'profile.index',
+]);
 
 Route::get('/', [HomeController::class, 'index'])->name('users.home');
 
@@ -52,8 +57,6 @@ Route::get('/administrator', function () {
 Route::get('/mau', function () {
     return view('admin.pages.category'); // giao diện mẫu = Category
 })->name('mau');
-
-
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {

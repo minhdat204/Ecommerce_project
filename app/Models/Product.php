@@ -12,7 +12,6 @@ class Product extends Model
     protected $table = 'san_pham'; // Replace with the correct table name
 
     protected $fillable = [
-        'id_danhmuc',
         'tensanpham',
         'slug',
         'mota',

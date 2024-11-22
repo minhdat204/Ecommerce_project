@@ -1646,7 +1646,7 @@ ol {
 .pagination-container {
     display: flex;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
 }
 
 .product__pagination a:hover,

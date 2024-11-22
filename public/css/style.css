@@ -3704,9 +3704,9 @@ ol {
 }
 
 .aboutUs-section p {
-    font-size: 1.7rem;
-    margin-bottom: 10px;
-    color: white;
+	font-size: 1rem;
+	margin-bottom: 10px;
+	color: #dcdcdc;
 	line-height: 1.8;
 	text-align: justify;
 }

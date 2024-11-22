@@ -25,13 +25,17 @@
             </div>
 
             <!-- Form Tìm Kiếm -->
-            <form method="GET" action="" class="form-inline mb-3">
-                <div class="form-group">
-                    <input type="text" name="search" class="form-control" placeholder="Tìm kiếm sản phẩm..." value="">
-                </div>
-                <button type="submit" class="btn btn-default">Tìm kiếm</button>
-            </form>
-
+<form action="{{ route('admin.product.index') }}" method="GET" class="form-inline mb-3">
+    <input type="text" name="search" class="form-control" placeholder="Tìm kiếm sản phẩm..." value="{{ request('search') }}">
+    <button type="submit" class="btn btn-default">Tìm kiếm</button>
+</form>
+@forelse ($products as $product)
+    <!-- Hiển thị sản phẩm -->
+@empty
+    <tr>
+        <td colspan="6" class="text-center">Không tìm thấy sản phẩm phù hợp với từ khóa "{{ request('search') }}".</td>
+    </tr>
+@endforelse
             <!-- Bảng Sản Phẩm -->
             <table class="table table-striped table-hover">
                 <thead>

@@ -9,17 +9,32 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $table = 'danh_muc'; // Tên bảng trong database
+    protected $table = 'danh_muc';
+    protected $primaryKey = 'id_danhmuc';
 
     protected $fillable = [
-        'ten_danhmuc', // Các cột cần thiết, bổ sung nếu thiếu
+        'id_danhmuc_cha',
+        'tendanhmuc',
         'slug',
         'mota',
+        'thumbnail',
+        'trangthai'
     ];
+    // Quan hệ với chính bảng Category
+    public function parentCategory()
+    {
+        return $this->belongsTo(Category::class, 'id_danhmuc_cha', 'id_danhmuc');
+    }
 
-    // Quan hệ 1-N: Một danh mục có nhiều sản phẩm
+    // Thêm relationship với products
     public function products()
     {
         return $this->hasMany(Product::class, 'id_danhmuc', 'id_danhmuc');
+    }
+
+    // Thêm relationship với child categories
+    public function childCategories()
+    {
+        return $this->hasMany(Category::class, 'id_danhmuc_cha', 'id_danhmuc');
     }
 }

@@ -1,0 +1,125 @@
+.categories {
+    padding: 80px 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title h2 {
+    color: #1c1c1c;
+    font-weight: 700;
+    font-size: 36px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 20px;
+}
+
+.section-title h2:after {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 4px;
+    width: 80px;
+    background: #7fad39;
+    content: "";
+    margin: 0 auto;
+}
+
+.service-items {
+    display: flex;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    gap: 30px;
+}
+
+.service-item {
+    flex: 1;
+    max-width: 350px;
+    text-align: center;
+    padding: 40px 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #7fad39;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.service-item:hover::before {
+    transform: translateX(0);
+}
+
+.service-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.service-icon {
+    width: 80px;
+    height: 80px;
+    background: #f8f9fa;
+    border-radius: 50%;
+    margin: 0 auto 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.service-item:hover .service-icon {
+    background: #7fad39;
+}
+
+.service-icon i {
+    font-size: 35px;
+    color: #7fad39;
+    transition: all 0.3s ease;
+}
+
+.service-item:hover .service-icon i {
+    color: #ffffff;
+}
+
+.service-title {
+    font-size: 22px;
+    color: #1c1c1c;
+    font-weight: 700;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.service-text {
+    font-size: 16px;
+    color: #6f6f6f;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.service-link {
+    display: inline-block;
+    font-size: 14px;
+    color: #7fad39;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.service-link:hover {
+    color: #598c27;
+}

@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\ProductManagerController;
 use App\Http\Controllers\Admin\ContactManagerController;
 use App\Http\Controllers\Admin\DashboardManagerController;
 use App\Http\Controllers\Admin\StatisticalManagerController;
-
+use App\Http\Controllers\Client\CartController;
 //client
 use App\Http\Controllers\Client\CategoryController;
 use App\Http\Controllers\Client\CommentController;

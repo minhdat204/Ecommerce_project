@@ -8,29 +8,29 @@ use Illuminate\Http\Request;
 
 class ProductManagerController
 {
-    /**
-     * Display a listing of the products.
-     */
-    public function index()
-    {
-        $products = Product::with('category')->paginate(10); // 10 sản phẩm mỗi trang
-        return view('admin.pages.product.index', compact('products'));
-    }
 
-    /**
-     * Show the form for creating a new product.
-     */
+    public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $products = Product::with('category') 
+        ->when($search, function ($query, $search) {
+            $query->where('tensanpham', 'like', '%' . $search . '%'); 
+        })
+        ->paginate(10); 
+
+    return view('admin.pages.product.index', compact('products'));
+}
+
+
     public function create()
 {
-    $categories = Category::all(); // Lấy tất cả danh mục từ bảng danh_muc
+    $categories = Category::all();
     return view('admin.pages.product.create', compact('categories'));
 }
 
 
 
-    /**
-     * Store a newly created product in storage.
-     */
     public function store(Request $request)
 {
     $request->validate([
@@ -45,7 +45,7 @@ class ProductManagerController
         'soluong' => 'required|integer',
         'trangthai' => 'required|boolean',
         'luotxem' => 'nullable|integer',
-        'id_danhmuc' => 'required|exists:danh_muc,id_danhmuc', // Kiểm tra id_danhmuc có tồn tại
+        'id_danhmuc' => 'required|exists:danh_muc,id_danhmuc', 
     ]);
 
     Product::create($request->all());
@@ -53,18 +53,14 @@ class ProductManagerController
 }
 
 
-    /**
-     * Show the specified product.
-     */
+    
     public function show(string $id)
     {
         $product = Product::findOrFail($id);
         return view('admin.pages.product.show', compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified product.
-     */
+  
     public function edit(string $id)
     {
         $product = Product::findOrFail($id);
@@ -72,9 +68,7 @@ class ProductManagerController
         return view('admin.pages.product.edit', compact('product', 'categories'));
     }
 
-    /**
-     * Update the specified product in storage.
-     */
+    
     public function update(Request $request, string $id)
     {
         $product = Product::findOrFail($id);
@@ -95,9 +89,7 @@ class ProductManagerController
         return redirect()->route('admin.product.index');
     }
 
-    /**
-     * Remove the specified product from storage.
-     */
+   
     public function destroy(string $id)
     {
         $product = Product::findOrFail($id);

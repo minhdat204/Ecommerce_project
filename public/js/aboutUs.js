@@ -1,3 +1,7 @@
+'use strict';
+
+(function ($) {
+
     /*-------------------
 		Blog READMORE
 	--------------------- */
@@ -21,3 +25,5 @@
             button.innerHTML = 'READ MORE <span class="arrow_right"></span>';  // Change button text back to "READ MORE"
         }
     });
+    
+})(jQuery);

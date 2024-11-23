@@ -1,4 +1,7 @@
 @extends('users.layouts.layout')
+@push('styles')
+    <link rel="stylesheet" href="{{asset('css/aboutUs.css')}}">
+@endpush
 @section('content')
 <!-- About-us Section Begin -->
 <section class="py-5">

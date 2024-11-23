@@ -6,14 +6,22 @@ use App\Models\Contact;
 
 use Illuminate\Http\Request;
 
-class ContactController
+class HomeController
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $slider = Product::where('trangthai', 'active')
+            ->where(function($query) {
+                $query->whereNotNull('gia_khuyen_mai')
+                      ->orWhere('luotxem', '>', 100);
+            })
+            ->with('images')
+            ->limit(3)
+            ->get();
+        return view('users.pages.home', compact('slider'));
     }
 
     /**
@@ -55,9 +63,6 @@ class ContactController
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //

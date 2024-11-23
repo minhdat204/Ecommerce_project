@@ -10,72 +10,36 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="shoping__cart__item">
-                    <img src="img/cart/cart-1.jpg" alt="">
-                    <h5>Vegetable’s Package</h5>
-                </td>
-                <td class="shoping__cart__price">
-                    $55.00
-                </td>
-                <td class="shoping__cart__quantity">
-                    <div class="quantity">
+    @foreach ($cartItems as $cartItem)
+        <tr>
+            <td class="shoping__cart__item">
+                <!-- Hình ảnh sản phẩm -->
+                <img src="{{ asset('img/cart/cart-1.jpg') }}" alt="{{ $cartItem->product->tensanpham }}">
+                <h5>{{ $cartItem->product->tensanpham }}</h5>
+            </td>
+            <td class="shoping__cart__price">
+                <!-- Giá sản phẩm -->
+                <span>{{ number_format($cartItem->product->gia, 0, ',', '.') }} VND</span>
+            </td>
+            <td class="shoping__cart__quantity">
+                <div class="quantity">
+                    <!-- Form cập nhật số lượng -->
+                    <form action="{{ route('cart.update', $cartItem->id_sp_giohang) }}" method="POST" class="cart-update-form">
+                        @csrf
+                        @method('PATCH')
                         <div class="pro-qty">
-                            <input type="text" value="1">
+                            <input type="number" name="quantity" value="{{ $cartItem->soluong }}" min="1" class="quantity-input" data-id="{{ $cartItem->id_sp_giohang }}">
                         </div>
-                    </div>
-                </td>
-                <td class="shoping__cart__total">
-                    $110.00
-                </td>
-                <td class="shoping__cart__item__close">
-                    <span class="icon_close"></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="shoping__cart__item">
-                    <img src="img/cart/cart-2.jpg" alt="">
-                    <h5>Fresh Garden Vegetable</h5>
-                </td>
-                <td class="shoping__cart__price">
-                    $39.00
-                </td>
-                <td class="shoping__cart__quantity">
-                    <div class="quantity">
-                        <div class="pro-qty">
-                            <input type="text" value="1">
-                        </div>
-                    </div>
-                </td>
-                <td class="shoping__cart__total">
-                    $39.99
-                </td>
-                <td class="shoping__cart__item__close">
-                    <span class="icon_close"></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="shoping__cart__item">
-                    <img src="img/cart/cart-3.jpg" alt="">
-                    <h5>Organic Bananas</h5>
-                </td>
-                <td class="shoping__cart__price">
-                    $69.00
-                </td>
-                <td class="shoping__cart__quantity">
-                    <div class="quantity">
-                        <div class="pro-qty">
-                            <input type="text" value="1">
-                        </div>
-                    </div>
-                </td>
-                <td class="shoping__cart__total">
-                    $69.99
-                </td>
-                <td class="shoping__cart__item__close">
-                    <span class="icon_close"></span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    </form>
+                </div>
+            </td>
+            <td class="shoping__cart__total">
+                <!-- Tính tổng tiền của sản phẩm -->
+                <span class="product-price-total">{{ number_format($cartItem->product->gia * $cartItem->soluong, 0, ',', '.') }} VND</span>
+            </td>
+        </tr>
+    @endforeach
+    </tbody>
+</table>
 </div>
+

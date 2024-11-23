@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
+use App\Models\Comment;
 class CommentManagerController
 {
     /**
@@ -11,7 +11,8 @@ class CommentManagerController
      */
     public function index()
     {
-        //
+        $commets = Comment::all();
+        return view('admin.pages.comment.index', compact('comments'));
     }
 
     public function create()

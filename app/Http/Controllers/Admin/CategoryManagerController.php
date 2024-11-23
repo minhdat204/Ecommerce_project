@@ -24,7 +24,11 @@ class CategoryManagerController
     public function store(Request $request)
     {
         $request->validate([
-            'tendanhmuc' => 'required|string|max:255|unique:danh_muc,tendanhmuc',
+            'CategoryName' => 'required|string|max:100|unique:danh_muc,tendanhmuc',  // Kiểm tra tên danh mục
+            'CategoryParent' => 'nullable|exists:danh_muc,id_danhmuc',  // Kiểm tra danh mục cha (nếu có)
+            'CategoryContent' => 'nullable|string',  // Mô tả có thể rỗng
+            'CategoryImage' => 'nullable|image|max:2048',  // Kiểm tra ảnh nếu có
+            'TrangThai' => 'required|in:active,inactive',  // Trạng thái chỉ có thể là 'active' hoặc 'inactive'
         ]);
 
         $slug = Str::slug($request->CategoryName, '-');

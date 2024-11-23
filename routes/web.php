@@ -55,8 +55,11 @@ Route::get('/about-us',function(){
     return view('users.pages.about-us');
 });
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 61410147a0b26c98495b465c07ba0a4c981d524e
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     // Category Routes

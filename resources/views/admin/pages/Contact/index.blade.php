@@ -44,7 +44,7 @@
                         <tr>
                             <td>{{ $contact->id_lienhe }}</td>
                             <td>{{ $contact->id_nguoidung }}</td>
-                            <td>{{ $contact->user->ten ?? 'Không xác định' }}</td>
+                            <td>{{ $contact->user->hoten ?? 'Không xác định' }}</td>
                             <td>{{ $contact->email }}</td>
                             <td>{{ $contact->sodienthoai }}</td>
                             <td>{{ $contact->noidung }}</td>

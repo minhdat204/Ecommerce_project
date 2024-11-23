@@ -3,16 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
-    use HasFactory;
-
     protected $table = 'san_pham';
     protected $primaryKey = 'id_sanpham';
 
     protected $fillable = [
+        'id_danhmuc',
         'tensanpham',
         'slug',
         'mota',
@@ -35,7 +33,7 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'id_danhmuc');
+        return $this->belongsTo(Category::class, 'id_danhmuc', 'id_danhmuc');
     }
 
     public function images()

@@ -39,42 +39,72 @@ class ProductManagerController
 
 public function store(Request $request)
 {
-    // Kiểm tra và lấy id_danhmuc từ tendanhmuc
-    $category = Category::where('tendanhmuc', $request->input('id_danhmuc'))->first();
+    // Validate dữ liệu
+    $request->validate([
+        'tensanpham' => 'required|string',
+        'slug' => 'required|string',
+        'mota' => 'required|string',
+        'thongtin_kythuat' => 'required|string',
+        'id_danhmuc' => 'required|string', // Dữ liệu truyền vào là tên danh mục
+        'gia' => 'required|numeric',
+        'gia_khuyen_mai' => 'nullable|numeric',
+        'donvitinh' => 'required|string',
+        'xuatxu' => 'required|string',
+        'soluong' => 'required|numeric',
+        'trangthai' => 'required|string',
+        'luotxem' => 'nullable|numeric',
+        'images' => 'nullable|array',
+        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate ảnh
+    ]);
 
+    // Lấy id_danhmuc từ tendanhmuc (tên danh mục)
+    $category = Category::where('tendanhmuc', $request->id_danhmuc)->first(); // Tìm danh mục theo tên
     if (!$category) {
-        return back()->withErrors('Danh mục không hợp lệ!');
-    }
-
-    // Lưu thông tin sản phẩm
-    $product = new Product();
-    $product->tensanpham = $request->input('tensanpham');
-    $product->slug = Str::slug($request->input('slug'));
-    $product->mota = $request->input('mota');
-    $product->thongtin_kythuat = $request->input('thongtin_kythuat');
-    $product->gia = $request->input('gia');
-    $product->gia_khuyen_mai = $request->input('gia_khuyen_mai');
-    $product->donvitinh = $request->input('donvitinh');
-    $product->xuatxu = $request->input('xuatxu');
-    $product->soluong = $request->input('soluong');
-    $product->trangthai = $request->input('trangthai');
-    $product->luotxem = $request->input('luotxem');
-    $product->id_danhmuc = $category->id_danhmuc;  // Gán id_danhmuc từ category
-
-    // Xử lý hình ảnh
-    $imagePaths = [];
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $image) {
-            $imagePaths[] = $image->store('product', 'public');
-        }
-        $product->images = json_encode($imagePaths);  // Lưu hình ảnh dưới dạng JSON
+        // Nếu không tìm thấy danh mục, trả về lỗi
+        return redirect()->back()->withErrors(['id_danhmuc' => 'Danh mục không tồn tại.']);
     }
 
     // Lưu sản phẩm
+    $product = new Product();
+    $product->tensanpham = $request->tensanpham;
+    $product->slug = $request->slug;
+    $product->mota = $request->mota;
+    $product->thongtin_kythuat = $request->thongtin_kythuat;
+    $product->id_danhmuc = $category->id_danhmuc; // Gán id_danhmuc lấy từ bảng danh_muc
+    $product->gia = $request->gia;
+    $product->gia_khuyen_mai = $request->gia_khuyen_mai;
+    $product->donvitinh = $request->donvitinh;
+    $product->xuatxu = $request->xuatxu;
+    $product->soluong = $request->soluong;
+    $product->trangthai = $request->trangthai;
+    $product->luotxem = $request->luotxem;
     $product->save();
+
+    // Xử lý hình ảnh
+    // Lưu hình ảnh
+    if ($request->hasFile('images')) {
+        $images = $request->file('images');
+        foreach ($images as $image) {
+            // Lưu ảnh vào thư mục storage/app/public/img/products
+            $imagePath = $image->store('img/products', 'public');
+    
+            // Lưu đường dẫn hình ảnh vào bảng hinh_anh_san_pham
+            $productImage = new ProductImage();
+            $productImage->id_sanpham = $product->id_sanpham; // Giả sử bảng có khóa ngoại id_sanpham
+            $productImage->duongdan = $imagePath;
+            $productImage->alt = $request->tensanpham; // Hoặc tùy chọn khác
+    
+            // Bỏ qua việc lưu `created_at` và `updated_at`
+            $productImage->save();
+        }
+    }
+    
 
     return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được thêm thành công!');
 }
+
+
+
 
 
 

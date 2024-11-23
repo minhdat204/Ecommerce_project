@@ -96,8 +96,8 @@
             <div class="mb-3">
                 <label for="trangthai" class="form-label">Trạng Thái</label>
                 <select class="form-control @error('trangthai') is-invalid @enderror" id="trangthai" name="trangthai" required>
-                    <option value="1" {{ old('trangthai') == '1' ? 'selected' : '' }}>Kích Hoạt</option>
-                    <option value="0" {{ old('trangthai') == '0' ? 'selected' : '' }}>Ẩn</option>
+                    <option value="active" {{ old('trangthai') === 'active' ? 'selected' : '' }}>Hoạt động</option>
+    <option value="inactive" {{ old('trangthai') === 'inactive' ? 'selected' : '' }}>Không hoạt động</option>
                 </select>
                 @error('trangthai')
                     <div class="invalid-feedback">{{ $message }}</div>

@@ -12,6 +12,7 @@ class ProductImage extends Model
     protected $table = 'hinh_anh_san_pham'; // Tên bảng trong database
     protected $primaryKey = 'id_hinhanh'; // Khóa chính
 
+
     protected $fillable = [
         'id_sanpham',
         'duongdan',

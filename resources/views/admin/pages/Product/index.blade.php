@@ -76,15 +76,15 @@
                             <td>{{ $product->soluong }}</td>
                             <td>
                                 @if ($product->trangthai == 'active')
-                                    <span class="label label-success">Kích hoạt</span>
+                                    <span class="label label-success">Hoạt Động</span>
                                 @else
-                                    <span class="label label-danger">Vô hiệu hóa</span>
+                                    <span class="label label-danger">Không Hoạt Động</span>
                                 @endif
                             </td>
                             <td>{{ $product->luotxem }}</td>
                             <td>
                                 @foreach($product->images as $productImage)
-                                    <img src="{{ asset('storage/' . $productImage->duongdan) }}" alt="{{ $productImage->alt }}" width="50">
+                                    <img src="{{ asset('storage/' . $productImage->duongdan) }}" alt="{{ $productImage->alt }}" width="100">
                                 @endforeach
                             </td>
                             <td>{{ $product->category ? $product->category->tendanhmuc : 'Chưa có danh mục' }}</td>

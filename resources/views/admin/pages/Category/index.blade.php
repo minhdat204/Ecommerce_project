@@ -84,9 +84,14 @@
 
                             </td>
                             <td>
-                                {{ $category->thumbnail }}
-
+                                @if ($category->thumbnail)
+                                    <img src="{{ asset('storage/' . $category->thumbnail) }}"
+                                        alt="{{ $category->tendanhmuc }}" width="100">
+                                @else
+                                    <span>No image</span>
+                                @endif
                             </td>
+
 
                             <td>
 
@@ -99,7 +104,7 @@
 
                             </td>
                             <td>
-                                <a href="#editCategoryModal" class="edit" data-toggle="modal">
+                                <a href="#editCategoryModal{{ $category->id_danhmuc }}" class="edit" data-toggle="modal">
                                     <i class="material-icons" data-toggle="tooltip" title="Sửa">&#xE254;</i>
                                 </a>
                                 <a href="#deleteCategoryModal" class="delete" data-toggle="modal">
@@ -109,46 +114,83 @@
                         </tr>
 
                         <!-- Modal Sửa Danh Mục -->
-                        <div id="editCategoryModal " class="modal fade">
+                        <div id="editCategoryModal{{ $category->id_danhmuc }}" class="modal fade">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form action="" method="POST">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Sửa Danh Mục</h5>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <form action="{{ route('admin.category.update', $category->id_danhmuc) }}"
+                                        method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Sửa Danh Mục</h4>
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                aria-hidden="true">&times;</button>
-                                        </div>
+
                                         <div class="modal-body">
+                                            <div class="form-group">
+                                                <label>Danh mục cha</label>
+                                                <select class="form-control" name="CategoryParent">
+                                                    <option value="">-- Chọn danh mục cha --</option>
+                                                    @foreach ($categories as $parent)
+                                                        @if ($parent->id_danhmuc != $category->id_danhmuc)
+                                                            <option value="{{ $parent->id_danhmuc }}"
+                                                                {{ old('CategoryParent', $category->id_danhmuc_cha) == $parent->id_danhmuc ? 'selected' : '' }}>
+                                                                {{ $parent->tendanhmuc }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
                                             <div class="form-group">
                                                 <label>Tên Danh Mục</label>
                                                 <input type="text" class="form-control" name="CategoryName"
-                                                    value="" required>
+                                                    value="{{ old('CategoryName', $category->tendanhmuc) }}" required>
                                             </div>
+
+                                            <div class="form-group">
+                                                <label>Mô tả</label>
+                                                <input type="text" class="form-control" name="CategoryContent"
+                                                    value="{{ old('CategoryContent', $category->mota) }}" required>
+                                            </div>
+
                                             <div class="form-group">
                                                 <label>Trạng thái</label>
                                                 <select class="form-control" name="Status" required>
-                                                    <option value="1">Kích
-                                                        hoạt
+                                                    <option value="active"
+                                                        {{ old('Status', $category->trangthai) == 'active' ? 'selected' : '' }}>
+                                                        Kích hoạt
                                                     </option>
-                                                    <option value="0">Vô
-                                                        hiệu hóa
+                                                    <option value="inactive"
+                                                        {{ old('Status', $category->trangthai) == 'inactive' ? 'selected' : '' }}>
+                                                        Vô hiệu hóa
                                                     </option>
                                                 </select>
                                             </div>
+
+                                            <div class="form-group">
+                                                <label>Hình ảnh</label>
+                                                <input type="file" class="form-control" name="CategoryImage"
+                                                    accept="image/*">
+                                                @if ($category->thumbnail)
+                                                    <div class="mt-2">
+                                                        <img src="{{ asset('storage/' . $category->thumbnail) }}"
+                                                            class="img-thumbnail" width="100" alt="Ảnh hiện tại">
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
+
                                         <div class="modal-footer">
-                                            <input type="button" class="btn btn-default" data-dismiss="modal"
-                                                value="Hủy">
-                                            <input type="submit" class="btn btn-info" value="Lưu">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Đóng</button>
+                                            <button type="submit" class="btn btn-primary">Cập nhật</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Modal Xóa Danh Mục -->
+                        </div> <!-- Modal Xóa Danh Mục -->
                         <div id="deleteCategoryModal" class="modal fade">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -195,6 +237,7 @@
         @method('DELETE')
     </form>
 
+
     <!-- Modal Thêm Danh Mục Mới -->
     <div id="addCategoryModal" class="modal fade">
         <div class="modal-dialog">
@@ -208,8 +251,12 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Danh mục cha</label>
-                            <input type="text" class="form-control" name="CategoryParent"
-                                placeholder="Nhập tên danh mục" required>
+                            <select id="CategoryParent" class="form-control" name="CategoryParent">
+                                <option value="">-- Chọn danh mục cha --</option>
+                                @foreach ($categories as $parent)
+                                    <option value="{{ $parent->id_danhmuc }}">{{ $parent->tendanhmuc }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Tên Danh Mục</label>
@@ -218,8 +265,8 @@
                         </div>
                         <div class="form-group">
                             <label>Mô tả</label>
-                            <input type="text" class="form-control" name="CategoryContent"
-                                placeholder="Nhập tên danh mục" required>
+                            <input type="text" class="form-control" name="CategoryContent" placeholder="Nhập mô tả"
+                                required>
                         </div>
                         <div class="form-group">
                             <label>Hình ảnh</label>
@@ -227,9 +274,9 @@
                         </div>
                         <div class="form-group">
                             <label>Trạng thái</label>
-                            <select class="form-control" name="Status" required>
-                                <option value="1">Kích hoạt</option>
-                                <option value="0">Vô hiệu hóa</option>
+                            <select class="form-control" name="TrangThai" required>
+                                <option value="active">Kích hoạt</option>
+                                <option value="inactive">Vô hiệu hóa</option>
                             </select>
                         </div>
                     </div>
@@ -241,6 +288,7 @@
             </div>
         </div>
     </div>
+
 
 @endsection
 

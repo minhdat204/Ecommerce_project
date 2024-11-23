@@ -13,7 +13,6 @@ class Category extends Model
     protected $primaryKey = 'id_danhmuc'; // Xác định khóa chính
 
     protected $fillable = [
-        'id_danhmuc',
         'id_danhmuc_cha',
         'tendanhmuc',
         'slug',
@@ -25,5 +24,17 @@ class Category extends Model
     public function parentCategory()
     {
         return $this->belongsTo(Category::class, 'id_danhmuc_cha', 'id_danhmuc');
+    }
+
+    // Thêm relationship với products
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'id_danhmuc', 'id_danhmuc');
+    }
+
+    // Thêm relationship với child categories
+    public function childCategories()
+    {
+        return $this->hasMany(Category::class, 'id_danhmuc_cha', 'id_danhmuc');
     }
 }

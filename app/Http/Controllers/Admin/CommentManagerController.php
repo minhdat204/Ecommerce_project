@@ -11,8 +11,8 @@ class CommentManagerController
      */
     public function index()
     {
-        $commets = Comment :: with ('product') 
-        -> select ('tensanpham', 'noidung', 'danhgia', 'id_sanpham')
+        $comments = Comment :: with ('product') 
+        -> select ('id_binhluan','noidung', 'danhgia', 'id_sanpham')
         -> paginate (10);
         return view('admin.pages.comment.index', compact('comments'));
     }

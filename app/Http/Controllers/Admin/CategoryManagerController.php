@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryManagerController
 {
@@ -29,7 +30,26 @@ class CategoryManagerController
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'tendanhmuc' => 'request|string|max:255|unique:danh_muc,tendanhmuc',
+        ]);
+
+        //tạo slug
+        $slug = Str::slug($request->CategoryName, '-');
+        if ($request->hasFile('CategoryImage')) {
+            // Lưu ảnh vào thư mục 'public/products'
+            $imagePath = $request->file('CategoryImage')->store('categories', 'public');
+            Category::create([
+                'id_danhmuc_cha' => $request->CategoryParent,
+                'tendanhmuc' => $request->CategoryName,
+                'slug' => $slug,  // Lưu slug
+
+                'mota' => $request->CategoryContent,
+                'thumbnail' => $imagePath,
+                'trangthai' => $request->trangthai, // hoặc trạng thái mặc định khác
+            ]);
+        }
+        return redirect()->route('admin.category.index')->with('success', 'Thêm danh mục thành công!');
     }
 
     /**

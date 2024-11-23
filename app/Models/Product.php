@@ -13,7 +13,6 @@ class Product extends Model
     protected $primaryKey = 'id_sanpham';
 
     protected $fillable = [
-        'id_danhmuc',
         'tensanpham',
         'slug',
         'mota',
@@ -36,7 +35,7 @@ class Product extends Model
   
     public function category()
     {
-        return $this->belongsTo(Category::class, 'id_danhmuc', 'id_danhmuc');
+        return $this->belongsTo(Category::class, 'id_danhmuc');
     }
 
     public function images()

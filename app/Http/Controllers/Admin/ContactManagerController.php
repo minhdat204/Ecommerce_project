@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class ContactManagerController
@@ -12,6 +12,10 @@ class ContactManagerController
     public function index()
     {
         //
+        $contacts = Contact :: with ('user') 
+        -> select ('id_lienhe', 'ten', 'email', 'sodienthoai', 'noidung', 'trangthai', 'id_nguoidung')
+        -> paginate (10);
+        return view('admin.pages.contact.index', compact('contacts'));
     }
 
     /**
@@ -60,5 +64,13 @@ class ContactManagerController
     public function destroy(string $id)
     {
         //
+        $contacts = Contact::find($id);
+
+        if ($contacts) {
+            $contacts->delete();
+            return redirect()->route('admin.contact.index')->with('success', 'Liên hệ đã được xóa');
+        }
+    
+        return redirect()->route('admin.contact.index')->with('error', 'Không tìm thấy liên hệ');
     }
 }

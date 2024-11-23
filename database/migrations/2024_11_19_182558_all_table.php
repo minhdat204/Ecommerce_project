@@ -53,6 +53,7 @@ return new class extends Migration
             $table->integer('soluong')->default(0);
             $table->enum('trangthai', ['active', 'inactive'])->default('active');
             $table->integer('luotxem')->default(0);
+            $table->unsignedBigInteger('id_danhmuc')->nullable(false)->change();
             $table->timestamps();
         });
 

@@ -9,20 +9,21 @@ class ProductImage extends Model
 {
     use HasFactory;
 
-    protected $table = 'hinh_anh_san_pham';
-    protected $primaryKey = 'id_hinhanh';
+    protected $table = 'hinh_anh_san_pham'; // Tên bảng trong database
+    protected $primaryKey = 'id_hinhanh'; // Khóa chính
 
     protected $fillable = [
         'id_sanpham',
         'duongdan',
         'alt',
-        'vitri'
+        'vitri',
+        'created_at',
     ];
 
-    public $timestamps = false;
-
+    // Quan hệ: Một hình ảnh thuộc về một sản phẩm
     public function product()
     {
-        return $this->belongsTo(Product::class, 'id_sanpham');
+        return $this->belongsTo(Product::class, 'id_sanpham', 'id_sanpham');
     }
 }
+

@@ -12,8 +12,7 @@ class CategoryManagerController
      */
     public function index()
     {
-        $categories = Category::with('parentCategory')->get();
-        return view('admin.pages.Category.index', compact('categories'));
+        //
     }
 
     /**

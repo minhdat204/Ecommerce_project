@@ -8,16 +8,9 @@ use App\Http\Controllers\Admin\ProductManagerController;
 use App\Http\Controllers\Admin\ContactManagerController;
 use App\Http\Controllers\Admin\DashboardManagerController;
 use App\Http\Controllers\Admin\StatisticalManagerController;
-
+use App\Http\Controllers\Client\CartController;
 //client
-use App\Http\Controllers\Client\CategoryController;
-use App\Http\Controllers\Client\CommentController;
-use App\Http\Controllers\Client\ContactController;
-use App\Http\Controllers\Client\DashboardController;
 use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\OrderController;
-use App\Http\Controllers\Client\ProductController;
-use App\Http\Controllers\Client\StatisticalController;
 use App\Http\Controllers\Client\ProfileController;
 
 Route::resource('profile', ProfileController::class)->names([

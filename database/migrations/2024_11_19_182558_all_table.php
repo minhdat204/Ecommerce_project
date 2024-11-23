@@ -59,7 +59,7 @@ return new class extends Migration
 
         Schema::create('hinh_anh_san_pham', function (Blueprint $table) {
             $table->id('id_hinhanh');
-            $table->foreignId('id_sanpham')->constrained()->onDelete('cascade'); 
+            $table->foreignId('id_sanpham')->constrained('san_pham', 'id_sanpham')->onDelete('cascade');
             $table->string('duongdan');
             $table->string('alt')->nullable();
             $table->integer('vitri')->default(0); 

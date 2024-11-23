@@ -25,12 +25,13 @@
     <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
+    @stack('styles')
 </head>
 
 <body>
     @include('users.partials.header')
 
-   @include('users.partials.breadcrumb')
+    @include('users.partials.breadcrumb')
 
     @yield('content')
 
@@ -50,6 +51,7 @@
     <script src="{{asset('js/owl.carousel.min.js')}}"></script>
     <script src="{{asset('js/main.js')}}"></script>
     <script src="{{asset('js/chat-widget.js')}}"></script>
+    @stack('scripts')
 </body>
 
 </html>

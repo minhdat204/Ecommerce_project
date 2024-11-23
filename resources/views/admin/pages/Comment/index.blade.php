@@ -1,24 +1,23 @@
 @extends('Admin.Layout.Layout')
 @section('namepage', 'Quản lý Bình Luận')
 @push('scripts')
-    <script src="{{ asset('js/delete_comment.js') }}"></script>
+    <script src="{{ asset('js/delete_comment.js') }}"></script>  <!-- Kết nối file JavaScript -->
 @endpush
 @section('content')
     <div class="container">
         <div class="table-wrapper">
             @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-                <!-- Hiển thị thông báo lỗi -->
-                @if(session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
-            <!-- Tiêu đề bảng -->
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
@@ -27,7 +26,6 @@
                 </div>
             </div>
 
-            <!-- Bảng danh sách bình luận -->
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -46,36 +44,41 @@
                             <td>{{ $comment->noidung }}</td>
                             <td>{{ $comment->danhgia }}</td>
                             <td>
-                            <a href="#deleteCommentModal" class="delete" data-toggle="modal">
-                                    <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                     <!-- Modal Xóa bình luận -->
-                     <div id="deleteCommentModal" class="modal fade">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                <form id="deleteCommentForm" action="" method="POST">
+                                <!-- Nút Xóa -->
+                                <a href="#" class="delete" data-toggle="modal" data-target="#deleteCommentModal{{ $comment->id_binhluan }}">
+                                <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- Modal Xóa Bình Luận -->
+                    <div id="deleteCommentModal{{ $comment->id_binhluan }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form id="deleteCommentForm{{ $comment->id_binhluan }}" action="{{ route('admin.comment.destroy', $comment->id_binhluan) }}" method="POST">
                                     @csrf
                                     @method('DELETE') <!-- Phương thức DELETE -->
                                     <div class="modal-header">
-                                        <h4 class="modal-title">Xóa bình luận</h4>
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h5 class="modal-title" id="deleteCommentModalLabel">Xóa bình luận</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
                                     <div class="modal-body">
                                         <p>Bạn có chắc chắn muốn xóa bình luận này?</p>
                                         <p class="text-warning"><small>Hành động này không thể hoàn tác.</small></p>
                                     </div>
                                     <div class="modal-footer">
-                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
-                                        <input type="submit" class="btn btn-danger" value="Xóa">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
                                     </div>
                                 </form>
-                                </div>
                             </div>
                         </div>
+                    </div>
+                @endforeach
                 </tbody>
+
             </table>
 
             <!-- Phân trang -->

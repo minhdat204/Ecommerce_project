@@ -11,7 +11,7 @@ class CommentManagerController
      */
     public function index()
     {
-        $comments = Comment :: with ('product') 
+        $comments = Comment :: with ('product')
         -> select ('id_binhluan','noidung', 'danhgia', 'id_sanpham')
         -> paginate (10);
         return view('admin.pages.comment.index', compact('comments'));
@@ -51,15 +51,15 @@ class CommentManagerController
      */
     public function destroy(string $id)
     {
-  
-        $comment = Comment::find($id);
 
-        if ($comment) {
-            $comment->delete();
+        try {
+            $comment = Comment::findOrFail($id); // Tìm bình luận theo ID
+            $comment->delete(); // Xóa bình luận
+
+            // Chuyển hướng lại trang danh sách với thông báo thành công
             return redirect()->route('admin.comment.index')->with('success', 'Bình luận đã được xóa.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.comment.index')->with('error', 'Xóa bình luận thất bại.');
         }
-    
-        return redirect()->route('admin.comment.index')->with('error', 'Không tìm thấy bình luận.');
     }
-    
 }

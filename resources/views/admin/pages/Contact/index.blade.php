@@ -54,6 +54,9 @@
                                 <a href="#" class="delete" data-toggle="modal" data-target="#deleteContactModal{{ $contact->id_lienhe }}">
                                     <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
                                 </a>
+                                    <a href="" class="edit" data-toggle="modal" data-target="#editContactModal{{ $contact->id_lienhe }}">
+                                    <i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa">&#xE254;</i>
+                                </a>
                             </td>
                         </tr>
 
@@ -82,6 +85,38 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Modal Chỉnh Sửa Trạng Thái -->
+                        <div id="editContactModal{{ $contact->id_lienhe }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editContactModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form id="editContactForm{{ $contact->id_lienhe }}" action="{{ route('admin.contact.update', $contact->id_lienhe) }}" method="POST">
+                                        @csrf
+                                        @method('PUT') <!-- Phương thức PUT -->
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editContactModalLabel">Chỉnh sửa trạng thái</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Chọn trạng thái mới cho liên hệ này:</p>
+                                            <div class="form-group">
+                                                <label for="trangthai">Trạng thái:</label>
+                                                <select name="trangthai" id="trangthai" class="form-control">
+                                                    <option value="0" {{ $contact->trangthai == 0 ? 'selected' : '' }}>Chưa xử lý</option>
+                                                    <option value="1" {{ $contact->trangthai == 1 ? 'selected' : '' }}>Đã xử lý</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                     @endforeach
                 </tbody>
             </table>

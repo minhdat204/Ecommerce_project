@@ -53,9 +53,14 @@ class ContactManagerController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id_lienhe)
     {
         //
+            $contact = Contact::findOrFail($id_lienhe); // Tìm liên hệ theo ID
+            $contact->trangthai = $request->input('trangthai'); // Lấy giá trị trạng thái từ form
+            $contact->save(); 
+
+        return redirect()->back()->with('success', 'Cập nhật trạng thái thành công.');
     }
 
     /**

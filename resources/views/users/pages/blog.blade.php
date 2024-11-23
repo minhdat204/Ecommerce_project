@@ -1,4 +1,7 @@
 @extends('users.layouts.layout')
+@push('scripts')
+    <script src="{{asset('js/aboutUs.js')}}"></script>
+@endpush
 @section('content')
 <!-- Blog Section Begin -->
 <section class="blog spad">

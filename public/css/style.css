@@ -1643,6 +1643,12 @@ ol {
 	transition: all, 0.3s;
 }
 
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
 .product__pagination a:hover,
 .blog__pagination a:hover {
 	background: #7fad39;

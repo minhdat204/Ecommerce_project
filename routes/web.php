@@ -55,6 +55,8 @@ Route::get('/about-us',function(){
     return view('users.pages.about-us');
 });
 
+
+
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     // Category Routes
@@ -111,6 +113,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'update'  => 'contact.update',
         'destroy' => 'contact.destroy',
     ]);
+
 
     // Dashboard Routes
     Route::get('dashboard', [DashboardManagerController::class, 'index'])->name('dashboard.index');

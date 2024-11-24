@@ -115,6 +115,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     ]);
     
 
+
     // Dashboard Routes
     Route::get('dashboard', [DashboardManagerController::class, 'index'])->name('dashboard.index');
 

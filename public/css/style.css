@@ -1624,6 +1624,7 @@ ol {
 	padding-top: 10px;
 }
 
+/*Dat: Thêm trạng thái active cho phần phân trang*/
 .product__pagination a.active,
 .blog__pagination a.active {
     background: #7fad39;

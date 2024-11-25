@@ -41,7 +41,7 @@ class ProductController
      */
     public function show(string $slug)
     {
-        $sanpham = Product::where('slug', $slug)->fist();
+        $sanpham = Product::where('slug', $slug)->first();
         return view('users.pages.shop-details', compact('sanpham'));
     }
 

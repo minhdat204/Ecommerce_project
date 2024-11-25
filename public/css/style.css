@@ -1720,6 +1720,7 @@ ol {
 	font-weight: 600;
 	margin-bottom: 15px;
 }
+/*Dat: thêm giá khuyến mãi nếu có trong chi tiết sản phẩm*/
 .product__details__text .product__details__price span {
     font-size: 20px;
 	display: inline-block;
@@ -3491,8 +3492,51 @@ ol {
 	}
 }
 
- /* Chat Widget */
- .chat-widget {
+/*Dat: Stock Status Styles */
+.stock-status {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.stock-status.in-stock {
+    background-color: #e8f5e9;
+    color: #43a047;
+    border: 1px solid #a5d6a7;
+}
+
+.stock-status.out-of-stock {
+    background-color: #ffebee;
+    color: #e53935;
+    border: 1px solid #ef9a9a;
+}
+
+/*Dat: Optional: Add animation for status changes */
+.stock-status {
+    transition: all 0.3s ease;
+}
+
+.stock-status:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/*Dat: Optional: Add icon support */
+.stock-status.in-stock::before {
+    content: "✓";
+    margin-right: 5px;
+}
+
+.stock-status.out-of-stock::before {
+    content: "✕";
+    margin-right: 5px;
+}
+
+/* Chat Widget */
+.chat-widget {
 	position: fixed;
 	bottom: 20px;
 	right: 20px;

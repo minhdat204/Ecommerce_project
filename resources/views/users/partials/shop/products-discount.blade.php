@@ -16,7 +16,7 @@
                 </div>
                 <div class="product__discount__item__text">
                     <span>{{$sanpham->category->tendanhmuc}}</span>
-                    <h5><a href="#">{{$sanpham->tensanpham}}</a></h5>
+                    <h5><a href="{{route('users.shop_details', $sanpham->slug)}}">{{$sanpham->tensanpham}}</a></h5>
                     <div class="product__item__price">${{$sanpham->gia_khuyen_mai}} <span>${{$sanpham->gia}}</span></div>
                 </div>
             </div>

@@ -4,6 +4,7 @@
 @section('content')
     <div class="container">
         <div class="table-wrapper">
+
             <!-- Tiêu đề bảng -->
             <div class="table-title">
                 <div class="row">

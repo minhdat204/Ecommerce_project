@@ -5,6 +5,103 @@ table.dataTable {
   max-width: none !important;
   border-collapse: separate !important;
 }
+/* Điều chỉnh bảng */
+/* Điều chỉnh bảng */
+.table {
+  width: 100%; /* Đảm bảo bảng luôn chiếm toàn bộ không gian */
+  table-layout: auto; /* Tự động phân bổ chiều rộng cột dựa trên nội dung */
+}
+
+/* Giới hạn chiều rộng cho các cột cụ thể */
+.table th:nth-child(2), /* ID */
+.table td:nth-child(2),
+.table th:nth-child(7), /* Giá */
+.table td:nth-child(7),
+.table th:nth-child(8), /* Giá Khuyến Mãi */
+.table td:nth-child(8),
+.table th:nth-child(11), /* Số Lượng */
+.table td:nth-child(11) {
+  width: 80px;
+  white-space: nowrap;
+}
+
+.table th:nth-child(3), /* Tên Sản Phẩm */
+.table td:nth-child(3) {
+  width: 200px; /* Chiều rộng cố định cho tên sản phẩm */
+  white-space: nowrap; /* Không xuống dòng */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Hiển thị "..." nếu nội dung quá dài */
+}
+
+.table th:nth-child(5), /* Mô Tả */
+.table td:nth-child(5),
+.table th:nth-child(6), /* Thông Tin Kỹ Thuật */
+.table td:nth-child(6) {
+  max-width: 150px; /* Giới hạn chiều rộng */
+  word-wrap: break-word; /* Tự xuống dòng */
+  overflow: hidden;
+}
+
+.table th:nth-child(14), /* Hình Ảnh */
+.table td:nth-child(14) {
+  width: 100px;
+  text-align: center;
+}
+
+/* Ẩn nút hành động nếu cần */
+.table th:last-child,
+.table td:last-child {
+  width: 150px;
+  text-align: center;
+}
+
+
+/* Thay đổi màu trạng thái */
+.label-success {
+  background-color: #5cb85c;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 5px;
+}
+.label-danger {
+  background-color: #d9534f;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 5px;
+}
+.table-responsive {
+  overflow-x: auto; /* Cho phép cuộn ngang */
+  -webkit-overflow-scrolling: touch; /* Mượt mà trên di động */
+}
+/* Căn giữa trạng thái */
+.table td span.label {
+  display: inline-block;
+  min-width: 80px; /* Đảm bảo chiều rộng tối thiểu */
+  text-align: center;
+}
+
+/* Thay đổi màu trạng thái */
+.label-success {
+  background-color: #5cb85c;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 5px;
+}
+.label-danger {
+  background-color: #d9534f;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 5px;
+}
+
+
+/* Ẩn nút hành động nếu cần */
+.table th:last-child,
+.table td:last-child {
+  width: 150px;
+  text-align: center;
+}
+
 table.dataTable td,
 table.dataTable th {
   -webkit-box-sizing: content-box;

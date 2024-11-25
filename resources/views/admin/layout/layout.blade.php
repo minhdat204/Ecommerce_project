@@ -8,7 +8,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Startmin - Bootstrap Admin Theme</title>
-
     <!-- Bootstrap CSS -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/metismenu/dist/metisMenu.min.css" rel="stylesheet">

@@ -1720,7 +1720,13 @@ ol {
 	font-weight: 600;
 	margin-bottom: 15px;
 }
-
+.product__details__text .product__details__price span {
+    font-size: 20px;
+	display: inline-block;
+	font-weight: 400;
+	text-decoration: line-through;
+	margin-left: 10px;
+}
 .product__details__text p {
 	margin-bottom: 45px;
 }

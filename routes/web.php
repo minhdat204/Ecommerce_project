@@ -46,7 +46,7 @@ Route::get('/checkout', function () {
 })->name('users.checkout');
 // admin
 Route::get('/administrator', function () {
-    return view('admin.layout.category'); // giao diện mẫu = Category
+    return view('admin.layout.layout'); // giao diện mẫu = Category
 })->name('dashboard');
 
 Route::get('/mau', function () {

@@ -4,6 +4,18 @@
 @section('content')
     <div class="container">
         <div class="table-wrapper">
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <!-- Tiêu đề bảng -->
             <div class="table-title">
                 <div class="row">
@@ -25,14 +37,21 @@
             </div>
 
             <!-- Form Tìm Kiếm -->
-            <form method="GET" action="" class="form-inline mb-3">
+            <form method="GET" action="{{ route('admin.category.index') }}" class="form-inline mb-3">
                 <div class="form-group">
                     <input type="text" name="search" class="form-control" placeholder="Tìm kiếm danh mục..."
-                        value=" ">
+                        value="{{ request('search') }}">
                 </div>
-                <button type="submit" class="btn btn-default">Tìm kiếm</button>
+                <button type="submit" class="btn btn-primary ml-2">Tìm kiếm</button>
             </form>
 
+            <!-- Hiển thị kết quả tìm kiếm -->
+            @if (request('search'))
+                <div class="alert alert-info">
+                    Kết quả tìm kiếm cho: <strong>{{ request('search') }}</strong>
+                    <span class="ml-2">({{ $categories->count() }} kết quả)</span>
+                </div>
+            @endif
             <!-- Bảng Danh Mục -->
             <table class="table table-striped table-hover">
                 <thead>
@@ -107,9 +126,12 @@
                                 <a href="#editCategoryModal{{ $category->id_danhmuc }}" class="edit" data-toggle="modal">
                                     <i class="material-icons" data-toggle="tooltip" title="Sửa">&#xE254;</i>
                                 </a>
-                                <a href="#deleteCategoryModal" class="delete" data-toggle="modal">
+                                <a href="#" class="delete" data-toggle="modal"
+                                    data-target="#deleteCategoryModal{{ $category->id_danhmuc }}">
                                     <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
+
                                 </a>
+
                             </td>
                         </tr>
 
@@ -191,10 +213,11 @@
                                 </div>
                             </div>
                         </div> <!-- Modal Xóa Danh Mục -->
-                        <div id="deleteCategoryModal" class="modal fade">
+                        <div id="deleteCategoryModal{{ $category->id_danhmuc }}" class="modal fade">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form action="" method="POST">
+                                    <form action="{{ route('admin.category.destroy', $category->id_danhmuc) }}"
+                                        method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <div class="modal-header">
@@ -203,13 +226,15 @@
                                                 aria-hidden="true">&times;</button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Bạn có chắc chắn muốn xóa danh mục này?</p>
+                                            <p>Bạn có chắc chắn muốn xóa danh mục
+                                                <strong>{{ $category->tendanhmuc }}</strong>?
+                                            </p>
                                             <p class="text-warning"><small>Hành động này không thể hoàn tác.</small></p>
                                         </div>
                                         <div class="modal-footer">
-                                            <input type="button" class="btn btn-default" data-dismiss="modal"
-                                                value="Hủy">
-                                            <input type="submit" class="btn btn-danger" value="Xóa">
+                                            <button type="button" class="btn btn-default"
+                                                data-dismiss="modal">Hủy</button>
+                                            <button type="submit" class="btn btn-danger">Xóa</button>
                                         </div>
                                     </form>
                                 </div>
@@ -221,12 +246,12 @@
 
             </table>
 
-            <!-- Phân Trang -->
+            <!-- Phân trang -->
             <div class="clearfix">
-                <div class="hint-text">Hiển thị <b>4</b> trong tổng số
-                    <b>4</b> mục
+                <div class="hint-text">
+                    Hiển thị <b>{{ $categories->count() }}</b> trong tổng số <b>{{ $categories->total() }}</b> mục
                 </div>
-                5
+                {{ $categories->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
@@ -303,11 +328,43 @@
             $("#selectAll").click(function() {
                 checkbox.prop('checked', this.checked);
             });
+
             checkbox.click(function() {
                 if (!this.checked) {
                     $("#selectAll").prop("checked", false);
                 }
             });
+
+            // Tự động ẩn thông báo sau 3 giây
+            $('.alert').delay(3000).fadeOut(500);
         });
+
+        function deleteCategory(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {
+                $.ajax({
+                    url: '/admin/category/' + id,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Cập nhật giao diện
+                            $('#category-' + id).fadeOut();
+                            // Hoặc reload trang
+                            // window.location.reload();
+
+                            // Hiển thị thông báo
+                            alert(response.message);
+                        } else {
+                            alert('Có lỗi xảy ra: ' + response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Đã xảy ra lỗi!');
+                    }
+                });
+            }
+        }
     </script>
 @endpush

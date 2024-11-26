@@ -8,12 +8,20 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage; // Add this import
 class CategoryManagerController
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::with('parentCategory')->get();
-        return view('admin.pages.Category.index', compact('categories'));
-    }
+        $search = $request->input('search');
+        $status = $request->input('status', 'active'); // Mặc định là 'active'
 
+        $categories = Category::with('parentCategory')
+            ->when($search, function ($query) use ($search) {
+                return $query->where('tendanhmuc', 'LIKE', '%' . trim($search) . '%')
+                    ->orWhere('mota', 'LIKE', '%' . trim($search) . '%');
+            })
+            ->where('trangthai', $status) // Lọc theo trạng thái
+            ->paginate(10); // Hiển thị 6 mục mỗi trang
+        return view('admin.pages.Category.index', compact('categories', 'search'));
+    }
     public function create()
     {
         $categories = Category::where('trangthai', 'active')
@@ -103,8 +111,22 @@ class CategoryManagerController
                 ->withInput();
         }
     }
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        try {
+            $category = Category::findOrFail($id);
+
+            // Cập nhật trạng thái thành "inactive"
+            $category->update([
+                'trangthai' => 'inactive'
+            ]);
+            return redirect()->route('admin.category.index')
+                ->with('success', 'Xóa danh mục thành công');
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi xóa danh mục: ' . $e->getMessage()
+            ]);
+        }
     }
 }

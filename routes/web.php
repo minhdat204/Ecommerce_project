@@ -51,6 +51,12 @@ Route::get('/mau', function () {
     return view('admin.pages.category'); // giao diện mẫu = Category
 })->name('mau');
 
+Route::get('/about-us',function(){
+    return view('users.pages.about-us');
+});
+
+
+
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     // Category Routes
@@ -109,6 +115,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'destroy' => 'contact.destroy',
     ]);
     
+
     Route::patch('products/{product}/hide', [ProductManagerController::class, 'hide'])->name('product.hide');
 
     // Dashboard Routes

@@ -4,6 +4,17 @@
 @section('content')
     <div class="container">
         <div class="table-wrapper">
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
 
             <!-- Tiêu đề bảng -->
             <div class="table-title">
@@ -118,7 +129,9 @@
                                 <a href="#" class="delete" data-toggle="modal"
                                     data-target="#deleteCategoryModal{{ $category->id_danhmuc }}">
                                     <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
+
                                 </a>
+
                             </td>
                         </tr>
 

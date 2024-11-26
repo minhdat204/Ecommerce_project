@@ -11,12 +11,14 @@ class CategoryManagerController
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $status = $request->input('status', 'active'); // Mặc định là 'active'
 
         $categories = Category::with('parentCategory')
             ->when($search, function ($query) use ($search) {
                 return $query->where('tendanhmuc', 'LIKE', '%' . trim($search) . '%')
                     ->orWhere('mota', 'LIKE', '%' . trim($search) . '%');
             })
+            ->where('trangthai', $status) // Lọc theo trạng thái
             ->get();
 
         return view('admin.pages.Category.index', compact('categories', 'search'));
@@ -119,11 +121,8 @@ class CategoryManagerController
             $category->update([
                 'trangthai' => 'inactive'
             ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Danh mục đã được xóa thành công!'
-            ]);
+            return redirect()->route('admin.category.index')
+                ->with('success', 'Xóa danh mục thành công');
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

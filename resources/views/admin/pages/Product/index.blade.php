@@ -14,7 +14,7 @@
                     <a href="{{ route('admin.product.create') }}" class="btn btn-success">
                         <i class="material-icons">&#xE147;</i> <span>Thêm Sản Phẩm Mới</span>
                     </a>
-                    <a onclick="xoanhieu()" href="javascript:void(0)" id="deleteSelected" class="btn btn-danger">
+                    <a onclick="confirmDeleteSelected()" href="javascript:void(0)" id="deleteSelected" class="btn btn-danger">
                         <i class="material-icons">&#xE15C;</i> <span>Xóa đã chọn</span>
                     </a>
                 </div>
@@ -65,7 +65,12 @@
                                 </span>
                             </td>
                             <td>{{ $product->id_sanpham }}</td>
-                            <td title="{{ $product->tensanpham }}">{{ Str::limit($product->tensanpham, 30) }}</td>
+                            <td>
+                                <!-- Chuyển tới trang chi tiết khi nhấn vào tên sản phẩm -->
+                                <a href="{{ route('admin.product.show', $product->id_sanpham) }}" title="{{ $product->tensanpham }}">
+                                    {{ Str::limit($product->tensanpham, 30) }}
+                                </a>
+                            </td>
                             <td>{{ $product->slug }}</td>
                             <td title="{{ $product->mota }}">{{ Str::limit($product->mota, 50) }}</td>
                             <td title="{{ $product->thongtin_kythuat }}">{{ Str::limit($product->thongtin_kythuat, 50) }}</td>
@@ -92,8 +97,8 @@
                                 <a href="{{ route('admin.product.edit', $product->id_sanpham) }}" class="edit" data-toggle="tooltip" title="Sửa">
                                     <i class="material-icons">&#xE254;</i>
                                 </a>
-                                <a href="#deleteProductModal" class="delete" data-toggle="modal" title="Xóa">
-                                    <i class="material-icons">&#xE872;</i>
+                                <a href="{{ route('admin.product.show', $product->id_sanpham) }}" class="delete" data-toggle="tooltip" title="Chi tiết">
+                                    <i class="material-icons">&#xE8F4;</i>
                                 </a>
                             </td>
                         </tr>
@@ -109,10 +114,37 @@
         </div>
     </div>
 </div>
+
+<!-- Form ẩn -->
+<form action="{{ route('admin.product.destroy', 0) }}" method="POST" id="deleteForm">
+    @csrf
+    @method('DELETE')
+    <input type="hidden" name="products" id="products">
+</form>
 @endsection
 
 @push('scripts')
 <script>
+    function confirmDeleteSelected() {
+        var selectedIds = [];
+        // Thu thập các ID sản phẩm đã chọn
+        $('table tbody input[type="checkbox"]:checked').each(function() {
+            selectedIds.push($(this).val());
+        });
+
+        if (selectedIds.length === 0) {
+            alert('Vui lòng chọn ít nhất một sản phẩm để xóa!');
+            return;
+        }
+
+        // Hiển thị hộp thoại xác nhận
+        if (confirm('Bạn có chắc chắn muốn xóa các sản phẩm đã chọn?')) {
+            // Gán giá trị danh sách ID vào form và gửi
+            $('#products').val(selectedIds.join(','));
+            $('#deleteForm').submit();
+        }
+    }
+
     $(document).ready(function() {
         // Kích hoạt tooltip
         $('[data-toggle="tooltip"]').tooltip();
@@ -129,4 +161,5 @@
         });
     });
 </script>
+
 @endpush

@@ -1,4 +1,7 @@
 @extends('users.layouts.layout')
+@push('styles')
+<link rel="stylesheet" href="{{asset('css/comment.css')}}" type="text/css">
+@endpush
 @section('content')
     <!-- Product Details Section Begin -->
     <section class="product-details spad">
@@ -25,6 +28,7 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
                         <h3>{{$Product->tensanpham}}</h3>
+                        <!-- Phần chấm điểm -->
                         <div class="product__details__rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -33,6 +37,7 @@
                             <i class="fa fa-star-half-o"></i>
                             <span>(18 reviews)</span>
                         </div>
+                        <!-- phần giá -->
                         <div class="product__details__price">
                             @if($Product->gia_khuyen_mai)
                                 ${{$Product->gia_khuyen_mai}}
@@ -41,6 +46,7 @@
                                 ${{$Product->gia}}
                             @endif
                         </div>
+                        <!-- phần mô tả -->
                         <p>{{$Product->mota}}</p>
                         <div class="product__details__quantity">
                             <div class="quantity">
@@ -136,20 +142,8 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-3" role="tabpanel">
-                                <div class="product__details__tab__desc">
-                                    <h6>Products Infomation</h6>
-                                    <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                                        Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
-                                        Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
-                                        sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
-                                        eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
-                                        Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
-                                        sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
-                                        diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
-                                        ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-                                        Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
-                                        Proin eget tortor risus.</p>
-                                </div>
+                                <!-- phần bình luận -->
+                                @include('users.partials.shop-details.comment')
                             </div>
                         </div>
                     </div>

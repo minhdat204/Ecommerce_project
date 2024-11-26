@@ -1034,6 +1034,10 @@ ol {
 	margin-bottom: 70px;
 }
 
+.blog.spad .row {
+    display: flex;
+}
+
 /*---------------------
   Breadcrumb
 -----------------------*/
@@ -1624,7 +1628,9 @@ ol {
 	padding-top: 10px;
 }
 
-.product__pagination a,
+.product__pagination a{
+	margin-right: 10px; 
+}
 .blog__pagination a {
 	display: inline-block;
 	width: 30px;
@@ -1647,6 +1653,7 @@ ol {
     display: flex;
     justify-content: center;
     align-items: center; 
+	margin-top: 20px;
 }
 
 .product__pagination a:hover,
@@ -2359,17 +2366,21 @@ ol {
 -----------------------*/
 
 .blog__sidebar {
-	padding-top: 50px;
+	display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+	margin-left: 50px;
 }
 
 .blog__sidebar__item {
-	margin-bottom: 50px;
+	flex-grow: 1;
 }
 
 .blog__sidebar__item h4 {
 	color: #1c1c1c;
 	font-weight: 700;
-	margin-bottom: 25px;
+	margin-top: 50px;
+	margin-bottom: 20px;
 }
 
 .blog__sidebar__item ul li {

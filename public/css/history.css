@@ -1,0 +1,123 @@
+/*---------------------
+    History Container
+-----------------------*/
+
+.container-history {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa; 
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/*---------------------
+  History Section
+-----------------------*/
+.history-section {
+  padding: 3rem 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.history {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  gap: 2rem; 
+}
+
+/* History Items */
+.history-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem; 
+  text-align: left;
+  position: relative;
+  width: 100%;
+}
+
+/* Year Styling */
+.history-year {
+  background: #7fad39;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  flex-shrink: 0;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Content Styling */
+.history-content {
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 120px);
+}
+
+.history-content h1 {
+  font-size: 1.8rem;
+  color: #7fad39;
+  margin-bottom: 0.8rem;
+}
+
+.history-content p {
+  font-size: 1rem;
+  color: #6c757d;
+  line-height: 1.8;
+}
+
+/* Arrow Styling */
+.history-arrow {
+  width: 2px;
+  height: 50px;
+  background: #95d5b2;
+  margin: 0 auto;
+  position: relative;
+}
+
+.history-arrow::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #95d5b2;
+}
+
+.history-arrow::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; 
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-bottom-color: #95d5b2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .history-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .history-content {
+    width: 100%;
+  }
+}
+
+
+
+

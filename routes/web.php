@@ -55,7 +55,13 @@ Route::get('/about-us',function(){
     return view('users.pages.about-us');
 });
 
+Route::get('/history',function(){
+    return view('users.pages.history');
+});
 
+Route::get('/lose-weight',function(){
+    return view('users.pages.lose-weight');
+});
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {

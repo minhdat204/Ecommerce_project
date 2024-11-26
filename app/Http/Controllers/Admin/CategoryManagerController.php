@@ -19,8 +19,7 @@ class CategoryManagerController
                     ->orWhere('mota', 'LIKE', '%' . trim($search) . '%');
             })
             ->where('trangthai', $status) // Lọc theo trạng thái
-            ->get();
-
+            ->paginate(10); // Hiển thị 6 mục mỗi trang
         return view('admin.pages.Category.index', compact('categories', 'search'));
     }
     public function create()

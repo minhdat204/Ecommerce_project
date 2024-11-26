@@ -246,12 +246,12 @@
 
             </table>
 
-            <!-- Phân Trang -->
+            <!-- Phân trang -->
             <div class="clearfix">
-                <div class="hint-text">Hiển thị <b>4</b> trong tổng số
-                    <b>4</b> mục
+                <div class="hint-text">
+                    Hiển thị <b>{{ $categories->count() }}</b> trong tổng số <b>{{ $categories->total() }}</b> mục
                 </div>
-                5
+                {{ $categories->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>

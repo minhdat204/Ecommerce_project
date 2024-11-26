@@ -41,7 +41,9 @@ class ProductController
      */
     public function show(string $slug)
     {
+        //Dat : lấy chi tiết sản phẩm dựa vào slug
         $Product = Product::where('slug', $slug)->first();
+        
         return view('users.pages.shop-details', compact('Product'));
     }
 

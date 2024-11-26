@@ -54,6 +54,7 @@ return new class extends Migration
             $table->enum('trangthai', ['active', 'inactive'])->default('active');
             $table->integer('luotxem')->default(0);
             $table->unsignedBigInteger('id_danhmuc')->nullable(false)->change();
+            $table->unique('slug');
             $table->timestamps();
         });
 

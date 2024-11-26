@@ -16,19 +16,19 @@ class ProductManagerController
 {
     $search = $request->input('search');
     
-    $products = Product::with(['category', 'images'])  // Chắc chắn đã lấy thông tin hình ảnh
+    // Bắt đầu truy vấn với eager loading category và images
+    $products = Product::with(['category', 'images'])
         ->when($search, function ($query, $search) {
+            // Áp dụng tìm kiếm nếu có
             $query->where('tensanpham', 'like', '%' . $search . '%');
         })
+        // Lọc sản phẩm có trạng thái không phải 'inactive'
+        ->where('trangthai', '!=', 'inactive')
         ->paginate(10);
-
-    // Truyền thông tin hình ảnh vào view
-    foreach ($products as $product) {
-        $product->images = ProductImage::where('id_sanpham', $product->id_sanpham)->get();
-    }
 
     return view('admin.pages.product.index', compact('products'));
 }
+
 
     // Hiển thị form thêm mới sản phẩm
     public function create()
@@ -186,33 +186,24 @@ public function store(Request $request)
 }
 
 
-
-
-
-
-
-
-    // Xóa sản phẩm
-    public function destroy(Request $request, $product = null)
+// Ẩn sản phẩm
+public function destroy($id_sanpham)
 {
-    $productIds = $request->input('products');
+    $product = Product::findOrFail($id_sanpham);
+    $product->trangthai = 'inactive';
+    $product->save();
 
-    if ($productIds) {
-        $ids = explode(',', $productIds);
-        Product::whereIn('id_sanpham', $ids)->update(['trangthai' => 'inactive']);
-
-        return redirect()->route('admin.product.index')->with('success', 'Các sản phẩm đã được ẩn thành công!');
-    } elseif ($product) {
-        $singleProduct = Product::find($product);
-        if ($singleProduct) {
-            $singleProduct->update(['trangthai' => 'inactive']);
-            return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được ẩn thành công!');
-        }
-    }
-
-    return redirect()->route('admin.product.index')->with('error', 'Vui lòng chọn sản phẩm để xóa!');
+    return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được ẩn');
 }
+public function hide($id)
+{
+    $product = Product::findOrFail($id);
+    
+    // Cập nhật trạng thái sản phẩm thành 'inactive'
+    $product->trangthai = 'inactive';
+    $product->save();
 
-
+    return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được ẩn');
+}
 
 }

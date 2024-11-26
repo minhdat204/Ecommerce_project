@@ -97,8 +97,10 @@
                                 <a href="{{ route('admin.product.edit', $product->id_sanpham) }}" class="edit" data-toggle="tooltip" title="Sửa">
                                     <i class="material-icons">&#xE254;</i>
                                 </a>
-                                <a href="{{ route('admin.product.show', $product->id_sanpham) }}" class="delete" data-toggle="tooltip" title="Chi tiết">
-                                    <i class="material-icons">&#xE8F4;</i>
+                                <!-- Nút ẩn sản phẩm -->
+                                <a href="#deleteProductModal" class="delete" data-toggle="modal" title="Ẩn sản phẩm" 
+                                   data-id="{{ $product->id_sanpham }}" onclick="setProductId(this)">
+                                   <i class="material-icons">&#xE872;</i>
                                 </a>
                             </td>
                         </tr>
@@ -116,15 +118,39 @@
 </div>
 
 <!-- Form ẩn -->
-<form action="{{ route('admin.product.destroy', 0) }}" method="POST" id="deleteForm">
+<form action="{{ route('admin.product.hide', ':product') }}" method="POST" id="deleteProductForm">
     @csrf
-    @method('DELETE')
-    <input type="hidden" name="products" id="products">
+    @method('PATCH') <!-- Sử dụng PATCH thay vì POST -->
+    <input type="hidden" name="product_id" id="product_id">
 </form>
+
+
+<!-- Modal Ẩn Sản Phẩm -->
+<div id="deleteProductModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProductModalLabel">Xác nhận ẩn sản phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn ẩn sản phẩm này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" onclick="submitDeleteForm()">Ẩn</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
 <script>
+    // Xác nhận xóa các sản phẩm đã chọn
     function confirmDeleteSelected() {
         var selectedIds = [];
         // Thu thập các ID sản phẩm đã chọn
@@ -140,26 +166,29 @@
         // Hiển thị hộp thoại xác nhận
         if (confirm('Bạn có chắc chắn muốn xóa các sản phẩm đã chọn?')) {
             // Gán giá trị danh sách ID vào form và gửi
-            $('#products').val(selectedIds.join(','));
-            $('#deleteForm').submit();
+            $('#deleteSelectedForm').submit();
         }
     }
 
-    $(document).ready(function() {
-        // Kích hoạt tooltip
-        $('[data-toggle="tooltip"]').tooltip();
+    // Đặt ID cho sản phẩm để ẩn
+    function setProductId(element) {
+        var productId = $(element).data('id');
+        var formAction = '{{ route('admin.product.destroy', ':product') }}';
+        formAction = formAction.replace(':product', productId);
+        $('#deleteProductForm').attr('action', formAction);
+        $('#product_id').val(productId);
+    }
 
-        // Chọn/Bỏ chọn tất cả checkbox
-        var checkbox = $('table tbody input[type="checkbox"]');
-        $("#selectAll").click(function() {
-            checkbox.prop('checked', this.checked);
-        });
-        checkbox.click(function() {
-            if (!this.checked) {
-                $("#selectAll").prop("checked", false);
-            }
-        });
-    });
+
+    // Gửi form xác nhận ẩn sản phẩm
+    function submitDeleteForm() {
+        // Kiểm tra action của form
+        var action = $('#deleteProductForm').attr('action');
+        if (action) {
+            $('#deleteProductForm').submit();
+        } else {
+            alert('Lỗi: Không có hành động cho form!');
+        }
+    }
 </script>
-
 @endpush

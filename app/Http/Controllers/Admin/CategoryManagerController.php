@@ -8,12 +8,19 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage; // Add this import
 class CategoryManagerController
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::with('parentCategory')->get();
-        return view('admin.pages.Category.index', compact('categories'));
-    }
+        $search = $request->input('search');
 
+        $categories = Category::with('parentCategory')
+            ->when($search, function ($query) use ($search) {
+                return $query->where('tendanhmuc', 'LIKE', '%' . trim($search) . '%')
+                    ->orWhere('mota', 'LIKE', '%' . trim($search) . '%');
+            })
+            ->get();
+
+        return view('admin.pages.Category.index', compact('categories', 'search'));
+    }
     public function create()
     {
         $categories = Category::where('trangthai', 'active')
@@ -103,8 +110,25 @@ class CategoryManagerController
                 ->withInput();
         }
     }
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        try {
+            $category = Category::findOrFail($id);
+
+            // Cập nhật trạng thái thành "inactive"
+            $category->update([
+                'trangthai' => 'inactive'
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Danh mục đã được xóa thành công!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi xóa danh mục: ' . $e->getMessage()
+            ]);
+        }
     }
 }

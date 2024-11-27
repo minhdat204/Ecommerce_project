@@ -91,6 +91,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'update'  => 'product.update',
         'destroy' => 'product.destroy',
     ]);
+    
 
     // Comment Routes
     Route::resource('comments', CommentManagerController::class)->names([
@@ -115,6 +116,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     ]);
     
 
+    Route::patch('products/{product}/hide', [ProductManagerController::class, 'hide'])->name('product.hide');
 
     // Dashboard Routes
     Route::get('dashboard', [DashboardManagerController::class, 'index'])->name('dashboard.index');

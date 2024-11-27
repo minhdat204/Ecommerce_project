@@ -16,5 +16,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
             'hoten' => 'Test User',
         ]);
+
+        $this->call([
+            FooterSeeder::class,
+        ]);
     }
 }

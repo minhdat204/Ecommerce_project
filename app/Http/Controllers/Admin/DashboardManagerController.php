@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 class DashboardManagerController
 {
     /**
-     * Display a listing of the resource.
+     * show những thống kê, thông tin tông quát.... không quản lý phần thông tin website
+     * phần thông tin website sẽ có 1 controller quản lý riêng
      */
     public function index()
     {

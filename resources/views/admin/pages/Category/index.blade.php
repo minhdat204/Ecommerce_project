@@ -151,19 +151,18 @@
 
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <label>Danh mục cha</label>
-                                                <select class="form-control" name="CategoryParent">
-                                                    <option value="">-- Chọn danh mục cha --</option>
-                                                    @foreach ($categories as $parent)
-                                                        @if ($parent->id_danhmuc != $category->id_danhmuc)
-                                                            <option value="{{ $parent->id_danhmuc }}"
-                                                                {{ old('CategoryParent', $category->id_danhmuc_cha) == $parent->id_danhmuc ? 'selected' : '' }}>
-                                                                {{ $parent->tendanhmuc }}
-                                                            </option>
-                                                        @endif
+                                                <label for="CategoryParent">Danh mục cha</label>
+                                                <select name="CategoryParent" id="CategoryParent" class="form-control">
+                                                    <option value="">-- Không chọn danh mục cha --</option>
+                                                    @foreach ($parentCategories as $parent)
+                                                        <option value="{{ $parent->id_danhmuc }}"
+                                                            {{ $parent->id_danhmuc == $category->id_danhmuc_cha ? 'selected' : '' }}>
+                                                            {{ $parent->tendanhmuc }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
+
 
                                             <div class="form-group">
                                                 <label>Tên Danh Mục</label>
@@ -278,7 +277,7 @@
                             <label>Danh mục cha</label>
                             <select id="CategoryParent" class="form-control" name="CategoryParent">
                                 <option value="">-- Chọn danh mục cha --</option>
-                                @foreach ($categories as $parent)
+                                @foreach ($parentCategories as $parent)
                                     <option value="{{ $parent->id_danhmuc }}">{{ $parent->tendanhmuc }}</option>
                                 @endforeach
                             </select>

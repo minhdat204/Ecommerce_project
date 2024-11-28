@@ -11,7 +11,7 @@ class Product extends Model
 
     protected $table = 'san_pham';
     protected $primaryKey = 'id_sanpham';
-
+    
     protected $fillable = [
         'id_danhmuc',
         'tensanpham',
@@ -33,7 +33,7 @@ class Product extends Model
         'soluong' => 'integer',
         'luotxem' => 'integer'
     ];
-  
+
     public function category()
     {
         return $this->belongsTo(Category::class, 'id_danhmuc', 'id_danhmuc');

@@ -1,4 +1,5 @@
 @extends('users.layouts.layout')
+
 @section('content')
     <!-- Product Details Section Begin -->
     <section class="product-details spad">
@@ -26,12 +27,21 @@
                     <div class="product__details__text">
                         <h3>Vetgetable’s Package</h3>
                         <div class="product__details__rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <span>(18 reviews)</span>
+                            {{-- Hiển thị sao đầy đủ --}}
+                            @for ($i = 0; $i < floor($ratingData['averageRating']); $i++)
+                                <i class="fa fa-star"></i>
+                            @endfor
+
+                            {{-- Hiển thị sao nửa nếu có --}}
+                            @if ($ratingData['averageRating'] - floor($ratingData['averageRating']) >= 0.5)
+                                <i class="fa fa-star-half-o"></i>
+                            @endif
+
+                            {{-- Hiển thị sao rỗng --}}
+                            @for ($i = 0; $i < 5 - ceil($ratingData['averageRating']); $i++)
+                                <i class="fa fa-star-o"></i>
+                            @endfor
+                            <span>({{ $ratingData['countFavorites'] }} reviews)</span>
                         </div>
                         <div class="product__details__price">$50.00</div>
                         <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam

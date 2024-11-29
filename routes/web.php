@@ -12,6 +12,7 @@ use App\Http\Controllers\Client\CartController;
 //client
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProfileController;
+use App\Http\Controllers\Client\ShopDetailsController;
 
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
@@ -54,7 +55,7 @@ Route::get('/mau', function () {
 Route::get('/about-us',function(){
     return view('users.pages.about-us');
 });
-
+Route::get('/shop-details/{id}', [ShopDetailsController::class, 'showProductDetails'])->name('users.pages.shop-details');
 
 
 // Admin Routes
@@ -115,9 +116,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'destroy' => 'contact.destroy',
     ]);
     
-
-    Route::patch('products/{product}/hide', [ProductManagerController::class, 'hide'])->name('product.hide');
-
     // Dashboard Routes
     Route::get('dashboard', [DashboardManagerController::class, 'index'])->name('dashboard.index');
 

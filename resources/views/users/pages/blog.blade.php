@@ -1,7 +1,6 @@
 @extends('users.layouts.layout')
-@push('scripts')
-    <script src="{{asset('js/aboutUs.js')}}"></script>
-    <script src="{{asset('js/search_blog.js')}}"></script>
+@push('styles')
+    <link rel="stylesheet" href="{{asset('css/blog.css')}}">
 @endpush
 @section('content')
 <!-- Blog Section Begin -->
@@ -10,19 +9,24 @@
         <div class="row">
             <div class="col-lg-8 col-md-7">
                 <div class="row">
-                    @include('users.partials.blog.blog-about-us')
-                    @include('users.partials.blog.blog-history')
-                    @include('users.partials.blog.blog-loseweight')
+                    <!-- Duyệt qua các bài viết blog -->
+                    @foreach($blogs as $blog)
+                        <div class="col-lg-6 col-md-6 col-sm-6 blog-item">
+                            @include('users.partials.blog.blog-item', ['blog' => $blog])
+                        </div>
+                    @endforeach
+                    
+                    <!-- Phân trang -->
                     <div class="col-lg-12 pagination-container">
                         <div class="product__pagination blog__pagination">
-                            <a href="#">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <a href="#"><i class="fa fa-long-arrow-right"></i></a>
+                            <!-- Phân trang có thể được tùy chỉnh theo yêu cầu -->
+                            {{ $blogs->links() }} <!-- Laravel sẽ tự động hiển thị phân trang -->
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <!-- Sidebar -->
             <div class="col-lg-4 col-md-5 d-flex flex-column">
                 <div class="blog__sidebar flex-grow-1">
                     <div class="blog__sidebar__item">
@@ -47,4 +51,3 @@
 </section>
 <!-- Blog Section End -->
 @endsection
-

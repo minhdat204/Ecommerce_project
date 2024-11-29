@@ -12,6 +12,7 @@ use App\Http\Controllers\Client\CartController;
 //client
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProfileController;
+use App\Http\Controllers\Client\BlogController;
 
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
@@ -23,9 +24,8 @@ Route::get('/shop', function () {
     return view('users.pages.shop');
 })->name('users.shop');
 
-Route::get('/blog', function () {
-    return view('users.pages.blog');
-})->name('users.blog');
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');// Trang danh sách blog
+Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blogs.show'); // Trang chi tiết blog
 
 Route::get('/contact', function () {
     return view('users.pages.contact');

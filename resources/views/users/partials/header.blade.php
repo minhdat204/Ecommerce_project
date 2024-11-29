@@ -68,7 +68,7 @@
                         <ul>
                             <li><a href="{{route('users.home')}}">Home</a></li>
                             <li class="active"><a href="{{route('users.shop')}}">Shop</a></li>
-                            <li><a href="{{route('users.blog')}}">Blog</a></li>
+                            <li><a href="{{route('blogs.index')}}">Blog</a></li>
                             <li><a href="{{route('users.contact')}}">Contact</a></li>
                         </ul>
                     </nav>

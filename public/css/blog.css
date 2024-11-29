@@ -1,0 +1,88 @@
+.blog-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.blog-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+}
+.blog__pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.blog__pagination .page-item {
+    margin: 0 5px;
+}
+
+.blog__pagination .page-item a {
+    padding: 8px 12px;
+    background: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.blog__pagination .page-item.active a {
+    background: #0056b3;
+}
+
+.blog__pagination .page-item a:hover {
+    background: #0056b3;
+}
+.blog__sidebar {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.blog__sidebar__item h4 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.blog__sidebar__item__tags a {
+    display: inline-block;
+    margin: 5px 5px 0 0;
+    padding: 5px 10px;
+    font-size: 12px;
+    background: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.blog__sidebar__item__tags a:hover {
+    background: #0056b3;
+}
+
+.blog-item {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tùy chọn: Thêm bóng */
+    background-color: #fff; /* Tùy chọn: Thêm màu nền */
+    border-radius: 8px;
+}
+
+@media (min-width: 992px) {
+    /* Desktop: Hiển thị 2 bài mỗi hàng */
+    .blog-item {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 991px) {
+    /* Tablet: 1 bài mỗi hàng */
+    .blog-item {
+        width: 100%;
+    }
+}

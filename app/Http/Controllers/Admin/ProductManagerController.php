@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 
 class ProductManagerController
 {
-    // Hiển thị danh sách sản phẩm
     public function index(Request $request)
 {
     // Lấy các tham số từ form
@@ -20,7 +19,7 @@ class ProductManagerController
     $maxPrice = $request->input('max_price');
     $xuatxu = $request->input('xuatxu');
     $idDanhMuc = $request->input('id_danhmuc');
-
+    $status = $request->input('trangthai', 'active');
     // Query sản phẩm
     $products = Product::with(['category', 'images'])
         ->when($search, function ($query) use ($search) {
@@ -38,6 +37,7 @@ class ProductManagerController
         ->when($idDanhMuc, function ($query) use ($idDanhMuc) {
             return $query->where('id_danhmuc', $idDanhMuc);
         })
+        ->where('trangthai', $status)
         ->paginate(5);
 
     // Lấy danh sách xuất xứ và danh mục cho dropdown
@@ -206,21 +206,19 @@ public function store(Request $request)
 // Ẩn sản phẩm
 public function destroy($id_sanpham)
 {
-    $product = Product::findOrFail($id_sanpham);
-    $product->trangthai = 'inactive';
-    $product->save();
+    try {
+        $product = Product::findOrFail($id_sanpham);
 
-    return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được ẩn');
-}
-public function hide($id)
-{
-    $product = Product::findOrFail($id);
-    
-    // Cập nhật trạng thái sản phẩm thành 'inactive'
-    $product->trangthai = 'inactive';
-    $product->save();
+        $product->update([
+            'trangthai' => 'inactive'
+        ]);
 
-    return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được ẩn');
+        return redirect()->route('admin.product.index')
+            ->with('success', 'Sản phẩm đã được ẩn thành công');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.product.index')
+            ->with('error', 'Có lỗi xảy ra khi ẩn sản phẩm: ' . $e->getMessage());
+    }
 }
 
 }

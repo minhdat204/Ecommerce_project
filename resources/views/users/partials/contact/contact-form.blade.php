@@ -8,7 +8,7 @@
                 </div>
             </div>
         </div>
-        <form action="{{route('client.contact.store')}}" method="POST">
+        <form action="{{route('contact.store')}}" method="POST">
             @csrf
             <div class="row">
                 <div class="col-lg-6 col-md-6">

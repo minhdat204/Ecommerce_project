@@ -12,9 +12,14 @@ use App\Http\Controllers\Client\CartController;
 //client
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProfileController;
+use App\Http\Controllers\Client\ContactController;
 
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
+]);
+
+Route::resource('contact', ContactController::class)->names([
+    'store' =>'contact.store',
 ]);
 
 Route::get('/', [HomeController::class, 'index'])->name('users.home');

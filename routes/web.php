@@ -16,7 +16,7 @@ use App\Http\Controllers\Client\ProfileController;
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
 ]);
-
+Route::get('/orders/{id}', [ProfileController::class, 'orderDetail'])->name('orders.detail');
 Route::get('/', [HomeController::class, 'index'])->name('users.home');
 
 Route::get('/shop', function () {
@@ -51,7 +51,7 @@ Route::get('/mau', function () {
     return view('admin.pages.category'); // giao diện mẫu = Category
 })->name('mau');
 
-Route::get('/about-us',function(){
+Route::get('/about-us', function () {
     return view('users.pages.about-us');
 });
 
@@ -113,7 +113,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'update'  => 'contact.update',
         'destroy' => 'contact.destroy',
     ]);
-    
+
 
 
     // Dashboard Routes

@@ -23,9 +23,38 @@
 
         <!-- Form Tìm Kiếm -->
         <form action="{{ route('admin.product.index') }}" method="GET" class="form-inline mb-3">
-            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm sản phẩm..." value="{{ request('search') }}">
-            <button type="submit" class="btn btn-default">Tìm kiếm</button>
+            <div class="form-group mr-2">
+                <input type="text" name="search" class="form-control" placeholder="Tìm kiếm tên sản phẩm..." value="{{ request('search') }}">
+            </div>
+            <div class="form-group mr-2">
+                <input type="number" name="min_price" class="form-control" placeholder="Giá từ..." value="{{ request('min_price') }}">
+            </div>
+            <div class="form-group mr-2">
+                <input type="number" name="max_price" class="form-control" placeholder="Giá đến..." value="{{ request('max_price') }}">
+            </div>
+            <div class="form-group mr-2">
+                <select name="xuatxu" class="form-control">
+                    <option value="">Chọn xuất xứ</option>
+                    @foreach ($countries as $country)
+                        <option value="{{ $country }}" {{ request('xuatxu') == $country ? 'selected' : '' }}>
+                            {{ $country }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group mr-2">
+                <select name="id_danhmuc" class="form-control">
+                    <option value="">Chọn loại sản phẩm</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id_danhmuc }}" {{ request('id_danhmuc') == $category->id_danhmuc ? 'selected' : '' }}>
+                            {{ $category->tendanhmuc }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
         </form>
+
 
         <!-- Bảng Sản Phẩm -->
         <div class="table-responsive">
@@ -111,10 +140,11 @@
 
         <!-- Phân Trang -->
         <div class="clearfix">
-            <div class="hint-text">Hiển thị <b>{{ $products->count() }}</b> trong tổng số <b>{{ $products->total() }}</b> sản phẩm</div>
-            {{ $products->links() }}
+            <div class="hint-text">
+                Hiển thị <b>{{ $products->count() }}</b> trong tổng số <b>{{ $products->total() }}</b> sản phẩm
+            </div>
+            {{ $products->links('pagination::bootstrap-4') }}
         </div>
-    </div>
 </div>
 
 <!-- Form ẩn -->

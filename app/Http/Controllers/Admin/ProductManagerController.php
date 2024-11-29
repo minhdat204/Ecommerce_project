@@ -14,19 +14,37 @@ class ProductManagerController
     // Hiển thị danh sách sản phẩm
     public function index(Request $request)
 {
+    // Lấy các tham số từ form
     $search = $request->input('search');
-    
-    // Bắt đầu truy vấn với eager loading category và images
-    $products = Product::with(['category', 'images'])
-        ->when($search, function ($query, $search) {
-            // Áp dụng tìm kiếm nếu có
-            $query->where('tensanpham', 'like', '%' . $search . '%');
-        })
-        // Lọc sản phẩm có trạng thái không phải 'inactive'
-        ->where('trangthai', '!=', 'inactive')
-        ->paginate(10);
+    $minPrice = $request->input('min_price');
+    $maxPrice = $request->input('max_price');
+    $xuatxu = $request->input('xuatxu');
+    $idDanhMuc = $request->input('id_danhmuc');
 
-    return view('admin.pages.product.index', compact('products'));
+    // Query sản phẩm
+    $products = Product::with(['category', 'images'])
+        ->when($search, function ($query) use ($search) {
+            return $query->where('tensanpham', 'like', '%' . $search . '%');
+        })
+        ->when($minPrice, function ($query) use ($minPrice) {
+            return $query->where('gia', '>=', $minPrice);
+        })
+        ->when($maxPrice, function ($query) use ($maxPrice) {
+            return $query->where('gia', '<=', $maxPrice);
+        })
+        ->when($xuatxu, function ($query) use ($xuatxu) {
+            return $query->where('xuatxu', $xuatxu);
+        })
+        ->when($idDanhMuc, function ($query) use ($idDanhMuc) {
+            return $query->where('id_danhmuc', $idDanhMuc);
+        })
+        ->paginate(5);
+
+    // Lấy danh sách xuất xứ và danh mục cho dropdown
+    $countries = Product::select('xuatxu')->distinct()->pluck('xuatxu');
+    $categories = Category::all();
+
+    return view('admin.pages.product.index', compact('products', 'countries', 'categories'));
 }
 
 
@@ -67,7 +85,7 @@ public function store(Request $request)
     // Lưu sản phẩm
     $product = new Product();
     $product->tensanpham = $request->tensanpham;
-    $product->slug = $request->slug;
+    $product->slug = Str::slug($request->tensanpham);    
     $product->mota = $request->mota;
     $product->thongtin_kythuat = $request->thongtin_kythuat;
     $product->id_danhmuc = $category->id_danhmuc; // Gán id_danhmuc lấy từ bảng danh_muc
@@ -76,8 +94,8 @@ public function store(Request $request)
     $product->donvitinh = $request->donvitinh;
     $product->xuatxu = $request->xuatxu;
     $product->soluong = $request->soluong;
-    $product->trangthai = $request->trangthai;
-    $product->luotxem = $request->luotxem;
+    $product->trangthai = $request->trangthai === 'active' ? 1 : 0; // Mặc định là "Không hoạt động" nếu không chọn    
+    $product->luotxem = $request->luotxem ?? 0;    
     $product->save();
 
     // Xử lý hình ảnh
@@ -135,7 +153,6 @@ public function store(Request $request)
     // Validate dữ liệu
     $request->validate([
         'tensanpham' => 'required|string|max:255',
-        'slug' => 'required|string|max:255|unique:san_pham,slug,' . $product->id_sanpham . ',id_sanpham',
         'mota' => 'required|string',
         'gia' => 'required|numeric',
         'gia_khuyen_mai' => 'nullable|numeric',
@@ -149,7 +166,7 @@ public function store(Request $request)
 
     // Cập nhật các thông tin sản phẩm
     $product->tensanpham = $request->tensanpham;
-    $product->slug = $request->slug;
+    $product->slug = Str::slug($request->input('tensanpham'));    
     $product->mota = $request->mota;
     $product->gia = $request->gia;
     $product->gia_khuyen_mai = $request->gia_khuyen_mai;

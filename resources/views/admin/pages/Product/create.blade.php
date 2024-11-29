@@ -1,28 +1,40 @@
 @extends('Admin.Layout.Layout')
 
 @section('content')
-    <div class="container">
-        <h1 class="my-4">Thêm Sản Phẩm Mới</h1>
+            <h1 class="my-4">Thêm Sản Phẩm Mới</h1>
 
-        <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+            <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-            <!-- Các trường thông tin sản phẩm -->
-            <div class="mb-3">
-                <label for="tensanpham" class="form-label">Tên Sản Phẩm</label>
-                <input type="text" class="form-control @error('tensanpham') is-invalid @enderror" id="tensanpham" name="tensanpham" value="{{ old('tensanpham') }}" required>
-                @error('tensanpham')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
+                <!-- Các trường thông tin sản phẩm -->
+                <div class="mb-3">
+                    <label for="tensanpham" class="form-label">Tên Sản Phẩm</label>
+                    <input type="text" class="form-control @error('tensanpham') is-invalid @enderror" id="tensanpham" name="tensanpham" value="{{ old('tensanpham') }}" required>
+                    @error('tensanpham')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
 
-            <div class="mb-3">
-                <label for="slug" class="form-label">Slug</label>
-                <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug" name="slug" value="{{ old('slug') }}" required>
-                @error('slug')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
+                <div class="mb-3">
+                    <label for="slug" class="form-label"></label>
+                    <input type="hidden" id="slug" name="slug">
+                </div>
+
+        <script>
+            // Chuyển tên sản phẩm thành slug tự động
+            document.getElementById('tensanpham').addEventListener('input', function () {
+                const slug = this.value
+                    .toLowerCase()
+                    .trim()
+                    .normalize('NFD') // Chuẩn hóa Unicode
+                    .replace(/[\u0300-\u036f]/g, '') // Loại bỏ dấu
+                    .replace(/đ/g, 'd') // Thay "đ" thành "d"
+                    .replace(/[^a-z0-9\s-]/g, '') // Loại bỏ ký tự đặc biệt
+                    .replace(/\s+/g, '-') // Thay khoảng trắng bằng dấu "-"
+                    .replace(/-+/g, '-'); // Loại bỏ dấu "-" liên tiếp
+                document.getElementById('slug').value = slug;
+            });
+        </script>
 
             <div class="mb-3">
                 <label for="mota" class="form-label">Mô Tả</label>
@@ -100,14 +112,6 @@
     <option value="inactive" {{ old('trangthai') === 'inactive' ? 'selected' : '' }}>Không hoạt động</option>
                 </select>
                 @error('trangthai')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <label for="luotxem" class="form-label">Lượt Xem</label>
-                <input type="number" class="form-control @error('luotxem') is-invalid @enderror" id="luotxem" name="luotxem" value="{{ old('luotxem') }}">
-                @error('luotxem')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>

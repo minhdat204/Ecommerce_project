@@ -32,12 +32,32 @@
                                    value="{{ old('tensanpham', $product->tensanpham) }}" required>
                         </div>
 
-                        <!-- Slug -->
+                        <!-- Slug (ẩn hoặc chỉ hiển thị read-only) -->
                         <div class="form-group">
                             <label for="slug">Slug</label>
-                            <input type="text" name="slug" id="slug" class="form-control" 
-                                   value="{{ old('slug', $product->slug) }}" required>
+                            <input type="text" id="slug" class="form-control" 
+                                value="{{ Str::slug(old('tensanpham', $product->tensanpham)) }}" readonly>
                         </div>
+                        @push('scripts')
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const nameInput = document.getElementById('tensanpham');
+                                const slugDisplay = document.getElementById('slug');
+
+                                function generateSlug(str) {
+                                    return str.toLowerCase()
+                                        .trim()
+                                        .replace(/[^a-z0-9\s-]/g, '')
+                                        .replace(/[\s-]+/g, '-')
+                                        .replace(/^-+|-+$/g, '');
+                                }
+
+                                nameInput.addEventListener('input', function () {
+                                    slugDisplay.value = generateSlug(nameInput.value);
+                                });
+                            });
+                        </script>
+                        @endpush
 
                         <!-- Mô tả -->
                         <div class="form-group">

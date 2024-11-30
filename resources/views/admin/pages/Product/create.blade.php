@@ -1,62 +1,28 @@
 @extends('Admin.Layout.Layout')
 
 @section('content')
-            <h1 class="my-4">Thêm Sản Phẩm Mới</h1>
+    <div class="container">
+        <h1 class="my-4">Thêm Sản Phẩm Mới</h1>
 
-            <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
+        <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
 
-                <!-- Các trường thông tin sản phẩm -->
-                <div class="mb-3">
-                    <label for="tensanpham" class="form-label">Tên Sản Phẩm</label>
-                    <input type="text" class="form-control @error('tensanpham') is-invalid @enderror" id="tensanpham" name="tensanpham" value="{{ old('tensanpham') }}" required>
-                    @error('tensanpham')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+            <!-- Các trường thông tin sản phẩm -->
+            <div class="mb-3">
+                <label for="tensanpham" class="form-label">Tên Sản Phẩm</label>
+                <input type="text" class="form-control @error('tensanpham') is-invalid @enderror" id="tensanpham" name="tensanpham" value="{{ old('tensanpham') }}" required>
+                @error('tensanpham')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-                <div class="mb-3">
-                    <label for="slug" class="form-label">Slug</label>
-                    <input type="hidden" id="slug" name="slug">
-                </div>
-
-                <script>
-                // Danh sách các slug đã có (có thể lấy từ database hoặc dữ liệu động)
-                var existingSlugs = [
-                    'rau-cai-ngot-organic',
-                    'rau-cai-ngot-organic-1',
-                    // Thêm các slug khác vào danh sách nếu cần
-                ];
-
-                // Chuyển tên sản phẩm thành slug tự động
-                document.getElementById('tensanpham').addEventListener('input', function () {
-                    let slug = this.value
-                        .toLowerCase()
-                        .trim()
-                        .normalize('NFD') // Chuẩn hóa Unicode
-                        .replace(/[\u0300-\u036f]/g, '') // Loại bỏ dấu
-                        .replace(/đ/g, 'd') // Thay "đ" thành "d"
-                        .replace(/[^a-z0-9\s-]/g, '') // Loại bỏ ký tự đặc biệt
-                        .replace(/\s+/g, '-') // Thay khoảng trắng bằng dấu "-"
-                        .replace(/-+/g, '-'); // Loại bỏ dấu "-" liên tiếp
-
-                    // Kiểm tra slug có bị trùng không
-                    let originalSlug = slug;
-                    let count = 1;
-                    while (existingSlugs.includes(slug)) {
-                        slug = originalSlug + '-' + count;
-                        count++;
-                    }
-
-                    // Gán giá trị slug vào input ẩn
-                    document.getElementById('slug').value = slug;
-
-                    // Thêm slug vào danh sách các slug đã có
-                    existingSlugs.push(slug);
-                });
-                </script>
-
-
+            <div class="mb-3">
+                <label for="slug" class="form-label">Slug</label>
+                <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug" name="slug" value="{{ old('slug') }}" required>
+                @error('slug')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
             <div class="mb-3">
                 <label for="mota" class="form-label">Mô Tả</label>
@@ -89,59 +55,19 @@
             <!-- Các trường thông tin khác -->
             <div class="mb-3">
                 <label for="gia" class="form-label">Giá</label>
-                <input type="number" class="form-control @error('gia') is-invalid @enderror" 
-                    id="gia" name="gia" value="{{ old('gia') }}" required min="0">
+                <input type="number" class="form-control @error('gia') is-invalid @enderror" id="gia" name="gia" value="{{ old('gia') }}" required>
                 @error('gia')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            <script>
-                document.getElementById('gia').addEventListener('input', function () {
-                    if (this.value < 0) {
-                        this.value = 0; 
-                    }
-                });
-                 // Lắng nghe sự kiện khi người dùng thay đổi giá
-                document.getElementById('gia').addEventListener('input', function () {
-                    validatePrice();
-                });
-
-                // Lắng nghe sự kiện khi người dùng thay đổi giá khuyến mãi
-                document.getElementById('gia_khuyen_mai').addEventListener('input', function () {
-                    validatePrice();
-                });
-
-                // Hàm kiểm tra giá
-                function validatePrice() {
-                    var gia = parseFloat(document.getElementById('gia').value);
-                    var giaKhuyenMai = parseFloat(document.getElementById('gia_khuyen_mai').value);
-
-                    // Kiểm tra nếu giá nhỏ hơn giá khuyến mãi
-                    if (gia <= giaKhuyenMai) {
-                        // Hiển thị lỗi nếu giá không hợp lệ
-                        alert('Giá phải lớn hơn giá khuyến mãi!');
-                        document.getElementById('gia').setCustomValidity('Giá phải lớn hơn giá khuyến mãi!');
-                    } else {
-                        // Không có lỗi nếu giá hợp lệ
-                        document.getElementById('gia').setCustomValidity('');
-                    }
-                }
-            </script>
 
             <div class="mb-3">
                 <label for="gia_khuyen_mai" class="form-label">Giá Khuyến Mãi</label>
-                <input type="number" class="form-control @error('gia_khuyen_mai') is-invalid @enderror" id="gia_khuyen_mai" name="gia_khuyen_mai" value="{{ old('gia_khuyen_mai') }} "required min="0">
+                <input type="number" class="form-control @error('gia_khuyen_mai') is-invalid @enderror" id="gia_khuyen_mai" name="gia_khuyen_mai" value="{{ old('gia_khuyen_mai') }}">
                 @error('gia_khuyen_mai')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            <script>
-                document.getElementById('gia_khuyen_mai').addEventListener('input', function () {
-                    if (this.value < 0) {
-                        this.value = 0; 
-                    }
-                });
-            </script>
 
             <div class="mb-3">
                 <label for="donvitinh" class="form-label">Đơn Vị Tính</label>
@@ -150,13 +76,6 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            <script>
-                document.getElementById('donvitinh').addEventListener('input', function () {
-                    if (this.value < 0) {
-                        this.value = 0; 
-                    }
-                });
-            </script>
 
             <div class="mb-3">
                 <label for="xuatxu" class="form-label">Xuất Xứ</label>
@@ -168,18 +87,11 @@
 
             <div class="mb-3">
                 <label for="soluong" class="form-label">Số Lượng</label>
-                <input type="number" class="form-control @error('soluong') is-invalid @enderror" id="soluong" name="soluong" value="{{ old('soluong') }}" required min="0">
+                <input type="number" class="form-control @error('soluong') is-invalid @enderror" id="soluong" name="soluong" value="{{ old('soluong') }}" required>
                 @error('soluong')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            <script>
-                document.getElementById('soluong').addEventListener('input', function () {
-                    if (this.value < 0) {
-                        this.value = 0;
-                    }
-                });
-            </script>
 
             <div class="mb-3">
                 <label for="trangthai" class="form-label">Trạng Thái</label>
@@ -188,6 +100,14 @@
     <option value="inactive" {{ old('trangthai') === 'inactive' ? 'selected' : '' }}>Không hoạt động</option>
                 </select>
                 @error('trangthai')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="luotxem" class="form-label">Lượt Xem</label>
+                <input type="number" class="form-control @error('luotxem') is-invalid @enderror" id="luotxem" name="luotxem" value="{{ old('luotxem') }}">
+                @error('luotxem')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
@@ -204,4 +124,3 @@
         </form>
     </div>
 @endsection
-

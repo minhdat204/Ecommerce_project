@@ -11,42 +11,22 @@ use Illuminate\Http\Request;
 
 class ProductManagerController
 {
+    // Hiển thị danh sách sản phẩm
     public function index(Request $request)
 {
-    // Lấy các tham số từ form
     $search = $request->input('search');
-    $minPrice = $request->input('min_price');
-    $maxPrice = $request->input('max_price');
-    $xuatxu = $request->input('xuatxu');
-    $idDanhMuc = $request->input('id_danhmuc');
-    $status = $request->input('trangthai', 'active');
-
-    $minPrice = ($minPrice >= 0) ? $minPrice : 0; // Nếu minPrice âm, gán giá trị bằng 0
-    $maxPrice = ($maxPrice >= 0) ? $maxPrice : 0;
-    // Query sản phẩm
+    
+    // Bắt đầu truy vấn với eager loading category và images
     $products = Product::with(['category', 'images'])
-        ->when($search, function ($query) use ($search) {
-            return $query->where('tensanpham', 'like', '%' . $search . '%');
+        ->when($search, function ($query, $search) {
+            // Áp dụng tìm kiếm nếu có
+            $query->where('tensanpham', 'like', '%' . $search . '%');
         })
-        ->when($minPrice, function ($query) use ($minPrice) {
-            return $query->where('gia', '>=', $minPrice);
-        })
-        ->when($maxPrice, function ($query) use ($maxPrice) {
-            return $query->where('gia', '<=', $maxPrice);
-        })
-        ->when($xuatxu, function ($query) use ($xuatxu) {
-            return $query->where('xuatxu', $xuatxu);
-        })
-        ->when($idDanhMuc, function ($query) use ($idDanhMuc) {
-            return $query->where('id_danhmuc', $idDanhMuc);
-        })
-        ->paginate(5);
+        // Lọc sản phẩm có trạng thái không phải 'inactive'
+        ->where('trangthai', '!=', 'inactive')
+        ->paginate(10);
 
-    // Lấy danh sách xuất xứ và danh mục cho dropdown
-    $countries = Product::select('xuatxu')->distinct()->pluck('xuatxu');
-    $categories = Category::all();
-
-    return view('admin.pages.product.index', compact('products', 'countries', 'categories'));
+    return view('admin.pages.product.index', compact('products'));
 }
 
 
@@ -66,13 +46,13 @@ public function store(Request $request)
         'mota' => 'required|string',
         'thongtin_kythuat' => 'required|string',
         'id_danhmuc' => 'required|string', // Dữ liệu truyền vào là tên danh mục
-        'gia' => 'required|numeric|min:0',
-        'gia_khuyen_mai' => 'nullable|numeric|min:0|lte:gia',
+        'gia' => 'required|numeric',
+        'gia_khuyen_mai' => 'nullable|numeric',
         'donvitinh' => 'required|string',
         'xuatxu' => 'required|string',
-        'soluong' => 'required|numeric|min:0',
+        'soluong' => 'required|numeric',
         'trangthai' => 'required|string',
-        'luotxem' => 'nullable|numeric|min:0',
+        'luotxem' => 'nullable|numeric',
         'images' => 'nullable|array',
         'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate ảnh
     ]);
@@ -87,7 +67,7 @@ public function store(Request $request)
     // Lưu sản phẩm
     $product = new Product();
     $product->tensanpham = $request->tensanpham;
-    $product->slug = Str::slug($request->tensanpham);    
+    $product->slug = $request->slug;
     $product->mota = $request->mota;
     $product->thongtin_kythuat = $request->thongtin_kythuat;
     $product->id_danhmuc = $category->id_danhmuc; // Gán id_danhmuc lấy từ bảng danh_muc
@@ -96,8 +76,8 @@ public function store(Request $request)
     $product->donvitinh = $request->donvitinh;
     $product->xuatxu = $request->xuatxu;
     $product->soluong = $request->soluong;
-    $product->trangthai = $request->trangthai === 'active' ? 1 : 0; // Mặc định là "Không hoạt động" nếu không chọn    
-    $product->luotxem = $request->luotxem ?? 0;    
+    $product->trangthai = $request->trangthai;
+    $product->luotxem = $request->luotxem;
     $product->save();
 
     // Xử lý hình ảnh
@@ -155,12 +135,13 @@ public function store(Request $request)
     // Validate dữ liệu
     $request->validate([
         'tensanpham' => 'required|string|max:255',
+        'slug' => 'required|string|max:255|unique:san_pham,slug,' . $product->id_sanpham . ',id_sanpham',
         'mota' => 'required|string',
-        'gia' => 'required|numeric|min:0',
-        'gia_khuyen_mai' => 'nullable|numeric|min:0|lte:gia',
+        'gia' => 'required|numeric',
+        'gia_khuyen_mai' => 'nullable|numeric',
         'donvitinh' => 'required|string',
         'xuatxu' => 'required|string',
-        'soluong' => 'required|integer|min:0',
+        'soluong' => 'required|integer',
         'trangthai' => 'required|string|in:active,inactive',
         'images' => 'nullable|array',
         'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -168,7 +149,7 @@ public function store(Request $request)
 
     // Cập nhật các thông tin sản phẩm
     $product->tensanpham = $request->tensanpham;
-    $product->slug = Str::slug($request->input('tensanpham'));    
+    $product->slug = $request->slug;
     $product->mota = $request->mota;
     $product->gia = $request->gia;
     $product->gia_khuyen_mai = $request->gia_khuyen_mai;
@@ -208,19 +189,21 @@ public function store(Request $request)
 // Ẩn sản phẩm
 public function destroy($id_sanpham)
 {
-    try {
-        $product = Product::findOrFail($id_sanpham);
+    $product = Product::findOrFail($id_sanpham);
+    $product->trangthai = 'inactive';
+    $product->save();
 
-        $product->update([
-            'trangthai' => 'inactive'
-        ]);
+    return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được ẩn');
+}
+public function hide($id)
+{
+    $product = Product::findOrFail($id);
+    
+    // Cập nhật trạng thái sản phẩm thành 'inactive'
+    $product->trangthai = 'inactive';
+    $product->save();
 
-        return redirect()->route('admin.product.index')
-            ->with('success', 'Sản phẩm đã được ẩn thành công');
-    } catch (\Exception $e) {
-        return redirect()->route('admin.product.index')
-            ->with('error', 'Có lỗi xảy ra khi ẩn sản phẩm: ' . $e->getMessage());
-    }
+    return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được ẩn');
 }
 
 }

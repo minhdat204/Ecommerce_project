@@ -30,8 +30,8 @@
                         <h3>{{$Product->tensanpham}}</h3>
                                 <div class="product__details__rating">
                                     <h4>Điểm đánh giá trung bình</h4>
-                                    <p><strong>{{ $averageRating ?: 'Chưa có đánh giá' }}</strong> điểm</p>
-                                </div>
+                                    <p><strong>Điểm đánh giá trung bình: </strong>{{ $averageRating }} / 5</p>
+                                    </div>
                             </div>
                         </div>
                       <a href="#" class="primary-btn">ADD TO CARD</a>

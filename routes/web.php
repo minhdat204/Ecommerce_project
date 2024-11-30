@@ -11,12 +11,14 @@ use App\Http\Controllers\Admin\StatisticalManagerController;
 use App\Http\Controllers\Client\CartController;
 //client
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\ContactController;
 
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
 ]);
+Route::get('/orders/{id}', [ProfileController::class, 'orderDetail'])->name('orders.detail');
 
 Route::resource('contact', ContactController::class)->names([
     'store' =>'contact.store',
@@ -24,9 +26,9 @@ Route::resource('contact', ContactController::class)->names([
 
 Route::get('/', [HomeController::class, 'index'])->name('users.home');
 
-Route::get('/shop', function () {
-    return view('users.pages.shop');
-})->name('users.shop');
+Route::get('/shop', [ProductController::class, 'index'])->name('users.shop');
+
+Route::get('/shop-detail/{slug}', [ProductController::class, 'show'])->name('users.shop_details');
 
 Route::get('/blog', function () {
     return view('users.pages.blog');
@@ -35,10 +37,6 @@ Route::get('/blog', function () {
 Route::get('/contact', function () {
     return view('users.pages.contact');
 })->name('users.contact');
-
-Route::get('/shop-details', function () {
-    return view('users.pages.shop-details');
-})->name('users.shop_details');
 
 Route::get('/shoping-cart', [CartController::class, 'showCart'])->name('users.shoping-cart');
 Route::patch('/shoping-cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
@@ -56,7 +54,7 @@ Route::get('/mau', function () {
     return view('admin.pages.category'); // giao diện mẫu = Category
 })->name('mau');
 
-Route::get('/about-us',function(){
+Route::get('/about-us', function () {
     return view('users.pages.about-us');
 });
 
@@ -97,6 +95,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'destroy' => 'product.destroy',
     ]);
 
+
     // Comment Routes
     Route::resource('comments', CommentManagerController::class)->names([
         'index'   => 'comment.index',
@@ -118,7 +117,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'update'  => 'contact.update',
         'destroy' => 'contact.destroy',
     ]);
-    
+
+
+    Route::patch('products/{product}/hide', [ProductManagerController::class, 'hide'])->name('product.hide');
 
     // Dashboard Routes
     Route::get('dashboard', [DashboardManagerController::class, 'index'])->name('dashboard.index');

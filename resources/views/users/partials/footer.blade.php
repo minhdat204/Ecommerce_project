@@ -5,7 +5,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
-                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                            <a href="./index.html"><img src="{{ asset('img/logo.png') }}" alt=""></a>
                         </div>
                         <p>Ogani là một công ty chuyên cung cấp thực phẩm sạch......</p>
                         <div class="footer__widget">
@@ -33,7 +33,6 @@
                             <li><a href="#">Fruit & Nut Gifts</a></li>
                             <li><a href="#">Fresh Berries</a></li>
                         </ul>
-
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-12">
@@ -51,9 +50,9 @@
                 <div class="col-lg-12">
                     <div class="footer__copyright">
                         <div class="footer__copyright__text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
-                        <div class="footer__copyright__payment"><img src="img/payment-item.png" alt=""></div>
+    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
+                        <div class="footer__copyright__payment"><img src="{{ asset('img/payment-item.png') }}" alt=""></div>
                     </div>
                 </div>
             </div>

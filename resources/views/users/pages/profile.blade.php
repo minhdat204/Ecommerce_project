@@ -52,7 +52,7 @@
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label for="user-gender" class="form-label">Gender</label>
-                                            <select class="form-select" id="user-gender" name="gioitinh">
+                                            <select class="form-select no-arrow" id="user-gender" name="gioitinh">
                                                 <option value="male" {{ $user->gioitinh == 'male' ? 'selected' : '' }}>
                                                     Male</option>
                                                 <option value="female" {{ $user->gioitinh == 'female' ? 'selected' : '' }}>
@@ -61,7 +61,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="user-language" class="form-label">Language</label>
-                                            <select class="form-select" id="user-language">
+                                            <select class="form-select no-arrow" id="user-language">
                                                 <option selected>Vietnamese</option>
                                                 <option value="english">English</option>
                                             </select>

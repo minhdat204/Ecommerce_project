@@ -28,38 +28,9 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
                         <h3>{{$Product->tensanpham}}</h3>
-<<<<<<< HEAD
                                 <div class="product__details__rating">
-                                    <h4>Điểm đánh giá trung bình</h4>
                                     <p><strong>Điểm đánh giá trung bình: </strong>{{ $averageRating }} / 5</p>
                                     </div>
-=======
-                        <!-- Phần chấm điểm -->
-                        <div class="product__details__rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <span>(18 reviews)</span>
-                        </div>
-                        <!-- phần giá -->
-                        <div class="product__details__price">
-                            @if($Product->gia_khuyen_mai)
-                                ${{$Product->gia_khuyen_mai}}
-                                <span>${{$Product->gia}}</span>
-                            @else
-                                ${{$Product->gia}}
-                            @endif
-                        </div>
-                        <!-- phần mô tả -->
-                        <p>{{$Product->mota}}</p>
-                        <div class="product__details__quantity">
-                            <div class="quantity">
-                                <div class="pro-qty">
-                                    <input type="text" value="1">
-                                </div>
->>>>>>> develop
                             </div>
                         </div>
                       <a href="#" class="primary-btn">ADD TO CARD</a>
@@ -149,7 +120,6 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-3" role="tabpanel">
-<<<<<<< HEAD
                                 <div class="product__details__tab__desc">
                                     <h6>Review sản phẩm</h6>
                                     @foreach($comments as $comment)
@@ -160,10 +130,6 @@
                                         </div>
                                     @endforeach
                                 </div>
-=======
-                                <!-- phần bình luận -->
-                                @include('users.partials.shop-details.comment')
->>>>>>> develop
                             </div>
                         </div>
                     </div>

@@ -28,16 +28,52 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
                         <h3>{{$Product->tensanpham}}</h3>
+<<<<<<< HEAD
                                 <div class="product__details__rating">
                                     <h4>Điểm đánh giá trung bình</h4>
                                     <p><strong>Điểm đánh giá trung bình: </strong>{{ $averageRating }} / 5</p>
                                     </div>
+=======
+                        <!-- Phần chấm điểm -->
+                        <div class="product__details__rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                            <span>(18 reviews)</span>
+                        </div>
+                        <!-- phần giá -->
+                        <div class="product__details__price">
+                            @if($Product->gia_khuyen_mai)
+                                ${{$Product->gia_khuyen_mai}}
+                                <span>${{$Product->gia}}</span>
+                            @else
+                                ${{$Product->gia}}
+                            @endif
+                        </div>
+                        <!-- phần mô tả -->
+                        <p>{{$Product->mota}}</p>
+                        <div class="product__details__quantity">
+                            <div class="quantity">
+                                <div class="pro-qty">
+                                    <input type="text" value="1">
+                                </div>
+>>>>>>> develop
                             </div>
                         </div>
                       <a href="#" class="primary-btn">ADD TO CARD</a>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
-                            <li><b>Availability</b> <span>In Stock</span></li>
+                            <li><b>Availability</b>
+                                <span>
+                                    @if($Product->soluong > 0)
+                                        <span class="stock-status in-stock">In Stock ({{$Product->soluong}} items)</span>
+                                    @else
+                                        <span class="stock-status out-of-stock">Out of Stock</span>
+                                    @endif
+                                </span>
+                            </li>
                             <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
                             <li><b>Weight</b> <span>0.5 kg</span></li>
                             <li><b>Share on</b>
@@ -113,6 +149,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-3" role="tabpanel">
+<<<<<<< HEAD
                                 <div class="product__details__tab__desc">
                                     <h6>Review sản phẩm</h6>
                                     @foreach($comments as $comment)
@@ -123,6 +160,10 @@
                                         </div>
                                     @endforeach
                                 </div>
+=======
+                                <!-- phần bình luận -->
+                                @include('users.partials.shop-details.comment')
+>>>>>>> develop
                             </div>
                         </div>
                     </div>
@@ -145,7 +186,7 @@
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="{{ asset('img/product/product-1.jpg') }}">
                             <ul class="product__item__pic__hover">
                                 <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                 <li><a href="#"><i class="fa fa-retweet"></i></a></li>
@@ -160,7 +201,7 @@
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="{{ asset('img/product/product-2.jpg') }}">
                             <ul class="product__item__pic__hover">
                                 <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                 <li><a href="#"><i class="fa fa-retweet"></i></a></li>
@@ -175,7 +216,7 @@
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="{{ asset('img/product/product-3.jpg') }}">
                             <ul class="product__item__pic__hover">
                                 <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                 <li><a href="#"><i class="fa fa-retweet"></i></a></li>
@@ -190,7 +231,7 @@
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-7.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="{{ asset('img/product/product-7.jpg') }}">
                             <ul class="product__item__pic__hover">
                                 <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                 <li><a href="#"><i class="fa fa-retweet"></i></a></li>

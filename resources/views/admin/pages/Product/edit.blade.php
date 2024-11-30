@@ -75,15 +75,29 @@
                         <div class="form-group">
                             <label for="gia">Giá</label>
                             <input type="number" name="gia" id="gia" class="form-control" 
-                                   value="{{ old('gia', $product->gia) }}" required>
+                                   value="{{ old('gia', $product->gia) }}" required min="0">
                         </div>
+                        <script>
+                            document.getElementById('gia').addEventListener('input', function () {
+                                if (this.value < 0) {
+                                    this.value = 0; // Tự động chuyển về 0 nếu nhập giá trị âm
+                                }
+                            });
+                        </script>
 
                         <!-- Giá khuyến mãi -->
                         <div class="form-group">
                             <label for="gia_khuyen_mai">Giá khuyến mãi</label>
                             <input type="number" name="gia_khuyen_mai" id="gia_khuyen_mai" class="form-control" 
-                                   value="{{ old('gia_khuyen_mai', $product->gia_khuyen_mai) }}">
+                                   value="{{ old('gia_khuyen_mai', $product->gia_khuyen_mai) }}" required min="0">
                         </div>
+                        <script>
+                            document.getElementById('gia_khuyen_mai').addEventListener('input', function () {
+                                if (this.value < 0) {
+                                    this.value = 0; // Tự động chuyển về 0 nếu nhập giá trị âm
+                                }
+                            });
+                        </script>
 
                         <!-- Đơn vị tính -->
                         <div class="form-group">
@@ -103,8 +117,15 @@
                         <div class="form-group">
                             <label for="soluong">Số lượng</label>
                             <input type="number" name="soluong" id="soluong" class="form-control" 
-                                   value="{{ old('soluong', $product->soluong) }}" required>
+                                   value="{{ old('soluong', $product->soluong) }}" required min="0">
                         </div>
+                        <script>
+                            document.getElementById('soluong').addEventListener('input', function () {
+                                if (this.value < 0) {
+                                    this.value = 0; // Tự động chuyển về 0 nếu nhập giá trị âm
+                                }
+                            });
+                        </script>
 
                         <!-- Trạng thái -->
                         <div class="form-group">
@@ -157,3 +178,4 @@
     </div>
 </div>
 @endsection
+

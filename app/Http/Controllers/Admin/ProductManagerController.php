@@ -20,6 +20,9 @@ class ProductManagerController
     $xuatxu = $request->input('xuatxu');
     $idDanhMuc = $request->input('id_danhmuc');
     $status = $request->input('trangthai', 'active');
+
+    $minPrice = ($minPrice >= 0) ? $minPrice : 0; // Nếu minPrice âm, gán giá trị bằng 0
+    $maxPrice = ($maxPrice >= 0) ? $maxPrice : 0;
     // Query sản phẩm
     $products = Product::with(['category', 'images'])
         ->when($search, function ($query) use ($search) {
@@ -64,13 +67,13 @@ public function store(Request $request)
         'mota' => 'required|string',
         'thongtin_kythuat' => 'required|string',
         'id_danhmuc' => 'required|string', // Dữ liệu truyền vào là tên danh mục
-        'gia' => 'required|numeric',
-        'gia_khuyen_mai' => 'nullable|numeric',
+        'gia' => 'required|numeric|min:0',
+        'gia_khuyen_mai' => 'nullable|numeric|min:0',
         'donvitinh' => 'required|string',
         'xuatxu' => 'required|string',
-        'soluong' => 'required|numeric',
+        'soluong' => 'required|numeric|min:0',
         'trangthai' => 'required|string',
-        'luotxem' => 'nullable|numeric',
+        'luotxem' => 'nullable|numeric|min:0',
         'images' => 'nullable|array',
         'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate ảnh
     ]);
@@ -154,11 +157,11 @@ public function store(Request $request)
     $request->validate([
         'tensanpham' => 'required|string|max:255',
         'mota' => 'required|string',
-        'gia' => 'required|numeric',
-        'gia_khuyen_mai' => 'nullable|numeric',
+        'gia' => 'required|numeric|min:0',
+        'gia_khuyen_mai' => 'nullable|numeric|min:0',
         'donvitinh' => 'required|string',
         'xuatxu' => 'required|string',
-        'soluong' => 'required|integer',
+        'soluong' => 'required|integer|min:0',
         'trangthai' => 'required|string|in:active,inactive',
         'images' => 'nullable|array',
         'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',

@@ -27,10 +27,10 @@
                 <input type="text" name="search" class="form-control" placeholder="Tìm kiếm tên sản phẩm..." value="{{ request('search') }}">
             </div>
             <div class="form-group mr-2">
-                <input type="number" name="min_price" class="form-control" placeholder="Giá từ..." value="{{ request('min_price') }}">
+                <input type="number" name="min_price" class="form-control" placeholder="Giá từ..." value="{{ request('min_price') }}" min="0">
             </div>
             <div class="form-group mr-2">
-                <input type="number" name="max_price" class="form-control" placeholder="Giá đến..." value="{{ request('max_price') }}">
+                <input type="number" name="max_price" class="form-control" placeholder="Giá đến..." value="{{ request('max_price') }}" min="0">
             </div>
             <div class="form-group mr-2">
                 <select name="xuatxu" class="form-control">
@@ -54,6 +54,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
         </form>
+
 
 
         <!-- Bảng Sản Phẩm -->
@@ -126,18 +127,44 @@
                                 <a href="{{ route('admin.product.edit', $product->id_sanpham) }}" class="edit" data-toggle="tooltip" title="Sửa">
                                     <i class="material-icons">&#xE254;</i>
                                 </a>
-                                <!-- Nút ẩn sản phẩm -->
-                                <a href="#" class="delete" data-toggle="modal"
-                                data-target="#deleteProductModal{{ $product->id_sanpham }}">
-                                <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
-                            </a>
+                                <a href="#" class="delete" data-toggle="modal" data-target="#deleteProductModal{{ $product->id_sanpham }}">
+                                    <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
+                                </a>
+                                <!-- Form Xóa Đã Chọn (ẩn) -->
+                                <div id="deleteProductModal{{ $product->id_sanpham }}" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form action="{{ route('admin.product.destroy', $product->id_sanpham) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Xóa Sản Phẩm</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Bạn có chắc chắn muốn xóa sản phẩm 
+                                                        <strong>{{ $product->ten_sanpham }}</strong>?
+                                                    </p>
+                                                    <p class="text-warning"><small>Hành động này không thể hoàn tác.</small></p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-
+        <form id="deleteSelectedForm" method="POST">
+        @csrf
+        @method('DELETE')
+        </form>
         <!-- Phân Trang -->
         <div class="clearfix">
             <div class="hint-text">
@@ -145,35 +172,6 @@
             </div>
             {{ $products->links('pagination::bootstrap-4') }}
         </div>
-        <!-- Form Xóa Đã Chọn (ẩn) -->
-    <form id="deleteSelectedForm" method="POST">
-        @csrf
-        @method('DELETE')
-    </form>
-<div id="deleteProductModal{{ $product->id_sanpham }}" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ route('admin.product.destroy', $product->id_sanpham) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="modal-header">
-                    <h4 class="modal-title">Xóa Sản Phẩm</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <p>Bạn có chắc chắn muốn xóa sản phẩm 
-                        <strong>{{ $product->ten_sanpham }}</strong>?
-                    </p>
-                    <p class="text-warning"><small>Hành động này không thể hoàn tác.</small></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-danger">Xóa</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 @endsection
 
 @push('scripts')
@@ -241,4 +239,3 @@
         });
     </script>
 @endpush
-

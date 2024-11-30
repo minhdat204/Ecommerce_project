@@ -67,19 +67,34 @@
             <!-- Các trường thông tin khác -->
             <div class="mb-3">
                 <label for="gia" class="form-label">Giá</label>
-                <input type="number" class="form-control @error('gia') is-invalid @enderror" id="gia" name="gia" value="{{ old('gia') }}" required>
+                <input type="number" class="form-control @error('gia') is-invalid @enderror" 
+                    id="gia" name="gia" value="{{ old('gia') }}" required min="0">
                 @error('gia')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <script>
+                document.getElementById('gia').addEventListener('input', function () {
+                    if (this.value < 0) {
+                        this.value = 0; 
+                    }
+                });
+            </script>
 
             <div class="mb-3">
                 <label for="gia_khuyen_mai" class="form-label">Giá Khuyến Mãi</label>
-                <input type="number" class="form-control @error('gia_khuyen_mai') is-invalid @enderror" id="gia_khuyen_mai" name="gia_khuyen_mai" value="{{ old('gia_khuyen_mai') }}">
+                <input type="number" class="form-control @error('gia_khuyen_mai') is-invalid @enderror" id="gia_khuyen_mai" name="gia_khuyen_mai" value="{{ old('gia_khuyen_mai') }} "required min="0">
                 @error('gia_khuyen_mai')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <script>
+                document.getElementById('gia_khuyen_mai').addEventListener('input', function () {
+                    if (this.value < 0) {
+                        this.value = 0; 
+                    }
+                });
+            </script>
 
             <div class="mb-3">
                 <label for="donvitinh" class="form-label">Đơn Vị Tính</label>
@@ -88,6 +103,13 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <script>
+                document.getElementById('donvitinh').addEventListener('input', function () {
+                    if (this.value < 0) {
+                        this.value = 0; 
+                    }
+                });
+            </script>
 
             <div class="mb-3">
                 <label for="xuatxu" class="form-label">Xuất Xứ</label>
@@ -99,11 +121,18 @@
 
             <div class="mb-3">
                 <label for="soluong" class="form-label">Số Lượng</label>
-                <input type="number" class="form-control @error('soluong') is-invalid @enderror" id="soluong" name="soluong" value="{{ old('soluong') }}" required>
+                <input type="number" class="form-control @error('soluong') is-invalid @enderror" id="soluong" name="soluong" value="{{ old('soluong') }}" required min="0">
                 @error('soluong')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <script>
+                document.getElementById('soluong').addEventListener('input', function () {
+                    if (this.value < 0) {
+                        this.value = 0;
+                    }
+                });
+            </script>
 
             <div class="mb-3">
                 <label for="trangthai" class="form-label">Trạng Thái</label>
@@ -128,3 +157,4 @@
         </form>
     </div>
 @endsection
+

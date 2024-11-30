@@ -14,8 +14,8 @@
                     <a href="{{ route('admin.product.create') }}" class="btn btn-success">
                         <i class="material-icons">&#xE147;</i> <span>Thêm Sản Phẩm Mới</span>
                     </a>
-                    <a onclick="confirmDeleteSelected()" href="javascript:void(0)" id="deleteSelected" class="btn btn-danger">
-                        <i class="material-icons">&#xE15C;</i> <span>Xóa đã chọn</span>
+                    <a onclick="xoanhieu()" href="javascript:void(0)" id="deleteSelected" class="btn btn-danger">
+                            <i class="material-icons">&#xE15C;</i> <span>Xóa đã chọn</span>
                     </a>
                 </div>
             </div>
@@ -23,9 +23,39 @@
 
         <!-- Form Tìm Kiếm -->
         <form action="{{ route('admin.product.index') }}" method="GET" class="form-inline mb-3">
-            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm sản phẩm..." value="{{ request('search') }}">
-            <button type="submit" class="btn btn-default">Tìm kiếm</button>
+            <div class="form-group mr-2">
+                <input type="text" name="search" class="form-control" placeholder="Tìm kiếm tên sản phẩm..." value="{{ request('search') }}">
+            </div>
+            <div class="form-group mr-2">
+                <input type="number" name="min_price" class="form-control" placeholder="Giá từ..." value="{{ request('min_price') }}" min="0">
+            </div>
+            <div class="form-group mr-2">
+                <input type="number" name="max_price" class="form-control" placeholder="Giá đến..." value="{{ request('max_price') }}" min="0">
+            </div>
+            <div class="form-group mr-2">
+                <select name="xuatxu" class="form-control">
+                    <option value="">Chọn xuất xứ</option>
+                    @foreach ($countries as $country)
+                        <option value="{{ $country }}" {{ request('xuatxu') == $country ? 'selected' : '' }}>
+                            {{ $country }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group mr-2">
+                <select name="id_danhmuc" class="form-control">
+                    <option value="">Chọn loại sản phẩm</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id_danhmuc }}" {{ request('id_danhmuc') == $category->id_danhmuc ? 'selected' : '' }}>
+                            {{ $category->tendanhmuc }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
         </form>
+
+
 
         <!-- Bảng Sản Phẩm -->
         <div class="table-responsive">
@@ -97,98 +127,115 @@
                                 <a href="{{ route('admin.product.edit', $product->id_sanpham) }}" class="edit" data-toggle="tooltip" title="Sửa">
                                     <i class="material-icons">&#xE254;</i>
                                 </a>
-                                <!-- Nút ẩn sản phẩm -->
-                                <a href="#deleteProductModal" class="delete" data-toggle="modal" title="Ẩn sản phẩm" 
-                                   data-id="{{ $product->id_sanpham }}" onclick="setProductId(this)">
-                                   <i class="material-icons">&#xE872;</i>
+                                <a href="#" class="delete" data-toggle="modal" data-target="#deleteProductModal{{ $product->id_sanpham }}">
+                                    <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
                                 </a>
+                                <!-- Form Xóa Đã Chọn (ẩn) -->
+                                <div id="deleteProductModal{{ $product->id_sanpham }}" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form action="{{ route('admin.product.destroy', $product->id_sanpham) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Xóa Sản Phẩm</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Bạn có chắc chắn muốn xóa sản phẩm 
+                                                        <strong>{{ $product->ten_sanpham }}</strong>?
+                                                    </p>
+                                                    <p class="text-warning"><small>Hành động này không thể hoàn tác.</small></p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-
+        <form id="deleteSelectedForm" method="POST">
+        @csrf
+        @method('DELETE')
+        </form>
         <!-- Phân Trang -->
         <div class="clearfix">
-            <div class="hint-text">Hiển thị <b>{{ $products->count() }}</b> trong tổng số <b>{{ $products->total() }}</b> sản phẩm</div>
-            {{ $products->links() }}
+            <div class="hint-text">
+                Hiển thị <b>{{ $products->count() }}</b> trong tổng số <b>{{ $products->total() }}</b> sản phẩm
+            </div>
+            {{ $products->links('pagination::bootstrap-4') }}
         </div>
-    </div>
-</div>
-
-<!-- Form ẩn -->
-<form action="{{ route('admin.product.hide', ':product') }}" method="POST" id="deleteProductForm">
-    @csrf
-    @method('PATCH') <!-- Sử dụng PATCH thay vì POST -->
-    <input type="hidden" name="product_id" id="product_id">
-</form>
-
-
-<!-- Modal Ẩn Sản Phẩm -->
-<div id="deleteProductModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteProductModalLabel">Xác nhận ẩn sản phẩm</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn ẩn sản phẩm này không?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-danger" onclick="submitDeleteForm()">Ẩn</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @endsection
 
 @push('scripts')
-<script>
-    // Xác nhận xóa các sản phẩm đã chọn
-    function confirmDeleteSelected() {
-        var selectedIds = [];
-        // Thu thập các ID sản phẩm đã chọn
-        $('table tbody input[type="checkbox"]:checked').each(function() {
-            selectedIds.push($(this).val());
+    <script>
+        $(document).ready(function() {
+            // Kích hoạt tooltip
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // Chọn/Bỏ chọn tất cả checkbox
+            var checkbox = $('table tbody input[type="checkbox"]');
+            $("#selectAll").click(function() {
+                checkbox.prop('checked', this.checked);
+            });
+
+            checkbox.click(function() {
+                if (!this.checked) {
+                    $("#selectAll").prop("checked", false);
+                }
+            });
+
+            // Tự động ẩn thông báo sau 3 giây
+            $('.alert').delay(3000).fadeOut(500);
+
+            // Hàm xóa nhiều sản phẩm
+            $('#deleteSelected').click(function() {
+                var selectedIds = [];
+                $('table tbody input[type="checkbox"]:checked').each(function() {
+                    selectedIds.push($(this).val());
+                });
+
+                if (selectedIds.length === 0) {
+                    alert("Vui lòng chọn ít nhất một sản phẩm để xóa.");
+                    return;
+                }
+
+                if (confirm('Bạn có chắc chắn muốn xóa các sản phẩm đã chọn?')) {
+                    $.ajax({
+                        url: '{{ route("admin.product.destroy", "bulk") }}',
+                        type: 'DELETE',
+                        data: {
+                            ids: selectedIds,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // Xóa các hàng tương ứng trong bảng
+                                selectedIds.forEach(function(id) {
+                                    $('#product-' + id).fadeOut();
+                                });
+
+                                // Hiển thị thông báo thành công
+                                alert(response.message);
+                                // Hoặc reload trang
+                                // window.location.reload();
+                            } else {
+                                alert('Có lỗi xảy ra: ' + response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            alert('Đã xảy ra lỗi!');
+                        }
+                    });
+                }
+            });
         });
-
-        if (selectedIds.length === 0) {
-            alert('Vui lòng chọn ít nhất một sản phẩm để xóa!');
-            return;
-        }
-
-        // Hiển thị hộp thoại xác nhận
-        if (confirm('Bạn có chắc chắn muốn xóa các sản phẩm đã chọn?')) {
-            // Gán giá trị danh sách ID vào form và gửi
-            $('#deleteSelectedForm').submit();
-        }
-    }
-
-    // Đặt ID cho sản phẩm để ẩn
-    function setProductId(element) {
-        var productId = $(element).data('id');
-        var formAction = '{{ route('admin.product.destroy', ':product') }}';
-        formAction = formAction.replace(':product', productId);
-        $('#deleteProductForm').attr('action', formAction);
-        $('#product_id').val(productId);
-    }
-
-
-    // Gửi form xác nhận ẩn sản phẩm
-    function submitDeleteForm() {
-        // Kiểm tra action của form
-        var action = $('#deleteProductForm').attr('action');
-        if (action) {
-            $('#deleteProductForm').submit();
-        } else {
-            alert('Lỗi: Không có hành động cho form!');
-        }
-    }
-</script>
+    </script>
 @endpush

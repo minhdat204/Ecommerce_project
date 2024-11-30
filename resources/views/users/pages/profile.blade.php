@@ -133,7 +133,7 @@
                 </div>
             </div>
             <!-- Score List -->
-            <div class="profile-tab-pane" style="display: none;">d
+            <div class="profile-tab-pane" style="display: none;">
                 <div class="favorite-page-container">
                     <div class="row">
                         @forelse ($scores as $score)

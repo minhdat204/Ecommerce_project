@@ -62,8 +62,8 @@ return new class extends Migration
             $table->foreignId('id_sanpham')->constrained('san_pham', 'id_sanpham')->onDelete('cascade');
             $table->string('duongdan');
             $table->string('alt')->nullable();
-            $table->integer('vitri')->default(0); 
-            $table->timestamp('created_at')->useCurrent(); // Thêm chỉ cột created_at 
+            $table->integer('vitri')->default(0);
+            $table->timestamp('created_at')->useCurrent(); // Thêm chỉ cột created_at
         });
 
         Schema::create('gio_hang', function (Blueprint $table) {

@@ -40,7 +40,6 @@ class ProductManagerController
         ->when($idDanhMuc, function ($query) use ($idDanhMuc) {
             return $query->where('id_danhmuc', $idDanhMuc);
         })
-        ->where('trangthai', $status)
         ->paginate(5);
 
     // Lấy danh sách xuất xứ và danh mục cho dropdown
@@ -68,7 +67,7 @@ public function store(Request $request)
         'thongtin_kythuat' => 'required|string',
         'id_danhmuc' => 'required|string', // Dữ liệu truyền vào là tên danh mục
         'gia' => 'required|numeric|min:0',
-        'gia_khuyen_mai' => 'nullable|numeric|min:0',
+        'gia_khuyen_mai' => 'nullable|numeric|min:0|lte:gia',
         'donvitinh' => 'required|string',
         'xuatxu' => 'required|string',
         'soluong' => 'required|numeric|min:0',
@@ -158,7 +157,7 @@ public function store(Request $request)
         'tensanpham' => 'required|string|max:255',
         'mota' => 'required|string',
         'gia' => 'required|numeric|min:0',
-        'gia_khuyen_mai' => 'nullable|numeric|min:0',
+        'gia_khuyen_mai' => 'nullable|numeric|min:0|lte:gia',
         'donvitinh' => 'required|string',
         'xuatxu' => 'required|string',
         'soluong' => 'required|integer|min:0',

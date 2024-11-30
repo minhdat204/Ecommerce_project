@@ -16,25 +16,47 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="slug" class="form-label"></label>
+                    <label for="slug" class="form-label">Slug</label>
                     <input type="hidden" id="slug" name="slug">
                 </div>
 
-        <script>
-            // Chuyển tên sản phẩm thành slug tự động
-            document.getElementById('tensanpham').addEventListener('input', function () {
-                const slug = this.value
-                    .toLowerCase()
-                    .trim()
-                    .normalize('NFD') // Chuẩn hóa Unicode
-                    .replace(/[\u0300-\u036f]/g, '') // Loại bỏ dấu
-                    .replace(/đ/g, 'd') // Thay "đ" thành "d"
-                    .replace(/[^a-z0-9\s-]/g, '') // Loại bỏ ký tự đặc biệt
-                    .replace(/\s+/g, '-') // Thay khoảng trắng bằng dấu "-"
-                    .replace(/-+/g, '-'); // Loại bỏ dấu "-" liên tiếp
-                document.getElementById('slug').value = slug;
-            });
-        </script>
+                <script>
+                // Danh sách các slug đã có (có thể lấy từ database hoặc dữ liệu động)
+                var existingSlugs = [
+                    'rau-cai-ngot-organic',
+                    'rau-cai-ngot-organic-1',
+                    // Thêm các slug khác vào danh sách nếu cần
+                ];
+
+                // Chuyển tên sản phẩm thành slug tự động
+                document.getElementById('tensanpham').addEventListener('input', function () {
+                    let slug = this.value
+                        .toLowerCase()
+                        .trim()
+                        .normalize('NFD') // Chuẩn hóa Unicode
+                        .replace(/[\u0300-\u036f]/g, '') // Loại bỏ dấu
+                        .replace(/đ/g, 'd') // Thay "đ" thành "d"
+                        .replace(/[^a-z0-9\s-]/g, '') // Loại bỏ ký tự đặc biệt
+                        .replace(/\s+/g, '-') // Thay khoảng trắng bằng dấu "-"
+                        .replace(/-+/g, '-'); // Loại bỏ dấu "-" liên tiếp
+
+                    // Kiểm tra slug có bị trùng không
+                    let originalSlug = slug;
+                    let count = 1;
+                    while (existingSlugs.includes(slug)) {
+                        slug = originalSlug + '-' + count;
+                        count++;
+                    }
+
+                    // Gán giá trị slug vào input ẩn
+                    document.getElementById('slug').value = slug;
+
+                    // Thêm slug vào danh sách các slug đã có
+                    existingSlugs.push(slug);
+                });
+                </script>
+
+
 
             <div class="mb-3">
                 <label for="mota" class="form-label">Mô Tả</label>
@@ -79,6 +101,31 @@
                         this.value = 0; 
                     }
                 });
+                 // Lắng nghe sự kiện khi người dùng thay đổi giá
+                document.getElementById('gia').addEventListener('input', function () {
+                    validatePrice();
+                });
+
+                // Lắng nghe sự kiện khi người dùng thay đổi giá khuyến mãi
+                document.getElementById('gia_khuyen_mai').addEventListener('input', function () {
+                    validatePrice();
+                });
+
+                // Hàm kiểm tra giá
+                function validatePrice() {
+                    var gia = parseFloat(document.getElementById('gia').value);
+                    var giaKhuyenMai = parseFloat(document.getElementById('gia_khuyen_mai').value);
+
+                    // Kiểm tra nếu giá nhỏ hơn giá khuyến mãi
+                    if (gia <= giaKhuyenMai) {
+                        // Hiển thị lỗi nếu giá không hợp lệ
+                        alert('Giá phải lớn hơn giá khuyến mãi!');
+                        document.getElementById('gia').setCustomValidity('Giá phải lớn hơn giá khuyến mãi!');
+                    } else {
+                        // Không có lỗi nếu giá hợp lệ
+                        document.getElementById('gia').setCustomValidity('');
+                    }
+                }
             </script>
 
             <div class="mb-3">

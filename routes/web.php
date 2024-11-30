@@ -13,11 +13,17 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\ProfileController;
+use App\Http\Controllers\Client\ContactController;
 
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
 ]);
 Route::get('/orders/{id}', [ProfileController::class, 'orderDetail'])->name('orders.detail');
+
+Route::resource('contact', ContactController::class)->names([
+    'store' =>'contact.store',
+]);
+
 Route::get('/', [HomeController::class, 'index'])->name('users.home');
 
 Route::get('/shop', [ProductController::class, 'index'])->name('users.shop');
@@ -88,7 +94,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'update'  => 'product.update',
         'destroy' => 'product.destroy',
     ]);
-    
+
 
     // Comment Routes
     Route::resource('comments', CommentManagerController::class)->names([

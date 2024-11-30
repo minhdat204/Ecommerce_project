@@ -62,9 +62,8 @@
                                         <div class="col-md-6">
                                             <label for="user-language" class="form-label">Language</label>
                                             <select class="form-select" id="user-language">
-                                                <option selected>Select Language</option>
+                                                <option selected>Vietnamese</option>
                                                 <option value="english">English</option>
-                                                <option value="vietnamese">Vietnamese</option>
                                             </select>
                                         </div>
                                     </div>
@@ -86,11 +85,12 @@
                                             <i class="bi bi-envelope me-2 text-primary" style="font-size: 1.5rem;"></i>
                                             <div>
                                                 <p class="mb-0">{{ $user->email }}</p>
-                                                <small class="text-muted">Updated 1 month ago</small>
                                             </div>
                                         </div>
-                                        <button class="btn btn-outline-secondary btn-sm mt-2">+ Add Email</button>
                                     </div>
+                                </div>
+                                <div class="row-edit">
+                                    <button class="btn btn-sm btn-primary">Edit</button>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +164,6 @@
             <div class="profile-tab-pane">
                 <div class="orders-page-container">
                     <h3 class="mb-4">Đơn hàng của tôi</h3>
-
                     <div class="row">
                         @forelse ($orders as $order)
                             <div class="col-12 mb-4">

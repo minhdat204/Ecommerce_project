@@ -1,35 +1,23 @@
 <?php
 namespace App\Http\Controllers\Client;
 
-use Illuminate\Http\Request;
-use App\Models\FavoriteProduct;
+use App\Models\Comment; 
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ShopDetailsController
 {
-    public function showProductDetails($id)
-{
-    $ratingData = $this->getRating($id);
+        public function showProductDetails($id)
+    {
+        // Lấy tất cả bình luận của sản phẩm với id_sanpham
+        $comments = Comment::where('id_sanpham', $id)->get();
 
-    \Log::info($ratingData); 
-    return view('users.pages.shop-details', [
-        'ratingData' => $ratingData  
-    ]);
-}
+        // Tính điểm đánh giá trung bình cho sản phẩm
+        $averageRating = Comment::where('id_sanpham', $id)->avg('danhgia');
 
-
-    public function getRating($id_sanpham)
-{
-    $countFavorites = DB::table('san_pham_yeu_thich')->where('id_sanpham', $id_sanpham)->count();
-    $averageRating = DB::table('san_pham_yeu_thich')->where('id_sanpham', $id_sanpham)->avg('id_yeuthich');
-
-    \Log::info(['countFavorites' => $countFavorites, 'averageRating' => $averageRating]);
-
-    return [
-        'countFavorites' => $countFavorites,
-        'averageRating' => $averageRating ?: 0,
-    ];
-}
+        // Trả về dữ liệu vào view
+        return view('users.pages.shop-details', compact('comments', 'averageRating'));
+    }
 
 }

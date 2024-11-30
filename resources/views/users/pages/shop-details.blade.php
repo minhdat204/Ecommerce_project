@@ -1,5 +1,7 @@
 @extends('users.layouts.layout')
-
+@push('styles')
+<link rel="stylesheet" href="{{asset('css/comment.css')}}" type="text/css">
+@endpush
 @section('content')
     <!-- Product Details Section Begin -->
     <section class="product-details spad">
@@ -9,52 +11,30 @@
                     <div class="product__details__pic">
                         <div class="product__details__pic__item">
                             <img class="product__details__pic__item--large"
-                                src="img/product/details/product-details-1.jpg" alt="">
+                                src="{{ asset('img/product/details/product-details-1.jpg') }}" alt="">
                         </div>
                         <div class="product__details__pic__slider owl-carousel">
-                            <img data-imgbigurl="img/product/details/product-details-2.jpg"
-                                src="img/product/details/thumb-1.jpg" alt="">
-                            <img data-imgbigurl="img/product/details/product-details-3.jpg"
-                                src="img/product/details/thumb-2.jpg" alt="">
-                            <img data-imgbigurl="img/product/details/product-details-5.jpg"
-                                src="img/product/details/thumb-3.jpg" alt="">
-                            <img data-imgbigurl="img/product/details/product-details-4.jpg"
-                                src="img/product/details/thumb-4.jpg" alt="">
+                            <img data-imgbigurl="{{ asset('img/product/details/product-details-2.jpg') }}"
+                                src="{{ asset('img/product/details/thumb-1.jpg') }}" alt="">
+                            <img data-imgbigurl="{{ asset('img/product/details/product-details-3.jpg') }}"
+                                src="{{ asset('img/product/details/thumb-2.jpg') }}" alt="">
+                            <img data-imgbigurl="{{ asset('img/product/details/product-details-5.jpg') }}"
+                                src="{{ asset('img/product/details/thumb-3.jpg') }}" alt="">
+                            <img data-imgbigurl="{{ asset('img/product/details/product-details-4.jpg') }}"
+                                src="{{ asset('img/product/details/thumb-4.jpg') }}" alt="">
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
-                        <h3>Vetgetable’s Package</h3>
-                        <div class="product__details__rating">
-                            {{-- Hiển thị sao đầy đủ --}}
-                            @for ($i = 0; $i < floor($ratingData['averageRating']); $i++)
-                                <i class="fa fa-star"></i>
-                            @endfor
-
-                            {{-- Hiển thị sao nửa nếu có --}}
-                            @if ($ratingData['averageRating'] - floor($ratingData['averageRating']) >= 0.5)
-                                <i class="fa fa-star-half-o"></i>
-                            @endif
-
-                            {{-- Hiển thị sao rỗng --}}
-                            @for ($i = 0; $i < 5 - ceil($ratingData['averageRating']); $i++)
-                                <i class="fa fa-star-o"></i>
-                            @endfor
-                            <span>({{ $ratingData['countFavorites'] }} reviews)</span>
-                        </div>
-                        <div class="product__details__price">$50.00</div>
-                        <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam
-                            vehicula elementum sed sit amet dui. Sed porttitor lectus nibh. Vestibulum ac diam sit amet
-                            quam vehicula elementum sed sit amet dui. Proin eget tortor risus.</p>
-                        <div class="product__details__quantity">
-                            <div class="quantity">
-                                <div class="pro-qty">
-                                    <input type="text" value="1">
+                        <h3>{{$Product->tensanpham}}</h3>
+                                <div class="product__details__rating">
+                                    <h4>Điểm đánh giá trung bình</h4>
+                                    <p><strong>{{ $averageRating ?: 'Chưa có đánh giá' }}</strong> điểm</p>
                                 </div>
                             </div>
                         </div>
-                        <a href="#" class="primary-btn">ADD TO CARD</a>
+                      <a href="#" class="primary-btn">ADD TO CARD</a>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Availability</b> <span>In Stock</span></li>
@@ -134,18 +114,14 @@
                             </div>
                             <div class="tab-pane" id="tabs-3" role="tabpanel">
                                 <div class="product__details__tab__desc">
-                                    <h6>Products Infomation</h6>
-                                    <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                                        Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
-                                        Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
-                                        sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
-                                        eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
-                                        Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
-                                        sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
-                                        diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
-                                        ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-                                        Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
-                                        Proin eget tortor risus.</p>
+                                    <h6>Review sản phẩm</h6>
+                                    @foreach($comments as $comment)
+                                        <div class="comment">
+                                            <p><strong>{{ $comment->user->name }}:</strong></p>
+                                            <p>{{ $comment->noidung }}</p>
+                                            <p><small>{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</small></p>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

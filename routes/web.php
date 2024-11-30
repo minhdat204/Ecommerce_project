@@ -118,6 +118,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     
     // Dashboard Routes
     Route::get('dashboard', [DashboardManagerController::class, 'index'])->name('dashboard.index');
+    Route::get('/shop-details/{id}', [ShopDetailsController::class, 'showProductDetails']);
 
     // Statistical Routes
     Route::get('statistics', [StatisticalManagerController::class, 'index'])->name('statistics.index');

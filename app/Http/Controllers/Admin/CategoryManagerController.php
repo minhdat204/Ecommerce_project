@@ -11,22 +11,24 @@ class CategoryManagerController
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $status = $request->input('status', 'active'); // Mặc định là 'active'
 
         $categories = Category::with('parentCategory')
             ->when($search, function ($query) use ($search) {
                 return $query->where('tendanhmuc', 'LIKE', '%' . trim($search) . '%')
                     ->orWhere('mota', 'LIKE', '%' . trim($search) . '%');
             })
-            ->where('trangthai', $status) // Lọc theo trạng thái
             ->paginate(10); // Hiển thị 6 mục mỗi trang
-        return view('admin.pages.Category.index', compact('categories', 'search'));
+        // Lấy danh mục cha
+        $parentCategories = Category::where('trangthai', 'active')->get();
+
+        return view('admin.pages.Category.index', compact('categories', 'parentCategories', 'search'));
     }
     public function create()
     {
-        $categories = Category::where('trangthai', 'active')
+        $parentCategories = Category::where('trangthai', 'active')
             ->get();
-        return view('admin.category.create', compact('categories'));
+
+        return view('admin.pages.Category.index', compact('category', 'parentCategories'));
     }
 
     public function store(Request $request)
@@ -43,7 +45,7 @@ class CategoryManagerController
         if ($request->hasFile('CategoryImage')) {
             $imagePath = $request->file('CategoryImage')->store('categories', 'public');
             $category = Category::create([
-                'id_danhmuc_cha' => $request->CategoryParent ?: null,
+                'id_danhmuc_cha' => $request->CategoryParent,
                 'tendanhmuc' => $request->CategoryName,
                 'slug' => $slug,
                 'mota' => $request->CategoryContent,
@@ -63,7 +65,13 @@ class CategoryManagerController
     public function edit(string $id)
     {
         $category = Category::findOrFail($id);
-        return view('admin.category.edit', compact('category'));
+
+        // Lấy tất cả danh mục cha có trạng thái active, ngoại trừ danh mục hiện tại
+        $parentCategories = Category::where('trangthai', 'active')
+            ->where('id_danhmuc', '!=', $id) // Loại trừ danh mục hiện tại
+            ->get();
+
+        return view('admin.pages.Category.index', compact('category', 'parentCategories'));
     }
 
     public function update(Request $request, string $id)
@@ -83,7 +91,7 @@ class CategoryManagerController
             $category->tendanhmuc = $request->CategoryName;
             $category->slug = Str::slug($request->CategoryName);
             $category->mota = $request->CategoryContent;
-            $category->id_danhmuc_cha = $request->CategoryParent ?: null;
+            $category->id_danhmuc_cha = $request->CategoryParent;
             $category->trangthai = $request->Status;
 
             // Xử lý upload ảnh nếu có

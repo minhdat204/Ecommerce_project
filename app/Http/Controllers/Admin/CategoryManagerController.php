@@ -11,14 +11,12 @@ class CategoryManagerController
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $status = $request->input('status', 'active'); // Mặc định là 'active'
 
         $categories = Category::with('parentCategory')
             ->when($search, function ($query) use ($search) {
                 return $query->where('tendanhmuc', 'LIKE', '%' . trim($search) . '%')
                     ->orWhere('mota', 'LIKE', '%' . trim($search) . '%');
             })
-            ->where('trangthai', $status) // Lọc theo trạng thái
             ->paginate(10); // Hiển thị 6 mục mỗi trang
         // Lấy danh mục cha
         $parentCategories = Category::where('trangthai', 'active')->get();

@@ -90,7 +90,7 @@ public function store(Request $request)
     $originalSlug = $slug; 
     while (Product::where('slug', $slug)->exists()) {
         $slug = $originalSlug . '-' . $slugCount;
-        $slugCount++;
+        $slugCount++; 
     }
 
     $product = new Product();

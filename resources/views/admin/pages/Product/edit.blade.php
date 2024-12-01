@@ -128,22 +128,107 @@
                                 @endforeach
                             </select>
                         </div>
-
-                        <!-- Hình ảnh hiện tại -->
                         <div class="form-group">
-                            <label>Hình ảnh hiện tại</label>
-                            <div>
-                                @foreach ($product->images as $image)
+                        <label>Hình ảnh hiện tại</label>
+                        <div>
+                            @foreach ($product->images as $image)
+                                <div class="position-relative me-3 mb-3">
                                     <img src="{{ asset('storage/' . $image->duongdan) }}" alt="{{ $image->alt }}" class="img-thumbnail" width="150">
-                                @endforeach
-                            </div>
+                                    
+                                    <!-- Hình chữ X để xóa hình ảnh -->
+                                    <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" onclick="confirmDelete({{ $image->id }})">
+                                        X
+                                    </button>
+
+                                    <!-- Ẩn checkbox, chỉ sử dụng cho việc gửi dữ liệu -->
+                                </div>
+                            @endforeach
                         </div>
 
-                        <!-- Thêm hình ảnh mới -->
-                        <div class="form-group">
-                            <label for="images">Thêm hình ảnh mới</label>
-                            <input type="file" name="images[]" id="images" class="form-control" multiple>
+                        <script>
+                            // Hàm xác nhận và xóa hình ảnh
+                            function confirmDelete(imageId) {
+                                if (confirm('Bạn có chắc muốn xóa hình ảnh này?')) {
+                                    // Tìm checkbox và đánh dấu xóa
+                                    const checkbox = document.querySelector(`input[value="${imageId}"]`);
+                                    checkbox.checked = true;
+
+                                    // Xóa hình ảnh trong giao diện
+                                    const imageItem = checkbox.closest('.position-relative');
+                                    imageItem.remove();
+                                }
+                            }
+                        </script>
+                            </div>
+                        <div class="mb-3">
+                            <label for="images" class="form-label">Thêm hình ảnh mới</label>
+                            <input type="file" name="images[]" id="images" class="form-control" multiple accept="image/*">
                         </div>
+
+                        <!-- Preview hình ảnh -->
+                        <div id="preview-container" class="d-flex flex-wrap mt-3"></div>
+
+                        <script>
+                            // Xử lý hiển thị hình ảnh xem trước
+                            document.getElementById('images').addEventListener('change', function (event) {
+                                const files = event.target.files;
+                                const previewContainer = document.getElementById('preview-container');
+
+                                // Xóa hình ảnh xem trước hiện tại
+                                previewContainer.innerHTML = '';
+
+                                // Duyệt qua danh sách file được chọn
+                                Array.from(files).forEach((file, index) => {
+                                    if (file.type.startsWith('image/')) {
+                                        const reader = new FileReader();
+
+                                        // Đọc file và hiển thị hình ảnh
+                                        reader.onload = function (e) {
+                                            const div = document.createElement('div');
+                                            div.className = 'image-item position-relative me-3 mb-3';
+                                            div.style.width = '100px';
+                                            div.style.height = '100px';
+
+                                            div.innerHTML = `
+                                                <img src="${e.target.result}" alt="Hình ảnh xem trước" class="img-thumbnail" style="width: 100%; height: 100%; object-fit: cover;">
+                                                <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" data-index="${index}">
+                                                    X
+                                                </button>
+                                            `;
+
+                                            previewContainer.appendChild(div);
+                                        };
+
+                                        reader.readAsDataURL(file);
+                                    }
+                                });
+
+                                // Gán sự kiện xóa hình ảnh
+                                setTimeout(() => attachDeleteHandlers(files), 100);
+                            });
+
+                            function attachDeleteHandlers(files) {
+                                document.querySelectorAll('#preview-container button').forEach((btn) => {
+                                    btn.addEventListener('click', function () {
+                                        const index = parseInt(this.getAttribute('data-index'));
+                                        const dt = new DataTransfer();
+
+                                        // Lấy các file trừ file bị xóa
+                                        Array.from(files).forEach((file, i) => {
+                                            if (i !== index) {
+                                                dt.items.add(file);
+                                            }
+                                        });
+
+                                        // Cập nhật lại các file trong input
+                                        document.getElementById('images').files = dt.files;
+
+                                        // Xóa hình ảnh xem trước
+                                        this.closest('.image-item').remove();
+                                    });
+                                });
+                            }
+                        </script>
 
                         <!-- Nút hành động -->
                         <div class="form-group text-center">

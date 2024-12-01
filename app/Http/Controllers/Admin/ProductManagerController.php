@@ -8,6 +8,8 @@ use App\Models\ProductImage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductManagerController
 {
@@ -59,7 +61,7 @@ public function store(Request $request)
 {
     // Validate dữ liệu
     $request->validate([
-        'tensanpham' => 'required|string',
+        'tensanpham' => 'required|string|max:255',        
         'slug' => 'required|string',
         'mota' => 'required|string',
         'thongtin_kythuat' => 'required|string',
@@ -81,26 +83,33 @@ public function store(Request $request)
         // Nếu không tìm thấy danh mục, trả về lỗi
         return redirect()->back()->withErrors(['id_danhmuc' => 'Danh mục không tồn tại.']);
     }
+    $tensanpham = $request->tensanpham;
+    $slug = Str::slug($tensanpham);
 
-    // Lưu sản phẩm
+    $slugCount = 1;
+    $originalSlug = $slug; 
+    while (Product::where('slug', $slug)->exists()) {
+        $slug = $originalSlug . '-' . $slugCount;
+        $slugCount++;
+    }
+
     $product = new Product();
     $product->tensanpham = $request->tensanpham;
-    $product->slug = Str::slug($request->tensanpham);    
+    $product->slug = $slug;    
     $product->mota = $request->mota;
     $product->thongtin_kythuat = $request->thongtin_kythuat;
-    $product->id_danhmuc = $category->id_danhmuc; // Gán id_danhmuc lấy từ bảng danh_muc
+    $product->id_danhmuc = $category->id_danhmuc; 
     $product->gia = $request->gia;
     $product->gia_khuyen_mai = $request->gia_khuyen_mai;
     $product->donvitinh = $request->donvitinh;
     $product->xuatxu = $request->xuatxu;
     $product->soluong = $request->soluong;
-    $product->trangthai = $request->trangthai === 'active' ? 1 : 0; // Mặc định là "Không hoạt động" nếu không chọn    
+    $product->trangthai = $request->trangthai === 'active' ? 1 : 0;  
     $product->luotxem = $request->luotxem ?? 0;    
     $product->save();
 
-    // Xử lý hình ảnh
-    // Lưu hình ảnh
-    if ($request->hasFile('images')) {
+     // Xử lý hình ảnh
+     if ($request->hasFile('images')) {
         $images = $request->file('images');
         foreach ($images as $image) {
             // Lưu ảnh vào thư mục storage/app/public/img/products
@@ -112,20 +121,13 @@ public function store(Request $request)
             $productImage->duongdan = $imagePath;
             $productImage->alt = $request->tensanpham; // Hoặc tùy chọn khác
     
-            // Bỏ qua việc lưu `created_at` và `updated_at`
+            // Bỏ qua việc lưu `created_at` và `updated_at` nếu sử dụng Eloquent, vì đã có time stamp tự động
             $productImage->save();
         }
     }
     
-
     return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được thêm thành công!');
 }
-
-
-
-
-
-
 
     // Hiển thị chi tiết sản phẩm
     public function show($id_sanpham)

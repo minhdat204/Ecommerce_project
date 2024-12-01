@@ -115,29 +115,78 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-
             <div class="mb-3">
-                <label class="form-label">Hình Ảnh Hiện Tại</label>
-                <div class="d-flex flex-wrap">
-                    @foreach ($product->images as $image)
-                        <div class="image-item position-relative me-3 mb-3">
-                            <img src="{{ asset('storage/' . $image->path) }}" alt="Hình ảnh" class="img-thumbnail" style="width: 100px; height: 100px;">
-                            <form action="{{ route('admin.product.image.delete', $image->id) }}" method="POST" style="position: absolute; top: 5px; right: 5px;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa hình ảnh này?')">X</button>
-                            </form>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="images" class="form-label">Thêm Hình Ảnh Mới</label>
-                <input type="file" class="form-control @error('images') is-invalid @enderror" id="images" name="images[]" multiple>
+                <label for="images" class="form-label">Hình Ảnh</label>
+                <input type="file" class="form-control @error('images') is-invalid @enderror" id="images" name="images[]" multiple accept="image/*">
                 @error('images')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+
+                <div id="preview-container" class="d-flex flex-wrap mt-3"></div>
             </div>
+
+            <script>
+                // Xử lý hiển thị hình ảnh xem trước
+                document.getElementById('images').addEventListener('change', function (event) {
+                    const files = event.target.files;
+                    const previewContainer = document.getElementById('preview-container');
+
+                    // Xóa hình ảnh xem trước hiện tại
+                    previewContainer.innerHTML = '';
+
+                    // Duyệt qua danh sách file được chọn
+                    Array.from(files).forEach((file, index) => {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+
+                            // Đọc file và hiển thị hình ảnh
+                            reader.onload = function (e) {
+                                const div = document.createElement('div');
+                                div.className = 'image-item position-relative me-3 mb-3';
+                                div.style.width = '100px';
+                                div.style.height = '100px';
+
+                                div.innerHTML = `
+                                    <img src="${e.target.result}" alt="Hình ảnh xem trước" class="img-thumbnail" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" data-index="${index}">
+                                        X
+                                    </button>
+                                `;
+
+                                previewContainer.appendChild(div);
+                            };
+
+                            reader.readAsDataURL(file);
+                        }
+                    });
+
+                    // Gán sự kiện xóa hình ảnh
+                    setTimeout(() => attachDeleteHandlers(files), 100);
+                });
+
+                function attachDeleteHandlers(files) {
+                    document.querySelectorAll('#preview-container button').forEach((btn) => {
+                        btn.addEventListener('click', function () {
+                            const index = parseInt(this.getAttribute('data-index'));
+                            const dt = new DataTransfer();
+
+                            // Lấy các file trừ file bị xóa
+                            Array.from(files).forEach((file, i) => {
+                                if (i !== index) {
+                                    dt.items.add(file);
+                                }
+                            });
+
+                            // Cập nhật danh sách file
+                            document.getElementById('images').files = dt.files;
+
+                            // Xóa hình ảnh xem trước
+                            this.closest('.image-item').remove();
+                        });
+                    });
+                }
+            </script>
+
 
             <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
         </form>

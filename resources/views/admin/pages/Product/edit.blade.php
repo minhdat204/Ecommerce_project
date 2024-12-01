@@ -74,14 +74,14 @@
                         <!-- Giá -->
                         <div class="form-group">
                             <label for="gia">Giá</label>
-                            <input type="number" name="gia" id="gia" class="form-control" 
+                            <input type="number" name="gia" id="gia" class="form-control @error('gia') is-invalid @enderror" 
                                    value="{{ old('gia', $product->gia) }}" required>
                         </div>
 
                         <!-- Giá khuyến mãi -->
                         <div class="form-group">
                             <label for="gia_khuyen_mai">Giá khuyến mãi</label>
-                            <input type="number" name="gia_khuyen_mai" id="gia_khuyen_mai" class="form-control" 
+                            <input type="number" name="gia_khuyen_mai" id="gia_khuyen_mai" class="form-control @error('gia_khuyen_mai') is-invalid @enderror" 
                                    value="{{ old('gia_khuyen_mai', $product->gia_khuyen_mai) }}">
                         </div>
 

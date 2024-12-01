@@ -117,7 +117,22 @@
             </div>
 
             <div class="mb-3">
-                <label for="images" class="form-label">Hình Ảnh</label>
+                <label class="form-label">Hình Ảnh Hiện Tại</label>
+                <div class="d-flex flex-wrap">
+                    @foreach ($product->images as $image)
+                        <div class="image-item position-relative me-3 mb-3">
+                            <img src="{{ asset('storage/' . $image->path) }}" alt="Hình ảnh" class="img-thumbnail" style="width: 100px; height: 100px;">
+                            <form action="{{ route('admin.product.image.delete', $image->id) }}" method="POST" style="position: absolute; top: 5px; right: 5px;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa hình ảnh này?')">X</button>
+                            </form>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="images" class="form-label">Thêm Hình Ảnh Mới</label>
                 <input type="file" class="form-control @error('images') is-invalid @enderror" id="images" name="images[]" multiple>
                 @error('images')
                     <div class="invalid-feedback">{{ $message }}</div>

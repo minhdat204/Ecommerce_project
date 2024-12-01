@@ -127,10 +127,33 @@
                                     <i class="material-icons">&#xE254;</i>
                                 </a>
                                 <!-- Nút ẩn sản phẩm -->
-                                <a href="#" class="delete" data-toggle="modal"
-                                data-target="#deleteProductModal{{ $product->id_sanpham }}">
+                                <a href="#" class="delete" data-toggle="modal" data-target="#deleteProductModal{{ $product->id_sanpham }}">
                                 <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
-                            </a>
+                                </a>
+                                <div id="deleteProductModal{{ $product->id_sanpham }}" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form action="{{ route('admin.product.destroy', $product->id_sanpham) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Xóa Sản Phẩm</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Bạn có chắc chắn muốn xóa sản phẩm 
+                                                    <strong>{{ $product->ten_sanpham }}</strong>?
+                                                </p>
+                                                <p class="text-warning"><small>Hành động này không thể hoàn tác.</small></p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                                                <button type="submit" class="btn btn-danger">Xóa</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             </td>
                         </tr>
                     @endforeach
@@ -150,30 +173,7 @@
         @csrf
         @method('DELETE')
     </form>
-<div id="deleteProductModal{{ $product->id_sanpham }}" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ route('admin.product.destroy', $product->id_sanpham) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="modal-header">
-                    <h4 class="modal-title">Xóa Sản Phẩm</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <p>Bạn có chắc chắn muốn xóa sản phẩm 
-                        <strong>{{ $product->ten_sanpham }}</strong>?
-                    </p>
-                    <p class="text-warning"><small>Hành động này không thể hoàn tác.</small></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-danger">Xóa</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 @endsection
 
 @push('scripts')

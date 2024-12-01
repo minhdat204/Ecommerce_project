@@ -116,7 +116,7 @@
                                 Categories</a>
                         </li>
                         <li>
-                            <a href=""><i class="fa fa-dashboard fa-fw"></i> Products</a>
+                            <a href="{{ Route('admin.product.index') }}"><i class="fa fa-dashboard fa-fw"></i> Products</a>
                         </li>
                         <li>
                             <a href=""><i class="fa fa-dashboard fa-fw"></i> Orders</a>

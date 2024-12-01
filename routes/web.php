@@ -14,6 +14,8 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\Client\ShopDetailsController;
+
 
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
@@ -29,6 +31,8 @@ Route::get('/', [HomeController::class, 'index'])->name('users.home');
 Route::get('/shop', [ProductController::class, 'index'])->name('users.shop');
 
 Route::get('/shop-detail/{slug}', [ProductController::class, 'show'])->name('users.shop_details');
+Route::get('/shop-detail/{slug}', [ShopDetailsController::class, 'showProductDetails'])->name('shop.detail');
+
 
 Route::get('/blog', function () {
     return view('users.pages.blog');
@@ -123,6 +127,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Dashboard Routes
     Route::get('dashboard', [DashboardManagerController::class, 'index'])->name('dashboard.index');
+    Route::get('/product-detail/{id}', [ShopDetailsController::class, 'showProductDetails'])->name('product.detail');
 
     // Statistical Routes
     Route::get('statistics', [StatisticalManagerController::class, 'index'])->name('statistics.index');

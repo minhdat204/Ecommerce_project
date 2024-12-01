@@ -27,27 +27,22 @@
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
-                        <h3>{{$Product->tensanpham}}</h3>
-                        <!-- Phần chấm điểm -->
-                        <div class="product__details__rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <span>(18 reviews)</span>
+                        <h3>{{$product->tensanpham}}</h3>
+                        <div class="product__rating">
+                            <p><strong>Đánh giá trung bình:</strong> {{ number_format($averageRating, 1) }} / 5 <i class="fa fa-star"></i></p>
                         </div>
-                        <!-- phần giá -->
+                            </div>
+                        </div>
                         <div class="product__details__price">
-                            @if($Product->gia_khuyen_mai)
-                                ${{$Product->gia_khuyen_mai}}
-                                <span>${{$Product->gia}}</span>
+                            @if($product->gia_khuyen_mai)
+                                ${{$product->gia_khuyen_mai}}
+                                <span>${{$product->gia}}</span>
                             @else
-                                ${{$Product->gia}}
+                                ${{product->gia}}
                             @endif
                         </div>
                         <!-- phần mô tả -->
-                        <p>{{$Product->mota}}</p>
+                        <p>{{$product->mota}}</p>
                         <div class="product__details__quantity">
                             <div class="quantity">
                                 <div class="pro-qty">
@@ -60,8 +55,8 @@
                         <ul>
                             <li><b>Availability</b>
                                 <span>
-                                    @if($Product->soluong > 0)
-                                        <span class="stock-status in-stock">In Stock ({{$Product->soluong}} items)</span>
+                                    @if($product->soluong > 0)
+                                        <span class="stock-status in-stock">In Stock ({{$product->soluong}} items)</span>
                                     @else
                                         <span class="stock-status out-of-stock">Out of Stock</span>
                                     @endif
@@ -142,8 +137,14 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-3" role="tabpanel">
-                                <!-- phần bình luận -->
-                                @include('users.partials.shop-details.comment')
+                                <div class="product__details__tab__desc">
+                                    <h6>Review sản phẩm</h6>
+                                    @foreach($comments as $comment)
+                                        <div class="comment">
+                                            <p><strong>{{ $comment->noidung }}</strong></p>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -153,8 +154,8 @@
     </section>
     <!-- Product Details Section End -->
 
-    <!-- Related Product Section Begin -->
-    <section class="related-product">
+   <!-- Related Product Section Begin -->
+   <section class="related-product">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">

@@ -119,11 +119,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     ]);
 
 
+
     Route::patch('products/{product}/hide', [ProductManagerController::class, 'hide'])->name('product.hide');
 
     // Dashboard Routes
     Route::get('dashboard', [DashboardManagerController::class, 'index'])->name('dashboard.index');
-
+    Route::put('dashboard/website-info', [DashboardManagerController::class, 'updateWebsiteInfo'])
+        ->name('dashboard.update-website-info');
     // Statistical Routes
     Route::get('statistics', [StatisticalManagerController::class, 'index'])->name('statistics.index');
     Route::get('statistics/sales', [StatisticalManagerController::class, 'sales'])->name('statistics.sales');

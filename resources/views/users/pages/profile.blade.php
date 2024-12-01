@@ -52,7 +52,7 @@
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label for="user-gender" class="form-label">Gender</label>
-                                            <select class="form-select" id="user-gender" name="gioitinh">
+                                            <select class="form-select no-arrow" id="user-gender" name="gioitinh">
                                                 <option value="male" {{ $user->gioitinh == 'male' ? 'selected' : '' }}>
                                                     Male</option>
                                                 <option value="female" {{ $user->gioitinh == 'female' ? 'selected' : '' }}>
@@ -61,10 +61,9 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="user-language" class="form-label">Language</label>
-                                            <select class="form-select" id="user-language">
-                                                <option selected>Select Language</option>
+                                            <select class="form-select no-arrow" id="user-language">
+                                                <option selected>Vietnamese</option>
                                                 <option value="english">English</option>
-                                                <option value="vietnamese">Vietnamese</option>
                                             </select>
                                         </div>
                                     </div>
@@ -86,11 +85,12 @@
                                             <i class="bi bi-envelope me-2 text-primary" style="font-size: 1.5rem;"></i>
                                             <div>
                                                 <p class="mb-0">{{ $user->email }}</p>
-                                                <small class="text-muted">Updated 1 month ago</small>
                                             </div>
                                         </div>
-                                        <button class="btn btn-outline-secondary btn-sm mt-2">+ Add Email</button>
                                     </div>
+                                </div>
+                                <div class="row-edit">
+                                    <button class="btn btn-sm btn-primary">Edit</button>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +133,7 @@
                 </div>
             </div>
             <!-- Score List -->
-            <div class="profile-tab-pane" style="display: none;">d
+            <div class="profile-tab-pane" style="display: none;">
                 <div class="favorite-page-container">
                     <div class="row">
                         @forelse ($scores as $score)
@@ -164,7 +164,6 @@
             <div class="profile-tab-pane">
                 <div class="orders-page-container">
                     <h3 class="mb-4">Đơn hàng của tôi</h3>
-
                     <div class="row">
                         @forelse ($orders as $order)
                             <div class="col-12 mb-4">

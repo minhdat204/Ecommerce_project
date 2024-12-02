@@ -94,7 +94,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="signup-button">SIGN UP</button>
+        <button type="submit" class="signup-button">Sign up</button>
         <div class="auth-footer">
             <p>Already have an account? <a href="{{ route('login') }}">Log in</a></p>
         </div>

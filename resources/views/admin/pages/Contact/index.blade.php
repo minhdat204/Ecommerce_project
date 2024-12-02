@@ -29,9 +29,7 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>ID Liên Hệ</th>
-                        <th>ID Người Dùng</th>
-                        <th>Tên Người Dùng</th>
+                        <th>Tên Liên Hệ </th>
                         <th>Email</th>
                         <th>Số Điện Thoại</th>
                         <th>Nội Dung</th>
@@ -42,9 +40,7 @@
                 <tbody>
                     @foreach ($contacts as $contact)
                         <tr>
-                            <td>{{ $contact->id_lienhe }}</td>
-                            <td>{{ $contact->id_nguoidung }}</td>
-                            <td>{{ $contact->user->hoten ?? 'Không xác định' }}</td>
+                            <td>{{ $contact->ten ?? 'Không xác định' }}</td>
                             <td>{{ $contact->email }}</td>
                             <td>{{ $contact->sodienthoai }}</td>
                             <td>{{ $contact->noidung }}</td>

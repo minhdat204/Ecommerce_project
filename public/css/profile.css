@@ -57,6 +57,8 @@
     padding: 10px;
     border-radius: 5px;
     transition: border-color 0.3s ease;
+    --bs-form-select-bg-img: none !important;
+
 }
 
 .form-control:focus,
@@ -99,3 +101,9 @@
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px);
 }
+.row-edit {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+}
+

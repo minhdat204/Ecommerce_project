@@ -1,4 +1,3 @@
-
 @extends('users.layouts.auth')
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/forgotPass.css')}}">
@@ -7,56 +6,60 @@
     <script src="{{asset('js/forgotPass.js')}}"></script>
 @endpush
 @section('content')
-    <div class="container">
+    <div class="auth-form">
         <!-- Step 1: Email Input -->
         <div id="emailStep" style="{{ !session('email_sent') ? '' : 'display: none' }}">
-            <div class="header">
-                <h1>Quên mật khẩu?</h1>
-                <p>Nhập email của bạn để khôi phục mật khẩu</p>
-            </div>
+            <h1>Reset Password</h1>
+            <p class="auth-subtitle">Enter your email to reset your password</p>
 
             <form action="{{ route('password.email') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" required placeholder="Nhập email của bạn">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" name="email" class="form-input @error('email') is-invalid @enderror"
+                           value="{{ old('email') }}" placeholder="Enter your email">
                     @error('email')
-                        <div class="error-message">{{ $message }}</div>
+                        <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <button type="submit" class="submit-btn">Gửi mã xác nhận</button>
-            </form>
+                <button type="submit" class="submit-btn">Send Reset Link</button>
 
-            <div class="links">
-                <a href="{{ route('login') }}">Quay lại đăng nhập</a>
-            </div>
+                <div class="auth-footer">
+                    <p>Remember your password? <a href="{{ route('login') }}">Back to Login</a></p>
+                </div>
+            </form>
         </div>
 
         <!-- Step 2: OTP Verification -->
         <div id="otpStep" style="{{ session('email_sent') ? '' : 'display: none' }}">
-            <div class="header">
-                <h1>Xác nhận OTP</h1>
-                <p>Nhập mã OTP đã được gửi đến email của bạn</p>
-            </div>
+            <h1>OTP Verification</h1>
+            <p class="auth-subtitle">Enter the OTP sent to your email</p>
 
             <form action="{{ route('password.verify-otp') }}" method="POST">
                 @csrf
-                <div class="otp-inputs">
-                    @for ($i = 1; $i <= 6; $i++)
-                    <input type="text" name="otp[]" class="otp-input" maxlength="1" autocomplete="off" required>
-                    @endfor
+                <div class="form-group">
+                    <div class="otp-inputs">
+                        @for ($i = 1; $i <= 6; $i++)
+                        <input type="text" name="otp[]" class="otp-input form-input" maxlength="1" autocomplete="off" required>
+                        @endfor
+                    </div>
+                    @error('otp')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
                 </div>
 
-                <button type="submit" class="submit-btn">Xác nhận</button>
-            </form>
+                <button type="submit" class="submit-btn">Verify OTP</button>
 
-            <div class="links">
-                <form action="{{ route('password.resend-otp') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-link">Gửi lại mã</button>
-                </form>
-            </div>
+                <div class="auth-footer">
+                    <form action="{{ route('password.resend-otp') }}" method="POST" class="resend-form">
+                        @csrf
+                        <p>Didn't receive the code?
+                            <button type="submit" class="resend-btn">Resend OTP</button>
+                        </p>
+                    </form>
+                </div>
+            </form>
         </div>
     </div>
 

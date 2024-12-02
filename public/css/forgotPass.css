@@ -140,6 +140,32 @@
     outline: none;
 }
 
+.resend-form {
+    margin-top: -1rem;
+    text-align: center;
+}
+
+.resend-form p {
+    color: #718096;
+    font-size: 0.875rem;
+}
+
+.resend-btn {
+    background: none;
+    border: none;
+    color: #7367F0;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 5px;
+    font-size: 0.875rem;
+}
+
+.resend-btn:hover {
+    color: #5E50EE;
+    text-decoration: underline;
+}
+
 @media (max-width: 480px) {
     .container {
         margin: 10px;

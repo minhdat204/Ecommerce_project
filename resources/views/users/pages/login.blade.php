@@ -29,7 +29,7 @@
                 <input type="password" name="password" class="form-input @error('password') is-invalid @enderror"
                        placeholder="Enter your password">
                 <button type="button" class="password-toggle">
-                    <i class="fa fa-eye"></i>
+                    Hide
                 </button>
             </div>
             @error('password')

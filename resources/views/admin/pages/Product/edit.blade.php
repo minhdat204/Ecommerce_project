@@ -25,39 +25,47 @@
                         @csrf
                         @method('PUT')
 
-                        <!-- Tên sản phẩm -->
+                       <!-- Tên sản phẩm -->
                         <div class="form-group">
                             <label for="tensanpham">Tên sản phẩm</label>
                             <input type="text" name="tensanpham" id="tensanpham" class="form-control" 
-                                   value="{{ old('tensanpham', $product->tensanpham) }}" required>
+                                value="{{ old('tensanpham', $product->tensanpham) }}" required>
                         </div>
 
                         <!-- Slug (ẩn hoặc chỉ hiển thị read-only) -->
                         <div class="form-group">
                             <label for="slug">Slug</label>
-                            <input type="text" id="slug" class="form-control" 
-                                value="{{ Str::slug(old('tensanpham', $product->tensanpham)) }}" readonly>
+                            <input type="text" id="slug" class="form-control" name="slug" 
+                                value="{{ old('slug', $product->slug) }}" readonly>
                         </div>
+
                         @push('scripts')
                         <script>
                             document.addEventListener('DOMContentLoaded', function () {
                                 const nameInput = document.getElementById('tensanpham');
                                 const slugDisplay = document.getElementById('slug');
 
+                                /**
+                                * Function to generate slug from a string
+                                * @param {string} str
+                                * @returns {string}
+                                */
                                 function generateSlug(str) {
                                     return str.toLowerCase()
                                         .trim()
-                                        .replace(/[^a-z0-9\s-]/g, '')
-                                        .replace(/[\s-]+/g, '-')
-                                        .replace(/^-+|-+$/g, '');
+                                        .replace(/[^a-z0-9\s-]/g, '') // Loại bỏ ký tự đặc biệt
+                                        .replace(/[\s-]+/g, '-')      // Thay thế khoảng trắng hoặc dấu gạch ngang bằng 1 dấu gạch ngang
+                                        .replace(/^-+|-+$/g, '');    // Loại bỏ dấu gạch ngang ở đầu hoặc cuối
                                 }
 
+                                // Cập nhật slug khi nhập tên sản phẩm
                                 nameInput.addEventListener('input', function () {
                                     slugDisplay.value = generateSlug(nameInput.value);
                                 });
                             });
                         </script>
                         @endpush
+
 
                         <!-- Mô tả -->
                         <div class="form-group">

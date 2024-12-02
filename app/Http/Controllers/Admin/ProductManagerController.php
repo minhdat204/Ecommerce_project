@@ -168,7 +168,18 @@ public function store(Request $request)
 
     // Cập nhật các thông tin sản phẩm
     $product->tensanpham = $request->tensanpham;
-    $product->slug = Str::slug($request->input('tensanpham'));    
+
+    // Tạo slug không trùng lặp
+    $tensanpham = $request->tensanpham;
+    $slug = Str::slug($tensanpham);
+    $slugCount = 1;
+    $originalSlug = $slug;
+
+    while (Product::where('slug', $slug)->where('id_sanpham', '!=', $id_sanpham)->exists()) {
+        $slug = $originalSlug . '-' . $slugCount;
+        $slugCount++; 
+    }
+    $product->slug = $slug;
     $product->mota = $request->mota;
     $product->gia = $request->gia;
     $product->gia_khuyen_mai = $request->gia_khuyen_mai;

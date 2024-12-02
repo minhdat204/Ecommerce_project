@@ -123,11 +123,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     ]);
 
 
-    Route::patch('products/{product}/hide', [ProductManagerController::class, 'hide'])->name('product.hide');
-
+    Route::prefix('products')->name('product.')->group(function () {
+        Route::patch('/{product}/hide', [ProductManagerController::class, 'hide'])->name('hide');
+        Route::get('/detail/{id}', [ProductManagerController::class, 'showProductDetails'])->name('detail');
+    });
+    
     // Dashboard Routes
     Route::get('dashboard', [DashboardManagerController::class, 'index'])->name('dashboard.index');
-    Route::get('/product-detail/{id}', [ShopDetailsController::class, 'showProductDetails'])->name('product.detail');
 
     // Statistical Routes
     Route::get('statistics', [StatisticalManagerController::class, 'index'])->name('statistics.index');

@@ -8,12 +8,15 @@ use App\Http\Controllers\Admin\ProductManagerController;
 use App\Http\Controllers\Admin\ContactManagerController;
 use App\Http\Controllers\Admin\DashboardManagerController;
 use App\Http\Controllers\Admin\StatisticalManagerController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Client\CartController;
 //client
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
@@ -58,7 +61,22 @@ Route::get('/about-us', function () {
     return view('users.pages.about-us');
 });
 
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+    Route::get('forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('password.request');
+    Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+    Route::post('verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('password.verify-otp');
+    Route::post('resend-otp', [ForgotPasswordController::class, 'sendResetLink'])->name('password.resend-otp');
+    Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
+});
 
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {

@@ -1,4 +1,4 @@
-    <!-- Page Preloder -->
+<!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>
     </div>
@@ -18,7 +18,37 @@
         </div>
         <div class="humberger__menu__widget">
             <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i> Login</a>
+                @auth
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-user"></i> {{ Auth::user()->hoten }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <div class="dropdown-header">
+                                <div class="user-info">
+                                    <i class="fa fa-user-circle"></i>
+                                    <span>{{ Auth::user()->email }}</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('profile.index') }}">
+                                <i class="fa fa-user-circle"></i> Tài khoản của tôi
+                            </a>
+                            <a class="dropdown-item" href="{{ route('orders.detail', ['id' => 'latest']) }}">
+                                <i class="fa fa-shopping-basket"></i> Đơn hàng của tôi
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">
+                                    <i class="fa fa-sign-out"></i> Đăng xuất
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
+                @endauth
             </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
@@ -80,10 +110,40 @@
                             <li><a href="{{route('users.shoping-cart')}}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
                         </ul>
                         <div class="header__top__right__language">
-                            <div class="header__cart__price">item: <span>$150.00</span></div>
+                            <div class="header__cart__price">Giỏ hàng: <span>150.000đ</span></div>
                         </div>
                         <div class="header__top__right__auth">
-                            <a href="#"><i class="fa fa-user"></i> Login</a>
+                            @auth
+                                <div class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="fa fa-user"></i> {{ Auth::user()->hoten }}
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <div class="dropdown-header">
+                                            <div class="user-info">
+                                                <i class="fa fa-user-circle"></i>
+                                                <span>{{ Auth::user()->email }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{{ route('profile.index') }}">
+                                            <i class="fa fa-user-circle"></i> Tài khoản của tôi
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('orders.detail', ['id' => 'latest']) }}">
+                                            <i class="fa fa-shopping-basket"></i> Đơn hàng của tôi
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <form action="{{ route('logout') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="fa fa-sign-out"></i> Đăng xuất
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @else
+                                <a href="{{ route('login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
+                            @endauth
                         </div>
                     </div>
                 </div>

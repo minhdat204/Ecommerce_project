@@ -17,6 +17,7 @@ use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Client\CheckoutController;
 
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
@@ -41,13 +42,12 @@ Route::get('/contact', function () {
     return view('users.pages.contact');
 })->name('users.contact');
 
-Route::get('/shoping-cart', [CartController::class, 'showCart'])->name('users.shoping-cart');
-Route::patch('/shoping-cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
 
 
-Route::get('/checkout', function () {
-    return view('users.pages.checkout');
-})->name('users.checkout');
+// Xóa route cũ không cần thiết
+// Route::patch('/shoping-cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
+
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 // admin
 Route::get('/administrator', function () {
     return view('admin.pages.category'); // giao diện mẫu = Category
@@ -77,6 +77,14 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
+
+// Cart routes
+Route::group(['prefix' => 'cart', 'middleware' => 'auth'], function() {
+    Route::get('/', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/items', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::patch('/items/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
+    Route::delete('/items/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
+})->name('cart.');
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {

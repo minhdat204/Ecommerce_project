@@ -228,7 +228,7 @@
                                         </div>
 
                                         <div class="d-flex justify-content-end mt-3">
-                                            @if ($order->trangthai === 'cho_xac_nhan')
+                                            @if (in_array($order->trangthai, ['pending', 'confirmed', 'processing']))
                                                 <button class="btn btn-danger btn-sm me-2"
                                                     onclick="cancelOrder({{ $order->id_donhang }})">
                                                     Hủy đơn hàng

@@ -3829,7 +3829,7 @@ ol {
     }
 }
 
-//Dat: thêm css cho trạng thái còn hàng hoặc hết hàng
+/*Dat: thêm css cho trạng thái còn hàng hoặc hết hàng*/
 .no-border {
     border: none !important;
 }

@@ -51,11 +51,15 @@
                         <div class="product__details__quantity">
                             <div class="quantity">
                                 <div class="pro-qty">
-                                    <input type="text" value="1">
+                                    <span class="dec qtybtn">-</span>
+                                    <input type="text" id="quantity" value="1"
+                                           min="1" max="{{$Product->soluong}}"
+                                           readonly>
+                                    <span class="inc qtybtn">+</span>
                                 </div>
                             </div>
                         </div>
-                        <a href="#" class="primary-btn">ADD TO CARD</a>
+                        <button onclick="addToCart()" class="primary-btn no-border">ADD TO CART</button>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Availability</b>
@@ -229,3 +233,45 @@
     </section>
     <!-- Related Product Section End -->
 @endsection
+
+@push('scripts')
+<script>
+function addToCart() {
+    @if(!Auth::check())
+        window.location.href = "{{ route('login') }}";
+        return;
+    @endif
+
+    const quantity = parseInt($('#quantity').val());
+    const productId = '{{$Product->id_sanpham}}';
+
+    $.ajax({
+        url: '{{ route('cart.add') }}',
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        data: {
+            id_sanpham: productId,
+            soluong: quantity
+        },
+        success: function(response) {
+            if (response.success) {
+                // Update cart count in header if needed
+
+                // Show success message
+                alert(response.message);
+                // Redirect to cart page
+                window.location.href = response.redirect_url;
+            } else {
+                alert(response.message || 'Error adding product to cart');
+            }
+        },
+        error: function(xhr) {
+            console.error('Cart error:', xhr);
+            alert('Error adding product to cart. Please try again.');
+        }
+    });
+}
+</script>
+@endpush

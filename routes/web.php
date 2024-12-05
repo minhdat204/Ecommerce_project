@@ -21,7 +21,7 @@ Route::resource('profile', ProfileController::class)->names([
 Route::get('/orders/{id}', [ProfileController::class, 'orderDetail'])->name('orders.detail');
 
 Route::resource('contact', ContactController::class)->names([
-    'store' =>'contact.store',
+    'store' => 'contact.store',
 ]);
 
 Route::get('/', [HomeController::class, 'index'])->name('users.home');
@@ -82,6 +82,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'edit'    => 'order.edit',
         'update'  => 'order.update',
         'destroy' => 'order.destroy',
+
     ]);
 
     // Product Routes

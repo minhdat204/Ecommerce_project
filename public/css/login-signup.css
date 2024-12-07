@@ -5,7 +5,6 @@
     font-weight: 800;
     color: #1a1a1a;
     margin-bottom: 8px;
-    margin-top: 15px;
 }
 
 /* Subtitle Styles */
@@ -13,7 +12,11 @@
 .signup-subtitle {
     font-size: 14px;
     color: #666;
-    margin-bottom: 25px;
+}
+
+textarea.form-input {
+    min-height: 20px;
+    resize: vertical;
 }
 
 /* Form Group */
@@ -28,6 +31,7 @@
     font-size: 14px;
     color: #1a1a1a;
     margin-bottom: 8px;
+    font-weight: 600;
 }
 
 /* Required Field */
@@ -118,7 +122,7 @@
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 10px;
     transition: background-color 0.3s ease;
 }
 
@@ -133,6 +137,7 @@
     font-size: 14px;
     color: #666;
     text-align: center;
+    margin-bottom: 0px!important;
 }
 
 .login-link a,
@@ -162,4 +167,42 @@
     color: rgba(0, 0, 0, 0.3); /* Màu đen với độ trong suốt */
     font-size: 14px; /* Thu nhỏ chữ */
     font-style: italic; /* Làm chữ nghiêng */
+}
+
+/* bổ sung thanh ngang dưới subtitle*/
+.signup-subtitle{
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+/* bổ sung khoảng margin bottom cho button*/
+.signup-button {
+    margin-bottom: 15px;
+}
+
+/* bổ sung khoảng cách ngang cho login form*/
+.login-content {
+    padding: 0 40px;
+}
+
+/* phần head form signup*/
+.signup-header {
+    padding: 40px 40px 20px 40px;
+}
+/* phần content form signup*/
+.signup-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 40px;
+    scrollbar-width: none; /* Ẩn thanh cuộn cho Firefox */
+    -ms-overflow-style: none; /* Ẩn thanh cuộn cho Internet Explorer và Edge */
+}
+
+.signup-content::-webkit-scrollbar {
+    display: none; /* Ẩn thanh cuộn cho Chrome, Safari và các trình duyệt WebKit */
+}
+/* phần footer form signup*/
+.signup-footer {
+    padding-top: 20px;
+    border-top: 1px solid #f5f5f5;
 }

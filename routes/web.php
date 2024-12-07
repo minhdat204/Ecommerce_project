@@ -14,11 +14,13 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\Client\OrderController;
 
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
 ]);
-Route::get('/orders/{id}', [ProfileController::class, 'orderDetail'])->name('orders.detail');
+Route::get('/orders/{id}', [OrderController::class, 'orderDetail'])->name('orders.detail');
+Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 
 Route::resource('contact', ContactController::class)->names([
     'store' => 'contact.store',

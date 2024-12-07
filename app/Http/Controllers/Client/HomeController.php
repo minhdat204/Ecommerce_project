@@ -35,7 +35,7 @@ class HomeController
         ->take(3)
         ->get();
 
-        //sản phẩm bán chạy: hiển thị 5 sản phẩm bán chạy nhất
+        //sản phẩm bán chạy: hiển thị 4 sản phẩm bán chạy nhất
         $best_selling_products = Product::select([
             'id_sanpham',
             'tensanpham',
@@ -54,7 +54,7 @@ class HomeController
         ->take(8)
         ->get();
 
-        // sản phâm mới: hiển thị 5 sản phẩm mới nhất
+        // sản phâm mới: hiển thị 4 sản phẩm mới nhất
         $new_products = Product::select([
             'id_sanpham',
             'tensanpham',
@@ -69,13 +69,13 @@ class HomeController
             $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
         }])
         ->orderBy('created_at', 'desc')
-        ->take(9)
+        ->take(8)
         ->get();
 
-        //hiển thị 1 số danh mục sản phẩm có trong cơ sở dữ liệu, với công thức là lấy 3 danh mục có nhiều sản phẩm nhất
+        //hiển thị 1 số danh mục sản phẩm có trong cơ sở dữ liệu, với công thức là lấy 4 danh mục có nhiều sản phẩm nhất
         $categories = Category::withCount('products as so_luong_san_pham')
         ->orderBy('so_luong_san_pham', 'desc')
-        ->take(3)
+        ->take(8)
         ->get();
 
         return view('users.pages.home', compact('slider', 'best_selling_products', 'new_products', 'categories'));

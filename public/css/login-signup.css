@@ -1,0 +1,165 @@
+/* Common Title Styles */
+.login-title,
+.signup-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    margin-top: 15px;
+}
+
+/* Subtitle Styles */
+.login-subtitle,
+.signup-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 0px !important;
+    text-align: left;
+}
+
+/* Form Label */
+.form-label {
+    display: block;
+    font-size: 14px;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+/* Required Field */
+.required {
+    color: #ff4444;
+}
+
+/* Form Input */
+.form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #7cb342;
+}
+
+/* Password Field */
+.password-field {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 13px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    user-select: none;
+    font-weight: bold;
+}
+
+/* Password Related */
+.password-hint {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.forgot-password {
+    text-align: left;
+    font-size: 14px;
+    color: #666;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.forgot-password:hover {
+    color: #7cb342;
+}
+
+/* Date Input */
+.date-input {
+    position: relative;
+}
+
+/* Gender Options */
+.gender-options {
+    display: flex;
+    gap: 20px;
+    margin-top: 8px;
+}
+
+.gender-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Button Styles */
+.login-button,
+.signup-button {
+    width: 100%;
+    padding: 12px;
+    background: #7cb342;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover,
+.signup-button:hover {
+    background: #689f38;
+}
+
+/* Link Styles */
+.login-link,
+.signup-link {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}
+
+.login-link a,
+.signup-link a {
+    color: #7cb342;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-link a:hover,
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+/*chia 2 cột trong form*/
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+/* trở về 1 cột trong form*/
+.full-width {
+    grid-column: 1 / -1;
+}
+/*định dạng input cho placeholder*/
+.form-input::placeholder {
+    color: rgba(0, 0, 0, 0.3); /* Màu đen với độ trong suốt */
+    font-size: 14px; /* Thu nhỏ chữ */
+    font-style: italic; /* Làm chữ nghiêng */
+}

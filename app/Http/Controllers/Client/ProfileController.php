@@ -45,14 +45,7 @@ class ProfileController extends Controller
     {
         // Logic xóa người dùng hoặc các sản phẩm yêu thích, đánh giá, nếu cần
     }
-    public function orderDetail($orderId)
-    {
-        $order = Order::with(['orderDetails.product'])
-            ->where('id_donhang', $orderId)
-            ->firstOrFail();
 
-        return view('users.pages.order.detail', compact('order'));
-    }
     /**
      * Show the favorite products page.
      */

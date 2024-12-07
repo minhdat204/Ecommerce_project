@@ -1,5 +1,12 @@
 <!-- Categories Section Begin -->
 <section class="categories">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="section-title">
+                <h2>Featured categories</h2>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="row">
             <div class="categories__slider owl-carousel">

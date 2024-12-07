@@ -142,7 +142,7 @@
                                     </div>
                                 </div>
                             @else
-                                <a href="{{ route('login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
+                                <button id="loginButton" class="no-border"><i class="fa fa-user"></i> Đăng nhập</button>
                             @endauth
                         </div>
                     </div>

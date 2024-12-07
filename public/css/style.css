@@ -424,7 +424,7 @@ ol {
 
 .modal-content-custom {
     background-color: #fff;
-    padding: 20px 40px;
+    padding: 20px 0px;
     width: 90%;
     max-width: 500px;
     position: relative;
@@ -466,6 +466,9 @@ ol {
 }
 .signup-container {
     margin: 0;
+    max-height: 90vh; /* Giới hạn chiều cao tối đa */
+    display: flex;
+    flex-direction: column;
 }
 /*end Dat*/
 

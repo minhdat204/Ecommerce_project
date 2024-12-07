@@ -35,7 +35,7 @@ function showLogin() {
 
 function showSignup() {
     loginContainer.style.display = 'none';
-    signupContainer.style.display = 'block';
+    signupContainer.style.display = 'flex';
 }
 
 // hàm mở modal

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class OrderManagerController
@@ -11,12 +12,14 @@ class OrderManagerController
      */
     public function index()
     {
-        //
+        $orders = Order::all();
+        return view('admin.pages.order.index', compact('orders'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
+
     public function create()
     {
         //
@@ -51,7 +54,11 @@ class OrderManagerController
      */
     public function update(Request $request, string $id)
     {
-        //
+        $order = Order::findOrFail($id);
+        $order->trangthai = $request->trangthai;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Trạng thái đơn hàng đã được cập nhật!');
     }
 
     /**

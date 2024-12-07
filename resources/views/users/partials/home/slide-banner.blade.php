@@ -12,7 +12,7 @@
                     @endif
                     <h2>{{ $product->tensanpham }}</h2>
                     <p>{{ Str::limit($product->mota, 50) }}</p>
-                    <a href="{{ url('san-pham/' . $product->slug) }}" class="primary-btn">SHOP NOW</a>
+                    <a href="{{ route('users.shop_details', $product->slug) }}" class="primary-btn">SHOP NOW</a>
                 </div>
             </div>
             @endforeach

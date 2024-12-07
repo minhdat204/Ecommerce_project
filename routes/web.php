@@ -129,5 +129,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Statistical Routes
     Route::get('statistics', [StatisticalManagerController::class, 'index'])->name('statistics.index');
     Route::get('statistics/sales', [StatisticalManagerController::class, 'sales'])->name('statistics.sales');
-    Route::get('statistics/products', [StatisticalManagerController::class, 'products'])->name('statistics.products');
+    Route::get('statistics/products', [StatisticalManagerController::class, 'productSales'])->name('statistics.productSales');
 });

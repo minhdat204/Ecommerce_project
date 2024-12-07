@@ -142,7 +142,6 @@ ol {
 
 .spad {
 	padding-top: 100px;
-	padding-bottom: 100px;
 }
 
 .text-white h1,
@@ -812,7 +811,6 @@ ol {
 
 .featured {
 	padding-top: 80px;
-	padding-bottom: 40px;
 }
 
 .featured__controls {
@@ -1015,6 +1013,14 @@ ol {
 	display: block;
 	color: #252525;
 	font-weight: 700;
+}
+
+/*---------------------
+  banner
+-----------------------*/
+
+.banner {
+    padding-top: 80px;
 }
 
 /*---------------------

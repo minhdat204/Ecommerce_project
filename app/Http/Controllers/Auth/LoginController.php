@@ -19,16 +19,9 @@ class LoginController
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'login' => 'required|string',
+            'email' => 'required|string',
             'password' => 'required|string'
         ]);
-
-        $loginType = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'tendangnhap';
-
-        $credentials = [
-            $loginType => $credentials['login'],
-            'password' => $credentials['password']
-        ];
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();

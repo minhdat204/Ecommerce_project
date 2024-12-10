@@ -44,11 +44,6 @@ Route::get('/contact', function () {
     return view('users.pages.contact');
 })->name('users.contact');
 
-
-
-// Xóa route cũ không cần thiết
-// Route::patch('/shoping-cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
-
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 // admin
 Route::get('/administrator', function () {
@@ -64,8 +59,7 @@ Route::get('/about-us', function () {
 });
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login']);
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
     Route::get('forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('password.request');
     Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
     Route::post('verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('password.verify-otp');

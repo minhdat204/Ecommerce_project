@@ -404,9 +404,14 @@ ol {
     background-color: transparent;
 }
 
+.header__top__right__auth button:hover {
+	color: #7fad39;
+}
+
 .header__top__right__auth button i {
 	margin-right: 6px;
 }
+
 /*Dat: Modal styles*/
 .modal-custom {
     display: none;
@@ -3769,6 +3774,7 @@ ol {
     margin-bottom: 0;
 }
 
+/*Dat: Updated Dropdown Styles */
 .header__top__right__auth .dropdown-toggle::after {
     display: none;
 }
@@ -3797,8 +3803,10 @@ ol {
     margin: 5px 0;
 }
 
-/* Updated Dropdown Styles */
+/*Dat: Updated Dropdown Styles */
 .header__top__right__auth .dropdown-toggle {
+    color: #000000;
+    background-color: white !important;
     padding: 8px 15px;
     border-radius: 4px;
     transition: all 0.3s ease;
@@ -3809,7 +3817,7 @@ ol {
 
 .header__top__right__auth .dropdown-toggle:hover,
 .header__top__right__auth .dropdown-toggle:focus {
-    background-color: rgba(0, 0, 0, 0.05);
+    color: #7fad39;
 }
 
 .header__top__right__auth .dropdown-menu {

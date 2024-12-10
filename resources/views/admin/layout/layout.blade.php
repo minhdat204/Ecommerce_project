@@ -110,7 +110,8 @@
                                 Giao diện mẫu</a>
                         </li>
                         <li>
-                            <a href="" class="active"><i class="fa fa-dashboard fa-fw"></i>
+                            <a href="{{ Route('admin.dashboard.index') }}" class="active"><i
+                                    class="fa fa-dashboard fa-fw"></i>
                                 Dashboard</a>
                         </li>
                         <li>
@@ -121,7 +122,7 @@
                             <a href=""><i class="fa fa-dashboard fa-fw"></i> Products</a>
                         </li>
                         <li>
-                            <a href=""><i class="fa fa-dashboard fa-fw"></i> Orders</a>
+                            <a href="{{ Route('admin.order.index') }}"><i class="fa fa-dashboard fa-fw"></i> Orders</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-dashboard fa-fw"></i> Statistical</a>

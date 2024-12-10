@@ -8,16 +8,17 @@
             <p class="login-subtitle">To access your account</p>
 
             <div class="login-content">
-                <form class="form-grid">
+                <form class="form-grid" method="POST" action="{{route('login')}}">
+                    @csrf
                     <div class="form-group full-width">
-                        <label class="form-label">Email or Username</label>
-                        <input type="email" class="form-input" placeholder="Enter your email or username">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" placeholder="Enter your email" name="email">
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Password</label>
                         <div class="password-field">
-                            <input type="password" class="form-input" placeholder="Enter your password">
+                            <input type="password" class="form-input" placeholder="Enter your password" name="password">
                             <button type="button" class="password-toggle">Hide</button>
                         </div>
                         <a href="#" class="forgot-password">I forgot my password</a>

@@ -25,11 +25,14 @@
     <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/login-signup.css')}}" type="text/css">
     @stack('styles')
 </head>
 
 <body>
     @include('users.partials.header')
+
+    @include('users.partials.login-signup')
 
     @include('users.partials.breadcrumb')
 
@@ -51,6 +54,7 @@
     <script src="{{asset('js/owl.carousel.min.js')}}"></script>
     <script src="{{asset('js/main.js')}}"></script>
     <script src="{{asset('js/chat-widget.js')}}"></script>
+    <script src="{{asset('js/login-signup.js')}}"></script>
     @stack('scripts')
 </body>
 

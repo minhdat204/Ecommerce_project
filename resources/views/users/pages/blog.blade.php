@@ -29,8 +29,8 @@
             <div class="col-lg-8 col-md-7">
                 <div class="row">
                     @include('users.partials.blog.blog-about-us')
-                    @include('users.partials.blog.blog-item')
-                    
+                    @include('users.partials.blog.blog-item-1')
+
                     <div class="col-lg-12 pagination-container">
                         <div class="product__pagination blog__pagination">
                             <a href="#">1</a>

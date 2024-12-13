@@ -11,7 +11,7 @@ class Product extends Model
 
     protected $table = 'san_pham';
     protected $primaryKey = 'id_sanpham';
-    
+
     protected $fillable = [
         'id_danhmuc',
         'tensanpham',
@@ -92,5 +92,12 @@ class Product extends Model
     public function incrementViewCount()
     {
         $this->increment('luotxem');
+    }
+
+    // quan hệ product đến cart
+    public function carts()
+    {
+        return $this->belongsToMany(Cart::class, 'san_pham_gio_hang', 'id_sanpham', 'id_giohang')
+            ->using(CartItem::class);
     }
 }

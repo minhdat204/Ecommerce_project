@@ -200,25 +200,26 @@
     });
 
     /*-------------------
-		Quantity change
-	--------------------- */
+        Quantity change
+    --------------------- */
     var proQty = $('.pro-qty');
-    proQty.prepend('<span class="dec qtybtn">-</span>');
-    proQty.append('<span class="inc qtybtn">+</span>');
     proQty.on('click', '.qtybtn', function () {
         var $button = $(this);
-        var oldValue = $button.parent().find('input').val();
+        var $input = $button.parent().find('input');
+        var oldValue = parseInt($input.val());
+        var maxValue = parseInt($input.attr('max'));
+        var minValue = parseInt($input.attr('min'));
+
         if ($button.hasClass('inc')) {
-            var newVal = parseFloat(oldValue) + 1;
+            var newVal = oldValue + 1;
+            if (newVal > maxValue) newVal = maxValue;
         } else {
-            // Don't allow decrementing below zero
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
-            }
+            var newVal = oldValue - 1;
+            if (newVal < minValue) newVal = minValue;
         }
-        $button.parent().find('input').val(newVal);
+
+        $input.val(newVal);
+        $input.trigger('change'); // Trigger change event
     });
 
 })(jQuery);

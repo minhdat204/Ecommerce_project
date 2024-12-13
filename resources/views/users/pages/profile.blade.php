@@ -233,8 +233,7 @@
                                                     onclick="cancelOrder({{ $order->id_donhang }})">
                                                     Hủy đơn hàng
                                                 </button>
-                                            @endif
-                                            <button class="btn btn-primary btn-sm"
+                                            @endif <button class="btn btn-primary btn-sm"
                                                 onclick="window.location='{{ route('orders.detail', $order->id_donhang) }}'">
                                                 Xem chi tiết
                                             </button>
@@ -282,22 +281,29 @@
         }
 
         function cancelOrder(orderId) {
-            if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
-                // Add your order cancellation logic here
-                fetch(`/orders/${orderId}/cancel`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            location.reload();
+            if (confirm('Bạn có chắc muốn hủy đơn hàng này?')) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                });
+
+                $.ajax({
+                    url: '/orders/' + orderId + '/cancel',
+                    type: 'POST',
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Đã hủy đơn hàng thành công');
+                            // Ẩn nút hủy đơn hàng
+                            $('.btn-danger[onclick="cancelOrder(' + orderId + ')"]').hide();
                         } else {
-                            alert('Không thể hủy đơn hàng. Vui lòng thử lại sau.');
+                            alert(response.message || 'Có lỗi xảy ra');
                         }
-                    });
+                    },
+                    error: function(xhr) {
+                        alert('Có lỗi xảy ra: ' + (xhr.responseJSON?.message || 'Không thể hủy đơn hàng'));
+                    }
+                });
             }
         }
     </script>

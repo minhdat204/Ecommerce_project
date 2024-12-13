@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Client\CartController;
 //client
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\BlogController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\ContactController;
@@ -35,6 +36,8 @@ Route::get('/', [HomeController::class, 'index'])->name('users.home');
 Route::get('/shop', [ProductController::class, 'index'])->name('users.shop');
 
 Route::get('/shop-detail/{slug}', [ProductController::class, 'show'])->name('users.shop_details');
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
+Route::get('blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');
 
 Route::get('/blog', function () {
     return view('users.pages.blog');

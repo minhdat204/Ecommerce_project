@@ -5,8 +5,7 @@
         </div>
         <div class="blog__item__text">
             <ul>
-                <li><i class="fa fa-calendar-o"></i> November 20, 2024</li>
-                <li><i class="fa fa-comment-o"></i> 5</li>
+                <li><i class="fa fa-calendar-o"></i> 20 tháng 10, 2024</li>
             </ul>
             <h5><a href="/about-us" id="about-us-title">About Us</a></h5>
             <p>Ogani Vegetable Store là cửa hàng thực phẩm trực tuyến, chuyên cung cấp các sản phẩm tươi, sạch, xanh...</p>

@@ -9,7 +9,7 @@
             </ul>
             <h5><a href="#">Lý do nên chọn sản phẩm của Ogani ?</a></h5>
             <p>Chúng tôi cam kết cung cấp thực phẩm hữu cơ chất lượng cao, an toàn cho sức khỏe và thân thiện với môi trường.</p>
-            <a href="/item-1" class="blog__btn">XEM THÊM <span class="arrow_right"></span></a>
+            <a href="/item-1" class="blog__btn">XEM THÊM<span class="arrow_right"></span></a>
         </div>
     </div>
 </div>

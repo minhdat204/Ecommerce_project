@@ -9,7 +9,7 @@
             </ul>
             <h5><a href="/about-us" id="about-us-title">About Us</a></h5>
             <p>Ogani Vegetable Store là cửa hàng thực phẩm trực tuyến, chuyên cung cấp các sản phẩm tươi, sạch, xanh...</p>
-            <a href="/about-us" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
+            <a href="/about-us" class="blog__btn">XEM THÊM<span class="arrow_right"></span></a>
         </div>
     </div>
 </div>

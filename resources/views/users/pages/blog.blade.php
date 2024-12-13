@@ -30,6 +30,7 @@
                 <div class="row">
                     @include('users.partials.blog.blog-about-us')
                     @include('users.partials.blog.blog-item')
+                    
                     <div class="col-lg-12 pagination-container">
                         <div class="product__pagination blog__pagination">
                             <a href="#">1</a>

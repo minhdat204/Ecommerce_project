@@ -91,7 +91,7 @@
                     <!-- Phân trang -->
                 <div class="col-lg-12 pagination-container">
                     <div class="product__pagination blog__pagination" id="pagination">
-                            {{ $blogs->links('pagination::bootstrap-4') }}
+                            {{ $posts->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
 

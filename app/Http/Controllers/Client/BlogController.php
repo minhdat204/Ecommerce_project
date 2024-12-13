@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Client;
+
 use App\Http\Controllers\Controller;
-use App\Models\Blog;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
@@ -12,41 +13,24 @@ class BlogController extends Controller
      */
     public function index(Request $request)
     {
-        $keyword = $request->input('keyword');
-    
-        $blogs = Blog::query()
-            ->when($keyword, function($query, $keyword) {
-                return $query->where('title', 'like', "%$keyword%")
-                             ->orWhere('content', 'like', "%$keyword%");
+        $keyword = $request->input('keyword'); // Lấy từ khóa tìm kiếm từ request
+
+        $posts = Post::query()
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where('tieude', 'like', "%$keyword%")
+                             ->orWhere('noidung', 'like', "%$keyword%");
             })
-            ->paginate(3);  // Phân trang 6 bài mỗi trang
-    
+            ->paginate(6);  
+
         if ($request->ajax()) {
             return response()->json([
-                'blogs' => view('users.partials.blog.blog-item', compact('blogs'))->render(),
-                'pagination' => view('pagination::bootstrap-4', ['paginator' => $blogs])->render(),
+                'posts' => view('users.partials.blog.blog-item', compact('posts'))->render(),
+                'pagination' => $posts->appends(['keyword' => $keyword])->links('pagination::bootstrap-4')->render(),
             ]);
         }
-    
-        return view('users.pages.blog', compact('blogs'));
-    }
-    
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        // Trả về view cho request bình thường
+        return view('users.pages.blog', compact('posts'));
     }
 
     /**
@@ -54,31 +38,15 @@ class BlogController extends Controller
      */
     public function show($slug)
     {
-        $blog = Blog::where('slug', $slug)->firstOrFail();
-        return view('blogs.show', compact('blog'));
+        $post = Post::where('slug', $slug)->firstOrFail();
+
+        return view('users.pages.blog-detail', compact('post'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Blog $blog)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Blog $blog)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Blog $blog)
-    {
-        //
-    }
+    // Các hàm create, store, edit, update, destroy chưa sử dụng sẽ để trống
+    public function create() {}
+    public function store(Request $request) {}
+    public function edit(Post $post) {}
+    public function update(Request $request, Post $post) {}
+    public function destroy(Post $post) {}
 }

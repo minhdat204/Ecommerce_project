@@ -88,7 +88,7 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="header__logo">
                         <a href="{{ route('users.home') }}"><img src="{{ asset('img/logo.png') }}" alt=""></a>
                     </div>
@@ -103,7 +103,7 @@
                         </ul>
                     </nav>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     <div class="header__cart">
                         <ul>
                             <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>

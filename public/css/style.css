@@ -321,11 +321,11 @@ ol {
 .header__top__right__social a:last-child {
 	margin-right: 0;
 }
-
+/* Dat sua */
 .header__top__right__language {
 	position: relative;
 	display: inline-block;
-	margin-right: 37px;
+	/* margin-right: 37px; */
 	cursor: pointer;
 }
 
@@ -335,7 +335,7 @@ ol {
 	visibility: visible;
 }
 
-.header__top__right__language:after {
+/* .header__top__right__language:after {
 	position: absolute;
 	right: -21px;
 	top: 1px;
@@ -344,7 +344,7 @@ ol {
 	background: #000000;
 	opacity: 0.1;
 	content: "";
-}
+} */
 
 .header__top__right__language img {
 	margin-right: 6px;
@@ -486,6 +486,7 @@ ol {
 
 .header__menu {
 	padding: 24px 0;
+    text-align: end;
 }
 
 .header__menu ul li {

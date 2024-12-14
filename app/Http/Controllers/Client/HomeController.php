@@ -11,10 +11,6 @@ class HomeController
 {
     public function index()
     {
-<<<<<<< HEAD
-        //
-    }
-=======
         // slider : Lấy 3 sản phẩm có đánh giá tốt nhất và giảm giá nhiều nhất
         $slider = Product::select([
             'id_sanpham',
@@ -38,7 +34,6 @@ class HomeController
         ')
         ->take(3)
         ->get();
->>>>>>> c82ac2319a7b1ec062d997c37eb818d154220a47
 
         //sản phẩm bán chạy: hiển thị 4 sản phẩm bán chạy nhất
         $best_selling_products = Product::select([
@@ -85,4 +80,29 @@ class HomeController
 
         return view('users.pages.home', compact('slider', 'best_selling_products', 'new_products', 'categories'));
     }
+    public function search(Request $request)
+{
+    // Lấy tất cả danh mục cấp cha (các danh mục không có id_danhmuc_cha)
+    $categories = Category::whereNull('id_danhmuc_cha')->get();
+
+    // Khởi tạo query cho model Product
+    $query = Product::query();
+
+    // Kiểm tra và thêm điều kiện cho category
+    if ($request->has('category') && $request->category != '') {
+        $query->where('id_danhmuc', $request->category);
+    }
+
+    // Kiểm tra và thêm điều kiện cho từ khóa tìm kiếm
+    if ($request->has('search_term') && $request->search_term != '') {
+        $query->where('tensanpham', 'like', '%' . $request->search_term . '%');
+    }
+
+    // Lấy kết quả tìm kiếm từ cơ sở dữ liệu
+    $products = $query->get();
+
+    // Trả kết quả về view
+    return view('users.pages.search-results', compact('products', 'categories'));
+}
+
 }

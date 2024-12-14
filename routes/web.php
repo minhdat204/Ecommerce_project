@@ -32,9 +32,11 @@ Route::resource('contact', ContactController::class)->names([
 ]);
 
 Route::get('/', [HomeController::class, 'index'])->name('users.home');
+Route::get('/search', [HomeController::class, 'search'])->name('search.results');
 
 Route::get('/shop', [ProductController::class, 'index'])->name('users.shop');
-
+// Route để hiển thị sản phẩm theo danh mục
+Route::get('/shop/category/{categoryId}', [ProductController::class, 'showByCategory'])->name('shop.category');
 Route::get('/shop-detail/{slug}', [ProductController::class, 'show'])->name('users.shop_details');
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
 Route::get('blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');

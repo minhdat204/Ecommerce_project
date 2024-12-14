@@ -8,7 +8,7 @@
                 <div class="col-lg-3 col-md-5">
                     <div class="sidebar">
                         <div class="sidebar__item">
-                            @include('users.partials.shop.department')
+                            @include('users.partials.shop.department', ['categories' => $categories])  <!-- Truyền categories vào view department -->
                         </div>
                         <div class="sidebar__item">
                             @include('users.partials.shop.price-filter')
@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-lg-9 col-md-7">
                     <div class="product__discount">
-                        @include('users.partials.shop.products-discount')
+                         @include('users.partials.shop.products-discount', ['ProductsDiscount' => $ProductsDiscount])
                     </div>
                     @include('users.partials.shop.products-content')
                 </div>

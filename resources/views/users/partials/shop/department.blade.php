@@ -1,13 +1,8 @@
-<h4>Department</h4>
-<ul>
-    <li><a href="#">Fresh Meat</a></li>
-    <li><a href="#">Vegetables</a></li>
-    <li><a href="#">Fruit & Nut Gifts</a></li>
-    <li><a href="#">Fresh Berries</a></li>
-    <li><a href="#">Ocean Foods</a></li>
-    <li><a href="#">Butter & Eggs</a></li>
-    <li><a href="#">Fastfood</a></li>
-    <li><a href="#">Fresh Onion</a></li>
-    <li><a href="#">Papayaya & Crisps</a></li>
-    <li><a href="#">Oatmeal</a></li>
-</ul>
+<div class="sidebar__item">
+    <h4>Danh Mục</h4>
+    <ul>
+        @foreach($categories as $category)
+            <li><a href="{{ route('shop.category', $category->id_danhmuc) }}">{{ $category->tendanhmuc }}</a></li>
+        @endforeach
+    </ul>
+</div>

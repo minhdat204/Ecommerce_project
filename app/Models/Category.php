@@ -25,6 +25,10 @@ class Category extends Model
     {
         return $this->belongsTo(Category::class, 'id_danhmuc_cha', 'id_danhmuc');
     }
+    public static function getParentCategories()
+    {
+        return self::whereNull('id_danhmuc_cha')->get();
+    }
 
     // Thêm relationship với products
     public function products()

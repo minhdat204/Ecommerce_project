@@ -39,10 +39,6 @@ Route::get('/shop-detail/{slug}', [ProductController::class, 'show'])->name('use
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
 Route::get('blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');
 
-Route::get('/blog', function () {
-    return view('users.pages.blog');
-})->name('users.blog');
-
 Route::get('/contact', function () {
     return view('users.pages.contact');
 })->name('users.contact');
@@ -60,12 +56,7 @@ Route::get('/mau', function () {
 Route::get('/about-us', function () {
     return view('users.pages.about-us');
 });
-Route::get('/item-1', function () {
-    return view('users.pages.item-1');
-});
-Route::get('/item-2', function () {
-    return view('users.pages.item-2');
-});
+
 
 Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('login');

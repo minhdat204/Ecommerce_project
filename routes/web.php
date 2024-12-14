@@ -60,6 +60,12 @@ Route::get('/mau', function () {
 Route::get('/about-us', function () {
     return view('users.pages.about-us');
 });
+Route::get('/item-1', function () {
+    return view('users.pages.item-1');
+});
+Route::get('/item-2', function () {
+    return view('users.pages.item-2');
+});
 
 Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('login');

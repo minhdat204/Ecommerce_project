@@ -13,7 +13,7 @@
             </ul>
                 <h5><a href="{{ route('blogs.show', $post->slug) }}">{{ $post->tieude }}</a></h5>
                 <p>{{ Str::limit($post->noidung, 150) }}</p>
-                <a href="{{ route('blogs.show', $post->slug) }}" class="blog__btn">Read More <span class="arrow_right"></span></a>
+                <a href="{{ route('blogs.show', $post->slug) }}" class="blog__btn">XEM THÊM<span class="arrow_right"></span></a>
             </div>
         </div>
     </div>

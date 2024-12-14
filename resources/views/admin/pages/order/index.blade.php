@@ -44,7 +44,6 @@
                         <th>Mã Đơn Hàng</th>
                         <th>Tổng Tiền Hàng</th>
                         <th>Tổng Giảm Giá</th>
-                        <th>Phí Vận Chuyển</th>
                         <th>Tổng Thanh Toán</th>
                         <th>Phương Thức Thanh Toán</th>
                         <th>Trạng Thái Thanh Toán</th>
@@ -108,46 +107,20 @@
                                 </form>
                             </td>
                             <td>
-                                <a href="#editOrderModal-{{ $order->id }}" class="edit" data-toggle="modal">
-                                    <i class="material-icons" data-toggle="tooltip" title="Sửa">&#xE254;</i>
-                                </a>
                                 <a href="#deleteOrderModal-{{ $order->id }}" class="delete" data-toggle="modal">
                                     <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
                                 </a>
                             </td>
                         </tr>
 
-                        {{-- <!-- Modal Sửa Đơn Hàng -->
-                        <div id="editOrderModal-{{ $order->id }}" class="modal fade">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form action="{{ route('orders.update', $order->id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Sửa Đơn Hàng</h4>
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                aria-hidden="true">&times;</button>
-                                        </div>
-                                        <div class="modal-body">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <input type="button" class="btn btn-default" data-dismiss="modal"
-                                                value="Hủy">
-                                            <input type="submit" class="btn btn-info" value="Lưu">
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div> --}}
 
-                        {{-- <!-- Modal Xóa Đơn Hàng -->
+                        <!-- Modal Xóa Đơn Hàng -->
                         <div id="deleteOrderModal-{{ $order->id }}" class="modal fade">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form action="{{ route('orders.destroy', $order->id) }}" method="POST">
+                                    <form action="{{ route('admin.order.destroy', $order) }}" method="POST">
                                         @csrf
-                                        @method('DELETE')
+                                        @method('DELETE') <!-- Chỉnh sửa từ POST thành DELETE -->
                                         <div class="modal-header">
                                             <h4 class="modal-title">Xóa Đơn Hàng</h4>
                                             <button type="button" class="close" data-dismiss="modal"
@@ -165,7 +138,7 @@
                                     </form>
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
                     @endforeach
                 </tbody>
             </table>

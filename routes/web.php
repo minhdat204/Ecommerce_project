@@ -19,7 +19,9 @@ use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\ReviewController;
 
+Route::post('/reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
 ]);
@@ -75,7 +77,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Cart routes
-Route::group(['prefix' => 'cart', 'middleware' => 'auth'], function() {
+Route::group(['prefix' => 'cart', 'middleware' => 'auth'], function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::post('/items', [CartController::class, 'addToCart'])->name('cart.add');
     Route::patch('/items/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');

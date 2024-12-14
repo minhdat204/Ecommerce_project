@@ -4,30 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
-<<<<<<< HEAD
+use App\Models\Product;
+use App\Models\OrderDetail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-=======
-use Illuminate\Support\Facades\DB;
-
->>>>>>> 670b9fbd93c63ebc6b9c42e5f7456f92adbb2d34
 
 class StatisticalManagerController 
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-<<<<<<< HEAD
-        return view('admin.pages.statistics.index');
-=======
-
->>>>>>> 670b9fbd93c63ebc6b9c42e5f7456f92adbb2d34
-    }
 
     public function sales(Request $request)
-{
+    {
     $startDate = $request->input('start_date'); // Ngày bắt đầu
     $endDate = $request->input('end_date'); // Ngày kết thúc
 
@@ -58,7 +47,35 @@ class StatisticalManagerController
     }
 
     return view('admin.pages.statistics.index', compact('salesData'));
-}
+    }
+    public function productSales(Request $request)
+    {
+        // Lấy thông tin ngày bắt đầu và ngày kết thúc từ input
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+    
+        // Bắt đầu truy vấn để lấy số lượng sản phẩm đã bán, sử dụng bảng don_hang
+        $query = DB::table('chi_tiet_don_hang')
+                    ->join('san_pham', 'san_pham.id_sanpham', '=', 'chi_tiet_don_hang.id_sanpham')
+                    ->join('don_hang', 'don_hang.id_donhang', '=', 'chi_tiet_don_hang.id_donhang') // Kết nối với bảng don_hang
+                    ->select('san_pham.tensanpham', DB::raw('SUM(chi_tiet_don_hang.soluong) as total_sales'))
+                    ->groupBy('san_pham.tensanpham');
+    
+        // Nếu có lọc theo ngày bắt đầu và ngày kết thúc, thêm điều kiện vào truy vấn
+        if ($startDate) {
+            $query->whereDate('don_hang.created_at', '>=', $startDate); // Lọc theo ngày từ bảng don_hang
+        }
+        if ($endDate) {
+            $query->whereDate('don_hang.created_at', '<=', $endDate); // Lọc theo ngày từ bảng don_hang
+        }
+    
+        // Thực thi truy vấn và lấy kết quả
+        $productSales = $query->get();
+    
+        // Trả kết quả về view
+        return view('admin.pages.statistics.sales', compact('productSales'));
+    }
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -106,68 +123,4 @@ class StatisticalManagerController
     {
         //
     }
-
-    public function sales()
-    {
-        $monthlySales = Order::selectRaw('MONTH(created_at) as month, COUNT(*) as sales')
-            ->whereYear('created_at', now()->year)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get()
-            ->keyBy('month')
-            ->toArray();
-    
-        $allMonths = [];
-        for ($month = 1; $month <= 12; $month++) {
-            $allMonths[] = [
-                'month' => $month,
-                'sales' => isset($monthlySales[$month]) ? $monthlySales[$month]['sales'] : 0,
-            ];
-        }
-    
-        return view('admin.pages.statistics.index', compact('allMonths'));
-    }
-    public function productSales(Request $request)
-    {
-        $year = $request->input('year');
-        $month = $request->input('month');
-        $day = $request->input('day');
-        
-        $query = DB::table('chi_tiet_don_hang as ctdh')
-            ->join('san_pham as p', 'ctdh.id_sanpham', '=', 'p.id_sanpham')
-            ->join('don_hang as dh', 'ctdh.id_donhang', '=', 'dh.id_donhang')
-            ->select('p.id_sanpham', 'p.tensanpham', DB::raw('SUM(ctdh.soluong) as tong_so_luong_mua'))
-            ->where('dh.trangthai', 'Completed');
-    
-        // Lọc theo năm nếu có
-        if (!empty($year)) {
-            $query->whereYear('dh.created_at', $year);
-        }
-    
-        // Lọc theo tháng nếu có
-        if (!empty($month)) {
-            $query->whereMonth('dh.created_at', $month);
-        }
-    
-        // Lọc theo ngày nếu có
-        if (!empty($day)) {
-            $query->whereDay('dh.created_at', $day);
-        }
-    
-        // Thực hiện truy vấn và sắp xếp kết quả
-        $productSales = $query
-            ->groupBy('p.id_sanpham', 'p.tensanpham')
-            ->orderBy('tong_so_luong_mua', 'desc')
-            ->get();
-    
-        // Trả kết quả về view
-        return view('admin.pages.statistics.index', ['productSales' => $productSales]);
-    }
-    
-    
-
-
-
-    
-
 }

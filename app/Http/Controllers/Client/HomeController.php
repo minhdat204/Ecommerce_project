@@ -2,64 +2,87 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
+<<<<<<< HEAD
         //
     }
+=======
+        // slider : Lấy 3 sản phẩm có đánh giá tốt nhất và giảm giá nhiều nhất
+        $slider = Product::select([
+            'id_sanpham',
+            'tensanpham',
+            'gia',
+            'gia_khuyen_mai',
+            'slug',
+            'mota',
+        ])
+        ->where('trangthai', 'active')
+        ->where('soluong', '>', 0)
+        ->with(['images' => function($query) {
+            $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
+        }])
+        ->withCount(['comments as danh_gia_tich_cuc' => function($query) {
+            $query->where('danhgia', '>=', 4); //với từng sản phẩm có trong bảng comments, đếm số lượng đánh giá >= 4
+        }])
+        ->orderByRaw('
+            ((danh_gia_tich_cuc * 0.6) +
+            (((gia - COALESCE(gia_khuyen_mai, gia)) / gia * 100) * 0.4)) DESC
+        ')
+        ->take(3)
+        ->get();
+>>>>>>> c82ac2319a7b1ec062d997c37eb818d154220a47
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        //sản phẩm bán chạy: hiển thị 4 sản phẩm bán chạy nhất
+        $best_selling_products = Product::select([
+            'id_sanpham',
+            'tensanpham',
+            'gia',
+            'gia_khuyen_mai',
+            'slug',
+            'mota',
+        ])
+        ->where('trangthai', 'active')
+        ->where('soluong', '>', 0)
+        ->with(['images' => function($query) {
+            $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
+        }])
+        ->withCount(['orderDetails as so_luong_da_ban'])//đếm tổng những đơn hàng có sản phẩm này, mỗi đơn không thể có cùng 1 sản phẩm
+        ->orderBy('so_luong_da_ban', 'desc')
+        ->take(8)
+        ->get();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        // sản phâm mới: hiển thị 4 sản phẩm mới nhất
+        $new_products = Product::select([
+            'id_sanpham',
+            'tensanpham',
+            'gia',
+            'gia_khuyen_mai',
+            'slug',
+            'mota',
+        ])
+        ->where('trangthai', 'active')
+        ->where('soluong', '>', 0)
+        ->with(['images' => function($query) {
+            $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
+        }])
+        ->orderBy('created_at', 'desc')
+        ->take(8)
+        ->get();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        //hiển thị 1 số danh mục sản phẩm có trong cơ sở dữ liệu, với công thức là lấy 4 danh mục có nhiều sản phẩm nhất
+        $categories = Category::withCount('products as so_luong_san_pham')
+        ->orderBy('so_luong_san_pham', 'desc')
+        ->take(8)
+        ->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('users.pages.home', compact('slider', 'best_selling_products', 'new_products', 'categories'));
     }
 }

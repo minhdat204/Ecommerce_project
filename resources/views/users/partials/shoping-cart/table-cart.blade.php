@@ -10,72 +10,45 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            @forelse($cartItems as $item)
+            <tr data-id="{{ $item->id_sp_giohang }}">
                 <td class="shoping__cart__item">
-                    <img src="img/cart/cart-1.jpg" alt="">
-                    <h5>Vegetable’s Package</h5>
+                    <img src="{{ asset($item->product->thumbnail) }}" alt="{{ $item->product->tensanpham }}" width="100">
+                    <h5>{{ $item->product->tensanpham }}</h5>
                 </td>
                 <td class="shoping__cart__price">
-                    $55.00
+                    ${{ number_format($item->product->gia_khuyen_mai ?? $item->product->gia, 2) }}
                 </td>
                 <td class="shoping__cart__quantity">
                     <div class="quantity">
                         <div class="pro-qty">
-                            <input type="text" value="1">
+                            <span class="dec qtybtn">-</span>
+                            <input type="number"
+                                value="{{ $item->soluong }}"
+                                min="1"
+                                max="{{ $item->product->soluong }}"
+                                class="quantity-input"
+                                data-id="{{ $item->id_sp_giohang }}"
+                                data-original-value="{{ $item->soluong }}"
+                                onchange="handleQuantityChange(this)"
+                                readonly>
+                            <span class="inc qtybtn">+</span>
                         </div>
                     </div>
                 </td>
                 <td class="shoping__cart__total">
-                    $110.00
+                    ${{ number_format(($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong, 2) }}
                 </td>
                 <td class="shoping__cart__item__close">
-                    <span class="icon_close"></span>
+                    <span class="icon_close" onclick="handleRemoveItem(this)"></span>
                 </td>
             </tr>
+            @empty
             <tr>
-                <td class="shoping__cart__item">
-                    <img src="img/cart/cart-2.jpg" alt="">
-                    <h5>Fresh Garden Vegetable</h5>
-                </td>
-                <td class="shoping__cart__price">
-                    $39.00
-                </td>
-                <td class="shoping__cart__quantity">
-                    <div class="quantity">
-                        <div class="pro-qty">
-                            <input type="text" value="1">
-                        </div>
-                    </div>
-                </td>
-                <td class="shoping__cart__total">
-                    $39.99
-                </td>
-                <td class="shoping__cart__item__close">
-                    <span class="icon_close"></span>
-                </td>
+                <td colspan="5" class="text-center">Your cart is empty</td>
             </tr>
-            <tr>
-                <td class="shoping__cart__item">
-                    <img src="img/cart/cart-3.jpg" alt="">
-                    <h5>Organic Bananas</h5>
-                </td>
-                <td class="shoping__cart__price">
-                    $69.00
-                </td>
-                <td class="shoping__cart__quantity">
-                    <div class="quantity">
-                        <div class="pro-qty">
-                            <input type="text" value="1">
-                        </div>
-                    </div>
-                </td>
-                <td class="shoping__cart__total">
-                    $69.99
-                </td>
-                <td class="shoping__cart__item__close">
-                    <span class="icon_close"></span>
-                </td>
-            </tr>
+            @endforelse
         </tbody>
     </table>
 </div>
+

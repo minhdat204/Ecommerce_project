@@ -19,11 +19,17 @@
                         <a onclick="xoanhieu()" href="javascript:void(0)" id="deleteSelected" class="btn btn-danger">
                             <i class="material-icons">&#xE15C;</i> <span>Xóa đã chọn</span>
                         </a>
+<<<<<<< HEAD
 
                     </div>
                 </div>
             </div>
 
+=======
+                    </div>
+                </div>
+            </div>
+>>>>>>> c82ac2319a7b1ec062d997c37eb818d154220a47
             <!-- Form Tìm Kiếm -->
             <form method="GET" action="" class="form-inline mb-3">
                 <div class="form-group">
@@ -32,7 +38,10 @@
                 </div>
                 <button type="submit" class="btn btn-default">Tìm kiếm</button>
             </form>
+<<<<<<< HEAD
 
+=======
+>>>>>>> c82ac2319a7b1ec062d997c37eb818d154220a47
             <!-- Bảng Danh Mục -->
             <table class="table table-striped table-hover">
                 <thead>

@@ -11,7 +11,7 @@
             var keyword = $('#searchInput').val();  // Lấy từ khóa tìm kiếm
 
             $.ajax({
-                url: '{{ route('blogs.index') }}',  // Địa chỉ gửi yêu cầu đến
+                url: '{{ route('users.blogs') }}',  // Địa chỉ gửi yêu cầu đến
                 method: 'GET',
                 data: {
                     keyword: keyword,  // Gửi từ khóa tìm kiếm
@@ -33,7 +33,7 @@
             var page = $(this).attr('href').split('page=')[1];  // Lấy số trang từ URL
 
             $.ajax({
-                url: '{{ route('blogs.index') }}',
+                url: '{{ route('users.blogs') }}',
                 method: 'GET',
                 data: {
                     keyword: $('#searchInput').val(),  // Lấy từ khóa tìm kiếm

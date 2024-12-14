@@ -398,6 +398,8 @@ ol {
 
 /*Dat: css cho button đăng nhập*/
 .header__top__right__auth button {
+    font-weight: 700;
+    padding-left: 15px;
 	display: block;
 	font-size: 14px;
 	color: #1c1c1c;
@@ -409,7 +411,7 @@ ol {
 }
 
 .header__top__right__auth button i {
-	margin-right: 6px;
+	margin-right: 3px;
 }
 
 /*Dat: Modal styles*/
@@ -3806,6 +3808,8 @@ ol {
 
 /*Dat: Updated Dropdown Styles */
 .header__top__right__auth .dropdown-toggle {
+    font-weight: 700;
+    font-size: 14px;
     color: #000000;
     background-color: white !important;
     padding: 8px 15px;
@@ -3813,7 +3817,7 @@ ol {
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .header__top__right__auth .dropdown-toggle:hover,

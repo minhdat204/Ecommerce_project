@@ -20,7 +20,7 @@ class BlogController extends Controller
                 return $query->where('tieude', 'like', "%$keyword%")
                              ->orWhere('noidung', 'like', "%$keyword%");
             })
-            ->paginate(6);  
+            ->paginate(3);  // Phân trang 3 bài viết mỗi trang
 
         if ($request->ajax()) {
             return response()->json([
@@ -33,15 +33,12 @@ class BlogController extends Controller
         return view('users.pages.blog', compact('posts'));
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($slug)
     {
         $post = Post::where('slug', $slug)->firstOrFail();
-
         return view('users.pages.blog-detail', compact('post'));
     }
+
 
     // Các hàm create, store, edit, update, destroy chưa sử dụng sẽ để trống
     public function create() {}

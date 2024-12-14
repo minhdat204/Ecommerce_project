@@ -3,53 +3,54 @@
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        // Khi người dùng submit form tìm kiếm
-        $('#searchForm').on('submit', function(e) {
-            e.preventDefault();  // Ngừng hành động mặc định của form (tải lại trang)
+$(document).on('submit', '.search-form', function (e) {
+    e.preventDefault();
 
-            var keyword = $('#searchInput').val();  // Lấy từ khóa tìm kiếm
+    let form = $(this);
+    let url = form.attr('action');
+    let data = form.serialize();
 
-            $.ajax({
-                url: '{{ route('blogs.index') }}',  // Địa chỉ gửi yêu cầu đến
-                method: 'GET',
-                data: {
-                    keyword: keyword,  // Gửi từ khóa tìm kiếm
-                    page: 1  // Thêm tham số page để luôn bắt đầu từ trang 1
-                },
-                success: function(response) {
-                    // Cập nhật lại danh sách bài viết
-                    $('#blogItems').html(response.blogs);
-                    // Cập nhật lại phân trang
-                    $('#pagination').html(response.pagination);
-                }
-            });
-        });
-
-        // Xử lý khi nhấn vào phân trang (AJAX pagination)
-        $(document).on('click', '.pagination a', function(e) {
-            e.preventDefault();  // Ngừng hành động mặc định của phân trang
-
-            var page = $(this).attr('href').split('page=')[1];  // Lấy số trang từ URL
-
-            $.ajax({
-                url: '{{ route('blogs.index') }}',
-                method: 'GET',
-                data: {
-                    keyword: $('#searchInput').val(),  // Lấy từ khóa tìm kiếm
-                    page: page  // Gửi số trang
-                },
-                success: function(response) {
-                    // Cập nhật lại danh sách bài viết
-                    $('#blogItems').html(response.blogs);
-                    // Cập nhật lại phân trang
-                    $('#pagination').html(response.pagination);
-                }
-            });
-        });
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: data,
+        success: function (response) {
+            $('.blog-list').html(response.posts); // Cập nhật danh sách bài viết
+            $('.pagination-container').html(response.pagination); // Cập nhật phân trang
+        },
+        error: function () {
+            alert('Có lỗi xảy ra, vui lòng thử lại!');
+        }
     });
+});
+
+$(document).on('click', '.pagination a', function (e) {
+    e.preventDefault();
+    let url = $(this).attr('href');
+
+    if (!url) {
+        alert('Không tìm thấy URL phân trang!');
+        return;
+    }
+
+    let keyword = $('input[name="keyword"]').val();
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: { keyword: keyword },
+        success: function (response) {
+            $('.blog-list').html(response.posts); // Cập nhật danh sách bài viết
+            $('.pagination-container').html(response.pagination); // Cập nhật phân trang
+        },
+        error: function () {
+            alert('Có lỗi xảy ra khi phân trang!');
+        }
+    });
+});
 </script>
 @endpush
+
 
 @section('content')
 <!-- Blog Section Begin -->
@@ -87,11 +88,11 @@
             <div class="col-lg-8 col-md-7">
                 <div class="row">
                     @include('users.partials.blog.blog-about-us')
-                    @include('users.partials.blog.blog-item')
+                    @include('users.partials.blog.blog-item', ['posts' => $posts]) <!-- Danh sách bài viết -->
                     <!-- Phân trang -->
                 <div class="col-lg-12 pagination-container">
                     <div class="product__pagination blog__pagination" id="pagination">
-                            {{ $posts->links('pagination::bootstrap-4') }}
+                    {{ $posts->appends(request()->query())->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
 

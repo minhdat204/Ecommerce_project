@@ -1,0 +1,121 @@
+/*---------------------
+  About-Us
+-----------------------*/
+
+/* Container-aboutUs */
+.container-aboutUs {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;     
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  /* Tăng độ mờ cho bóng */
+}
+
+/* Image Section */
+.image-section {
+    flex: 1;
+    min-width: 50%;
+    position: relative;
+    overflow: hidden;  /* Ẩn phần vượt ra ngoài */
+}
+
+.image-section img {
+    width: 100%;
+    height: auto;  /* Đảm bảo tỷ lệ khung hình không bị biến dạng */
+    object-fit: cover; 
+    transition: transform 0.3s ease;  /* Hiệu ứng chuyển động khi hover */
+}
+
+.image-section img:hover {
+    transform: scale(1.05);  /* Phóng to khi di chuột */
+}
+
+/* About Us Section */
+.aboutUs-section {
+    flex: 1;
+    min-width: 50%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #7fad39;  
+    color: #fff;  
+    border-radius: 8px;  
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  /* Tăng độ mờ cho bóng */
+    margin: 20px auto;  
+}
+
+.aboutUs-section h1 {
+    color: #fff;  /* Sử dụng màu trắng cho tiêu đề */
+    font-size: 2.5rem;  /* Tăng kích thước tiêu đề */
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.aboutUs-section p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #dcdcdc;  /* Màu chữ cho mô tả */
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.aboutUs-section ul {
+    list-style-type: none;  /* Bỏ dấu chấm trong danh sách */
+    padding: 0;  /* Bỏ padding của ul */
+}
+
+.aboutUs-section li {
+    margin-bottom: 10px;  /* Khoảng cách giữa các mục trong danh sách */
+    position: relative;  /* Để có thể thêm icon vào trước */
+    padding-left: 25px;  /* Tạo khoảng cách cho icon */
+    color: #fff;  /* Đặt màu chữ cho mục danh sách */
+}
+
+.aboutUs-section li:before {
+    content: "\f00c";  /* Thêm icon checkmark từ FontAwesome */
+    font-family: "Font Awesome 5 Free";  /* Đảm bảo rằng font được sử dụng */
+    font-weight: 900;  /* Đặt độ dày font cho icon */
+    position: absolute;
+    left: 0;  /* Đặt vị trí icon bên trái */
+    color: #fff; 
+    font-size: 1.2rem;  
+}
+
+/* Container Item */
+.container-item-1 {
+    max-width: 1200px; /* Đặt chiều rộng tối đa cho phần tử */
+    margin: 0 auto; /* Canh giữa phần tử */
+    padding: 20px; /* Thêm khoảng đệm bên trong */
+    background-color: #f8f9fa; /* Màu nền sáng */
+    border-radius: 10px; /* Bo góc cho phần tử */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ cho phần tử */
+    display: flex; /* Sử dụng Flexbox để sắp xếp nội dung */
+    flex-direction: column; /* Sắp xếp theo cột */
+    align-items: center; /* Canh giữa nội dung theo chiều ngang */
+    transition: transform 0.3s, box-shadow 0.3s; /* Hiệu ứng chuyển động cho phần tử */
+}
+
+.container-item-1:hover {
+    transform: translateY(-5px); /* Đẩy phần tử lên một chút khi hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Tăng cường bóng đổ khi hover */
+}
+
+/* Các phần tử bên trong (ví dụ: tiêu đề và mô tả) */
+.container-item-1 h2 {
+    font-size: 1.8rem; /* Kích thước chữ cho tiêu đề */
+    color: #28a745; /* Màu chữ cho tiêu đề */
+    margin-bottom: 15px; /* Khoảng cách dưới tiêu đề */
+    text-align: center; /* Canh giữa tiêu đề */
+}
+
+.container-item-1 p {
+    font-size: 1rem; /* Kích thước chữ cho mô tả */
+    color: #555; /* Màu chữ cho mô tả */
+    line-height: 1.6; /* Khoảng cách giữa các dòng */
+    text-align: center; 
+}

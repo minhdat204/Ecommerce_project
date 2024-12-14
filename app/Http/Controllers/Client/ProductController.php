@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -43,8 +44,28 @@ class ProductController
     {
         //Dat : lấy chi tiết sản phẩm dựa vào slug
         $Product = Product::where('slug', $slug)->first();
-        
-        return view('users.pages.shop-details', compact('Product'));
+
+        //Dat: lấy 4 sản phẩm liên quan (Điểm liên quan =  lượt xem 60% + ngẫu nhiên 40%) và xử lý việc không đủ sản phẩm liên quan
+        $initialRelated = Product::where('id_danhmuc', $Product->id_danhmuc)
+            ->where('id_sanpham', '!=', $Product->id_sanpham)
+            ->orderByRaw('(luotxem * 0.6) + (RAND() * 0.4) DESC')
+            ->take(4)
+            ->get();
+
+        if ($initialRelated->count() < 4) {
+            $remainingCount = 4 - $initialRelated->count();
+            $randomProducts = Product::where('id_sanpham', '!=', $Product->id_sanpham)
+            ->whereNotIn('id_sanpham', $initialRelated->pluck('id_sanpham'))
+            ->inRandomOrder()
+            ->take($remainingCount)
+            ->get();
+
+            $relatedProducts = $initialRelated->concat($randomProducts);
+        } else {
+            $relatedProducts = $initialRelated;
+        }
+
+        return view('users.pages.shop-details', compact('Product', 'relatedProducts'));
     }
 
     /**

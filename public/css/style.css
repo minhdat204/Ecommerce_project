@@ -321,11 +321,11 @@ ol {
 .header__top__right__social a:last-child {
 	margin-right: 0;
 }
-
+/* Dat sua */
 .header__top__right__language {
 	position: relative;
 	display: inline-block;
-	margin-right: 37px;
+	/* margin-right: 37px; */
 	cursor: pointer;
 }
 
@@ -335,7 +335,7 @@ ol {
 	visibility: visible;
 }
 
-.header__top__right__language:after {
+/* .header__top__right__language:after {
 	position: absolute;
 	right: -21px;
 	top: 1px;
@@ -344,7 +344,7 @@ ol {
 	background: #000000;
 	opacity: 0.1;
 	content: "";
-}
+} */
 
 .header__top__right__language img {
 	margin-right: 6px;
@@ -398,6 +398,8 @@ ol {
 
 /*Dat: css cho button đăng nhập*/
 .header__top__right__auth button {
+    font-weight: 700;
+    padding-left: 15px;
 	display: block;
 	font-size: 14px;
 	color: #1c1c1c;
@@ -409,7 +411,7 @@ ol {
 }
 
 .header__top__right__auth button i {
-	margin-right: 6px;
+	margin-right: 3px;
 }
 
 /*Dat: Modal styles*/
@@ -486,6 +488,7 @@ ol {
 
 .header__menu {
 	padding: 24px 0;
+    text-align: end;
 }
 
 .header__menu ul li {
@@ -3805,6 +3808,8 @@ ol {
 
 /*Dat: Updated Dropdown Styles */
 .header__top__right__auth .dropdown-toggle {
+    font-weight: 700;
+    font-size: 14px;
     color: #000000;
     background-color: white !important;
     padding: 8px 15px;
@@ -3812,7 +3817,7 @@ ol {
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .header__top__right__auth .dropdown-toggle:hover,

@@ -95,7 +95,6 @@ $(document).on('click', '.pagination a', function (e) {
                     {{ $posts->appends(request()->query())->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
-
                 </div>
             </div>
         </div>

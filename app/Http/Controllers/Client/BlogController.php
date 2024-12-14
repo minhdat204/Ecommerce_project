@@ -8,34 +8,33 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
-    {
-        $keyword = $request->input('keyword'); // Lấy từ khóa tìm kiếm từ request
+    public function index(Request $request){
 
-        $posts = Post::query()
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('tieude', 'like', "%$keyword%")
-                             ->orWhere('noidung', 'like', "%$keyword%");
-            })
-            ->paginate(6);  
+    $keyword = $request->input('keyword'); 
 
-        if ($request->ajax()) {
-            return response()->json([
-                'posts' => view('users.partials.blog.blog-item', compact('posts'))->render(),
-                'pagination' => $posts->appends(['keyword' => $keyword])->links('pagination::bootstrap-4')->render(),
-            ]);
-        }
+    // Truy vấn bài viết với điều kiện tìm kiếm
+    $posts = Post::query()
+        ->when($keyword, function ($query, $keyword) {
+            return $query->where('tieude', 'like', "%$keyword%")
+                         ->orWhere('noidung', 'like', "%$keyword%");
+        })
+        ->paginate(6);  
 
-        // Trả về view cho request bình thường
-        return view('users.pages.blog', compact('posts'));
+    // Kiểm tra yêu cầu AJAX
+    if ($request->ajax()) {
+        // Trả về JSON cho yêu cầu AJAX
+        return response()->json([
+            'posts' => view('users.partials.blog.blog-item', ['posts' => $posts])->render(),
+            'pagination' => $posts->appends(key: ['keyword' => $keyword])->links('pagination::bootstrap-4')->render(),
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // Trả về view cho yêu cầu bình thường
+    return view('users.pages.blog', [
+        'posts' => $posts, 
+        'keyword' => $keyword // Thêm biến keyword để sử dụng trong view nếu cần
+    ]);
+}
     public function show($slug)
     {
         $post = Post::where('slug', $slug)->firstOrFail();

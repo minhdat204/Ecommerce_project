@@ -95,6 +95,13 @@
                                             <td class="align-middle">{{ $detail->soluong }}</td>
                                             <td class="align-middle fw-bold">
                                                 {{ number_format($detail->gia * $detail->soluong) }}đ</td>
+                                            @if ($order->trangthai === 'completed')
+                                                <td>
+                                                    <a href="{{ Route('users.shop_details', ['slug' => $detail->product->slug]) }}"
+                                                        class="btn btn-primary btn-sm">đánh
+                                                        giá</a>
+                                                </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>

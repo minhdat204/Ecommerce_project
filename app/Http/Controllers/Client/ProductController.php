@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Client;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Comment;
+
 use Illuminate\Http\Request;
 
 class ProductController
@@ -45,7 +47,7 @@ class ProductController
         //Dat : lấy chi tiết sản phẩm dựa vào slug
         $Product = Product::where('slug', $slug)->first();
 
-        //Dat: lấy 4 sản phẩm liên quan (Điểm liên quan =  lượt xem 60% + ngẫu nhiên 40%) và xử lý việc không đủ sản phẩm liên quan
+        //Dat: lấy 4 sản phẩm liên quan (Điểm liên quan = lượt xem 60% + ngẫu nhiên 40%)
         $initialRelated = Product::where('id_danhmuc', $Product->id_danhmuc)
             ->where('id_sanpham', '!=', $Product->id_sanpham)
             ->orderByRaw('(luotxem * 0.6) + (RAND() * 0.4) DESC')
@@ -55,19 +57,46 @@ class ProductController
         if ($initialRelated->count() < 4) {
             $remainingCount = 4 - $initialRelated->count();
             $randomProducts = Product::where('id_sanpham', '!=', $Product->id_sanpham)
-            ->whereNotIn('id_sanpham', $initialRelated->pluck('id_sanpham'))
-            ->inRandomOrder()
-            ->take($remainingCount)
-            ->get();
+                ->whereNotIn('id_sanpham', $initialRelated->pluck('id_sanpham'))
+                ->inRandomOrder()
+                ->take($remainingCount)
+                ->get();
 
             $relatedProducts = $initialRelated->concat($randomProducts);
         } else {
             $relatedProducts = $initialRelated;
         }
 
-        return view('users.pages.shop-details', compact('Product', 'relatedProducts'));
-    }
+        //Khoa: lấy dữ liệu comments
+        $reviews = Comment::where('id_sanpham', $Product->id_sanpham)
+            ->whereNull('parent_id')
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
+        $totalReviews = $reviews->count();
+        $averageRating = $reviews->avg('danhgia') ?? 0;
+
+        $ratingStats = [
+            5 => $reviews->where('danhgia', 5)->count(),
+            4 => $reviews->where('danhgia', 4)->count(),
+            3 => $reviews->where('danhgia', 3)->count(),
+            2 => $reviews->where('danhgia', 2)->count(),
+            1 => $reviews->where('danhgia', 1)->count(),
+        ];
+
+        $userReview = null;
+
+        return view('users.pages.shop-details', compact(
+            'Product',
+            'relatedProducts',
+            'reviews',
+            'totalReviews',
+            'averageRating',
+            'ratingStats',
+            'userReview'
+        ));
+    }
     /**
      * Show the form for editing the specified resource.
      */

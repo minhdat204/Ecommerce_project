@@ -25,36 +25,45 @@
         </div>
     </div>
 
-    <!-- Review Form -->
-    <div class="review-form">
-        <h3>Write a Review</h3>
-        <form action="{{ route('reviews.store') }}" method="POST">
-            @csrf
-            <input type="hidden" name="id_sanpham" value="{{ $product->id_sanpham }}">
-            <p>Product ID: {{ $product->id_sanpham }}</p>
+    @php
+        $reviewController = new \App\Http\Controllers\Client\ReviewController();
+        $checkResult = $reviewController->checkCanReview($product->id_sanpham);
 
-            <div class="form-group">
-                <label>Your Rating</label>
-                <div class="rating-stars" id="rating-stars">
-                    <i class="star" data-value="1">☆</i>
-                    <i class="star" data-value="2">☆</i>
-                    <i class="star" data-value="3">☆</i>
-                    <i class="star" data-value="4">☆</i>
-                    <i class="star" data-value="5">☆</i>
+    @endphp
+    @if ($checkResult['canReview'])
+        <!-- Review Form -->
+        <div class="review-form">
+            <h3>Write a Review</h3>
+            <form action="{{ route('reviews.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id_sanpham" value="{{ $product->id_sanpham }}">
+                <p>Product ID: {{ $product->id_sanpham }}</p>
+
+                <div class="form-group">
+                    <label>Your Rating</label>
+                    <div class="rating-stars" id="rating-stars">
+                        <i class="star" data-value="1">☆</i>
+                        <i class="star" data-value="2">☆</i>
+                        <i class="star" data-value="3">☆</i>
+                        <i class="star" data-value="4">☆</i>
+                        <i class="star" data-value="5">☆</i>
+                    </div>
+                    <input type="hidden" name="danhgia" id="rating-value" required>
                 </div>
-                <input type="hidden" name="danhgia" id="rating-value" required>
-            </div>
 
-            <div class="form-group">
-                <label>Your Review</label>
-                <textarea name="noidung" rows="4" required placeholder="Share your experience with this product..."></textarea>
-            </div>
+                <div class="form-group">
+                    <label>Your Review</label>
+                    <textarea name="noidung" rows="4" required placeholder="Share your experience with this product..."></textarea>
+                </div>
 
-            <button type="submit" class="btn btn-primary">Submit Review</button>
-        </form>
-    </div>
-
-    <!-- Review List -->
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </form>
+        </div>
+    @else
+        <div class="alert alert-info">
+            {{ $checkResult['message'] }}
+        </div>
+    @endif <!-- Review List -->
     <div class="review-list">
         @foreach ($reviews as $review)
             <div class="review-item">

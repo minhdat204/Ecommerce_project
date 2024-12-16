@@ -64,8 +64,16 @@ class OrderManagerController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Order $order)
     {
-        //
+        // dd($order);
+        // Kiểm tra trạng thái đơn hàng
+        if ($order->trangthai === 'cancelled') {
+            // Cập nhật trạng thái đơn hàng thành 'inactive'
+            $order->trangthai = 'inactive';
+            $order->save();
+
+            return redirect()->back()->with('success', 'Trạng thái đơn hàng đã được cập nhật!');
+        }
     }
 }

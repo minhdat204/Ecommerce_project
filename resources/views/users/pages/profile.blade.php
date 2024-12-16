@@ -25,7 +25,7 @@
         <div class="profile-content mt-4">
             <!-- Personal Tab -->
             <div class="profile-tab-pane" style="display: block;">
-                <form method="POST" action="{{ route('profile.update', $user->id_nguoidung) }}">
+                <form method="POST" action="{{ route('profile.update', $user) }}">
                     @csrf
                     <div class="row justify-content-center">
                         <div class="col-md-8">
@@ -41,21 +41,23 @@
                                         <div class="col-md-6">
                                             <label for="user-fullname" class="form-label">Full Name</label>
                                             <input type="text" class="form-control" id="user-fullname" name="hoten"
-                                                value="{{ $user->hoten }}">
+                                                value="{{ Auth::user()->hoten }}">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="user-id" class="form-label">User ID</label>
                                             <input type="text" class="form-control" id="user-id" name="id_nguoidung"
-                                                value="{{ $user->id_nguoidung }}" readonly>
+                                                value="{{ Auth::user()->id_nguoidung }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label for="user-gender" class="form-label">Gender</label>
                                             <select class="form-select no-arrow" id="user-gender" name="gioitinh">
-                                                <option value="male" {{ $user->gioitinh == 'male' ? 'selected' : '' }}>
+                                                <option value="male"
+                                                    {{ Auth::user()->gioitinh == 'male' ? 'selected' : '' }}>
                                                     Male</option>
-                                                <option value="female" {{ $user->gioitinh == 'female' ? 'selected' : '' }}>
+                                                <option value="female"
+                                                    {{ Auth::user()->gioitinh == 'female' ? 'selected' : '' }}>
                                                     Female</option>
                                             </select>
                                         </div>
@@ -71,12 +73,12 @@
                                         <div class="col-md-6">
                                             <label for="user-address" class="form-label">Address</label>
                                             <input type="text" class="form-control" id="user-address" name="diachi"
-                                                value="{{ $user->diachi }}">
+                                                value="{{ Auth::user()->diachi }}">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="user-phone" class="form-label">Phone</label>
                                             <input type="text" class="form-control" id="user-phone" name="sodienthoai"
-                                                value="{{ $user->sodienthoai }}">
+                                                value="{{ Auth::user()->sodienthoai }}">
                                         </div>
                                     </div>
                                     <div class="email-address-section border p-3 rounded">
@@ -84,7 +86,7 @@
                                         <div class="d-flex align-items-center">
                                             <i class="bi bi-envelope me-2 text-primary" style="font-size: 1.5rem;"></i>
                                             <div>
-                                                <p class="mb-0">{{ $user->email }}</p>
+                                                <p class="mb-0">{{ Auth::user()->email }}</p>
                                             </div>
                                         </div>
                                     </div>

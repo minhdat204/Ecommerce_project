@@ -1,0 +1,205 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.card {
+    transition: all 0.3s ease; /* Thêm hiệu ứng mượt khi hover */
+    width: 400px;              /* Kích thước cho mỗi card */
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 10px;
+    flex: 1 1 calc(25% - 40px); /* Điều chỉnh độ rộng các card khi có nhiều card */
+    text-align: center;
+}
+
+.card:hover {
+    background-color: #f0f0f0; /* Màu nền khi hover */
+}
+
+/* Đổi màu icon khi hover */
+.card svg {
+    fill: black; /* Màu icon mặc định */
+    transition: fill 0.3s ease; /* Hiệu ứng chuyển màu */
+}
+
+.card:hover svg {
+    fill: #007bff; /* Màu icon khi hover */
+}
+
+/* Đổi màu hình ảnh khi hover */
+.card img {
+    width: 30px;
+    height: 30px;
+    transition: filter 0.3s ease; /* Thêm hiệu ứng khi hover vào hình ảnh */
+}
+
+.card:hover img {
+    filter: grayscale(0%); /* Làm ảnh có màu khi hover */
+}
+
+/* Định dạng cho tiêu đề trong card */
+.card h3 {
+    margin: 10px 0;
+    font-size: 18px;
+    color: black; /* Màu chữ mặc định */
+    transition: color 0.3s ease; /* Thêm hiệu ứng chuyển màu chữ */
+}
+
+.card:hover h3 {
+    color: #007bff; /* Màu chữ khi hover */
+}
+
+/* Tiến trình (progress) của card */
+.card .progress {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
+
+.card .progress svg {
+    width: 100%;
+    height: 100%;
+}
+
+.card .progress circle {
+    fill: none;
+    stroke-width: 10;
+    transition: stroke 0.3s ease; /* Thêm hiệu ứng chuyển màu cho vòng tròn */
+}
+
+.card .progress .bg {
+    stroke: #e6e6e6; /* Màu nền của vòng tròn */
+}
+
+.card .progress .meter {
+    stroke-linecap: round;
+}
+
+.card .progress .percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: bold;
+    color: black; /* Màu chữ mặc định */
+    transition: color 0.3s ease; /* Thêm hiệu ứng chuyển màu chữ */
+}
+
+.card:hover .progress .percentage {
+    color: #007bff; /* Màu chữ phần trăm khi hover */
+}
+
+/* Đổi màu stroke của các vòng tròn khi hover */
+.card:hover .progress .bg {
+    stroke: #dcdcdc; /* Màu nền vòng tròn khi hover */
+}
+
+.card:hover .progress .meter {
+    stroke: #007bff; /* Màu stroke của vòng tròn khi hover */
+}
+
+/* Định dạng riêng cho card có lớp 'tire-wear' */
+.card.tire-wear {
+    background-color: #a78bfa; /* Màu nền của card khi có lớp 'tire-wear' */
+    color: white;
+}
+
+.card.tire-wear:hover {
+    background-color: #9b7df0; /* Màu nền khi hover vào card có lớp 'tire-wear' */
+}
+
+.card.tire-wear h3 {
+    color: white; /* Màu chữ tiêu đề của card khi có lớp 'tire-wear' */
+}
+
+.card.tire-wear .progress .percentage {
+    color: white; /* Màu phần trăm của card khi có lớp 'tire-wear' */
+}
+
+.card.tire-wear .progress .bg {
+    stroke: #dcdcdc; /* Màu nền vòng tròn khi hover vào card có lớp 'tire-wear' */
+}
+
+.card.tire-wear .progress .meter {
+    stroke: white; /* Màu stroke của vòng tròn khi hover vào card có lớp 'tire-wear' */
+}
+
+.statistics {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.statistics .chart-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 10px;
+    flex: 1 1 calc(50% - 40px); /* Mỗi card chiếm 50% chiều rộng với margin */
+    transition: transform 0.3s ease; /* Thêm hiệu ứng chuyển động khi hover */
+}
+
+.statistics .chart-card:hover {
+    transform: translateY(-5px); /* Di chuyển nhẹ lên khi hover */
+}
+
+.statistics .chart-card h3 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    color: #333;
+}
+
+.statistics .chart-card .tabs {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.statistics .chart-card .tabs button {
+    background-color: #f5f7fa;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Thêm hiệu ứng cho hover */
+}
+
+.statistics .chart-card .tabs button:hover {
+    background-color: #e1e1e1; /* Màu nền khi hover */
+}
+
+.statistics .chart-card .tabs button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.statistics .chart-card .chart {
+    width: 100%;
+    height: 200px;
+    background-color: #f0f0f0; /* Màu nền mặc định cho khu vực chart */
+    border-radius: 10px;
+}
+
+.statistics .chart-card .chart img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Đảm bảo ảnh không bị méo khi thay đổi kích thước */
+    border-radius: 10px;
+}

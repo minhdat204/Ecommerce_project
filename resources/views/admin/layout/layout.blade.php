@@ -17,6 +17,7 @@
     <link href="{{ asset('Admin/css/timeline.css') }}" rel="stylesheet">
     <link href="{{ asset('Admin/css/startmin.css') }}" rel="stylesheet">
     <link href="{{ asset('Admin/css/morris.css') }}" rel="stylesheet">
+    <link href="{{ asset('Admin/css/statistics.css') }}" rel="stylesheet">
     <link href="{{ asset('Admin/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

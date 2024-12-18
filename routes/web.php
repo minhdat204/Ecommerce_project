@@ -61,6 +61,10 @@ Route::get('/about-us', function () {
     return view('users.pages.about-us');
 });
 
+Route::get('/test', function () {
+    return view('statics-layout-test'); // giao diện mẫu = Category
+})->name('testlayout');
+
 Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('login');
     Route::get('forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('password.request');

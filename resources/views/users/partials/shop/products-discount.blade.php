@@ -18,7 +18,7 @@
                     <span>{{$sanpham->category->tendanhmuc}}</span>
                     <h5><a href="{{route('users.shop_details', $sanpham->slug)}}">{{$sanpham->tensanpham}}</a></h5>
                     <div class="product__item__price">${{$sanpham->gia_khuyen_mai}} <span>${{$sanpham->gia}}</span></div>
-                    <div>Giảm đến {{floor(($sanpham->gia - $sanpham->gia_khuyen_mai) / $sanpham->gia * 100)}}%</div>
+                    <div class="discount">Giảm đến {{floor(($sanpham->gia - $sanpham->gia_khuyen_mai) / $sanpham->gia * 100)}}%</div>
                 </div>
             </div>
         </div>

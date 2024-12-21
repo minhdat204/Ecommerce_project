@@ -1702,6 +1702,11 @@ ol {
 	margin-left: 10px;
 }
 
+.discount {
+    font-size: 18px;
+    color: #dd2222;
+    font-weight: 900;
+}
 .product__pagination,
 .blog__pagination {
 	padding-top: 10px;

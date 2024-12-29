@@ -125,7 +125,8 @@
                             <a href="{{ Route('admin.order.index') }}"><i class="fa fa-dashboard fa-fw"></i> Orders</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Statistical</a>
+                            <a href="{{ Route('admin.statistics.index') }}"><i class="fa fa-dashboard fa-fw"></i>
+                                Statistical</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-dashboard fa-fw"></i> Comments</a>

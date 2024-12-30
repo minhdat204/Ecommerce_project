@@ -24,8 +24,8 @@
 @endsection
 
 @push('scripts')
-
-<script>
+<script src="{{ asset('js/shopping-cart.js') }}"></script>
+{{-- <script>
 function handleQuantityChange(input) {
     const $input = $(input);
     const $row = $input.closest('tr');
@@ -120,5 +120,5 @@ function updateCartCount(count) {
 function updateCartTotal(total) {
     $('.header__cart__price span').text(total);
 }
-</script>
+</script> --}}
 @endpush

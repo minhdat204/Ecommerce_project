@@ -223,3 +223,104 @@
     });
 
 })(jQuery);
+
+//Dat: hàm tái sử dụng fetch api
+function fetchData(url, method, body = null, successCallback, errorCallback, finallyCallback) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+    //thiết lập mặc định các option cho fetch
+    const options = {
+        method,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    };
+
+    //nếu là phương thức ngoài get thì thêm header và body
+    if (method !== 'GET' && body) {
+        options.headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(body);
+    }
+
+    fetch(url, options)
+    .then(response => {
+        if (!response.ok) {
+            notification('Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
+            throw new Error('có lỗi xảy ra, vui lòng thử lại sau.');
+        }
+        return response.json();
+    })
+    .then(data => successCallback(data))
+    .catch(error => {
+        console.error('Error:', error);
+        notification('Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
+        if(errorCallback) errorCallback(error);
+    })
+    .finally(() => {
+        if(finallyCallback) finallyCallback();
+    });
+}
+
+//cải tiến hàm fetch api
+async function fetchData2(url, method, body = null, successCallback, errorCallback, finallyCallback) {
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+        // Thiết lập mặc định các option cho fetch
+        const options = {
+            method,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+            },
+        };
+
+        // Nếu là phương thức ngoài GET thì thêm header và body
+        if (method !== 'GET' && body) {
+            options.headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+        }
+
+        // Gửi yêu cầu fetch
+        const response = await fetch(url, options);
+
+        // Kiểm tra phản hồi
+        if (!response.ok) {
+            const errorMessage = `Lỗi ${response.status}: ${response.statusText}`;
+            console.error('Fetch Error:', errorMessage);
+            notification(errorMessage, 'error');
+            throw new Error(errorMessage);
+        }
+
+        // Chuyển đổi dữ liệu sang JSON
+        const data = await response.json();
+        if (successCallback) successCallback(data);
+    } catch (error) {
+        console.error('Error:', error);
+        notification('Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
+        if (errorCallback) errorCallback(error);
+    }
+    finally {
+        if (finallyCallback) finallyCallback();
+    }
+}
+
+// Dat: Hàm hiển thị thông báo
+function notification(message, type = 'error', duration = 3000, onClick = null) {
+    const bgColors = {
+        error: '#ff6b6b',
+        success: '#7fad39',
+        warning: '#ffd43b',
+        info: '#4dabf7'
+    };
+
+    Toastify({
+        text: message,
+        duration: duration,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: bgColors[type] || bgColors.error,
+        },
+        onClick: onClick || function(){}
+    }).showToast();
+}

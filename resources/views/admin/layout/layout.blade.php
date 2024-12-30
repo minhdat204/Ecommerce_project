@@ -119,20 +119,24 @@
                                 Categories</a>
                         </li>
                         <li>
-                            <a href=""><i class="fa fa-dashboard fa-fw"></i> Products</a>
+                            <a href="{{ Route('admin.product.index') }}"><i class="fa fa-dashboard fa-fw"></i>
+                                Products</a>
                         </li>
                         <li>
-                            <a href="{{ Route('admin.order.index') }}"><i class="fa fa-dashboard fa-fw"></i> Orders</a>
+                            <a href="{{ Route('admin.order.index') }}"><i class="fa fa-dashboard fa-fw"></i>
+                                Orders</a>
                         </li>
                         <li>
                             <a href="{{ Route('admin.statistics.index') }}"><i class="fa fa-dashboard fa-fw"></i>
                                 Statistical</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Comments</a>
+                            <a href="{{ Route('admin.comment.index') }}"><i class="fa fa-dashboard fa-fw"></i>
+                                Comments</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Contact</a>
+                            <a href="{{ Route('admin.contact.index') }}"><i class="fa fa-dashboard fa-fw"></i>
+                                Contact</a>
                         </li>
                     </ul>
                 </div>

@@ -42,9 +42,9 @@
                         </th>
                         <th>STT</th>
                         <th>Mã Đơn Hàng</th>
-                        <th>Tổng Tiền Hàng</th>
+                        {{-- <th>Tổng Tiền Hàng</th>
                         <th>Tổng Giảm Giá</th>
-                        <th>Phí Vận Chuyển</th>
+                        <th>Phí Vận Chuyển</th> --}}
                         <th>Tổng Thanh Toán</th>
                         <th>Phương Thức Thanh Toán</th>
                         <th>Trạng Thái Thanh Toán</th>
@@ -72,9 +72,9 @@
 
                             <td>{{ $stt++ }}</td>
                             <td>{{ $order->ma_don_hang }}</td>
-                            <td>{{ number_format($order->tong_tien_hang, 0, ',', '.') }} đ</td>
+                            {{-- <td>{{ number_format($order->tong_tien_hang, 0, ',', '.') }} đ</td>
                             <td>{{ number_format($order->tong_giam_gia, 0, ',', '.') }} đ</td>
-                            <td>{{ number_format($order->phi_van_chuyen, 0, ',', '.') }} đ</td>
+                            <td>{{ number_format($order->phi_van_chuyen, 0, ',', '.') }} đ</td> --}}
                             <td>{{ number_format($order->tong_thanh_toan, 0, ',', '.') }} đ</td>
                             <td>{{ $order->pt_thanhtoan }}</td>
                             <td>

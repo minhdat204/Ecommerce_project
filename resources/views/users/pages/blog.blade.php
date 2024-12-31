@@ -24,30 +24,6 @@ $(document).on('submit', '.search-form', function (e) {
     });
 });
 
-$(document).on('click', '.pagination a', function (e) {
-    e.preventDefault();
-    let url = $(this).attr('href');
-
-    if (!url) {
-        alert('Không tìm thấy URL phân trang!');
-        return;
-    }
-
-    let keyword = $('input[name="keyword"]').val();
-
-    $.ajax({
-        url: url,
-        type: 'GET',
-        data: { keyword: keyword },
-        success: function (response) {
-            $('.blog-list').html(response.posts); // Cập nhật danh sách bài viết
-            $('.pagination-container').html(response.pagination); // Cập nhật phân trang
-        },
-        error: function () {
-            alert('Có lỗi xảy ra khi phân trang!');
-        }
-    });
-});
 </script>
 @endpush
 
@@ -88,15 +64,18 @@ $(document).on('click', '.pagination a', function (e) {
             <div class="col-lg-8 col-md-7">
                 <div class="row">
                     @include('users.partials.blog.blog-about-us')
-                    @include('users.partials.blog.blog-item', ['posts' => $posts]) <!-- Danh sách bài viết -->
-                    <!-- Phân trang -->
-                <div class="col-lg-12 pagination-container">
-                    <div class="product__pagination blog__pagination" id="pagination">
-                    {{ $posts->appends(request()->query())->links('pagination::bootstrap-4') }}
-                    </div>
-                </div>
+                    
+
+                    <!-- Danh sách bài viết -->
+                    @include('users.partials.blog.blog-item', ['posts' => $posts])
+
+
+
                 </div>
             </div>
+
+
+
         </div>
     </div>
 </section>

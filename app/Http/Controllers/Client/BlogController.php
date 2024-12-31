@@ -12,33 +12,32 @@ class BlogController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $keyword = $request->input('keyword'); // Lấy từ khóa tìm kiếm từ request
+        {
+            // Lấy từ khóa tìm kiếm từ request
+            $keyword = $request->input('keyword'); 
 
-        $posts = Post::query()
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('tieude', 'like', "%$keyword%")
-                             ->orWhere('noidung', 'like', "%$keyword%");
-            })
-            ->paginate(3);  // Phân trang 3 bài viết mỗi trang
+            // Truy vấn và phân trang, áp dụng tìm kiếm nếu có keyword
+            $posts = Post::query()
+                ->when($keyword, function ($query) use ($keyword) {
+                    return $query->where('tieude', 'like', "%$keyword%")
+                                ->orWhere('noidung', 'like', "%$keyword%");
+                })
+                ->paginate(3);  // Phân trang 3 bài viết mỗi trang
 
-        if ($request->ajax()) {
-            return response()->json([
-                'posts' => view('users.partials.blog.blog-item', compact('posts'))->render(),
-                'pagination' => $posts->appends(['keyword' => $keyword])->links('pagination::bootstrap-4')->render(),
-            ]);
+            // Trả về view với danh sách bài viết
+            return view('users.pages.blog', compact('posts'));
         }
 
-        // Trả về view cho request bình thường
-        return view('users.pages.blog', compact('posts'));
-    }
 
+    /**
+     * Display the specified resource.
+     */
     public function show($slug)
     {
+        // Tìm bài viết theo slug và trả về trang chi tiết bài viết
         $post = Post::where('slug', $slug)->firstOrFail();
         return view('users.pages.blog-detail', compact('post'));
     }
-
 
     // Các hàm create, store, edit, update, destroy chưa sử dụng sẽ để trống
     public function create() {}

@@ -1,7 +1,7 @@
 @extends('Admin.Layout.Layout')
 @section('content')
 
-    <div class="wrapper">
+<div class="wrapper">
         <div style="display: flex; justify-content: space-around; gap: 20px;">
             <div class="card-item">
                 <img alt="Energy icon" height="30" src="https://storage.googleapis.com/a1aa/image/KamAa9fe22p3Dk3zY3UGdmmF0OkvgiefGSeZ1twXvX2HfEAfJA.jpg" width="30"/>
@@ -51,10 +51,10 @@
                 </div>
             </div>
         </div>
-    </div>
+</div>
 
-    <div class="dashboard">
-  <div class="chart-card">
+<div class="dashboard">
+<div class="chart-card">
     <h3>Miles Statistics</h3>
     <div class="tabs">
       <button class="active">Day</button>
@@ -64,19 +64,21 @@
     <div class="chart">
       <img alt="Bar chart showing miles statistics" height="200" src="https://storage.googleapis.com/a1aa/image/UZjspCBe4VXrYyAAfAeZ0wlTDjEDzmNNsT2WLJNZSHbknA4nA.jpg" width="400"/>
     </div>
-  </div>
-  <div class="chart-card">
-    <h3>Car Statistics</h3>
+</div>
+<div class="chart-card">
+    <h3>Miles Statistics</h3>
     <div class="tabs">
-      <button class="active">Day</button>
-      <button>Week</button>
-      <button>Month</button>
+        <button onclick="fetchChartData('day')">Day</button>
+        <button onclick="fetchChartData('week')">Week</button>
+        <button onclick="fetchChartData('month')">Month</button>
     </div>
     <div class="chart">
-      <img alt="Line chart showing car statistics" height="200" src="https://storage.googleapis.com/a1aa/image/2uS6e4MUMXUzKKFjPX3XwFdn8veXVtCmT9mjzpAU60V3TA8TA.jpg" width="400"/>
+        <canvas id="salesChart" width="400" height="200"></canvas>
     </div>
-  </div>
 </div>
+</div>
+
+
 
 
 @endsection

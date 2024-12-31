@@ -157,7 +157,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('dashboard/website-info', [DashboardManagerController::class, 'updateWebsiteInfo'])
         ->name('dashboard.update-website-info');
     // Statistical Routes
-    Route::get('statistics', [StatisticalManagerController::class, 'sales'])->name('statistics.index');
-    Route::get('statistics/sales', [StatisticalManagerController::class, 'sales'])->name('statistics.sales');
-    Route::get('statistics/products', [StatisticalManagerController::class, 'productSales'])->name('statistics.productSales');
+    
+    Route::get('statistics', [StatisticalManagerController::class, 'handleStatistics'])->name('statistics');
+    // Lấy dữ liệu doanh thu cho biểu đồ
+    Route::get('statistics/revenue-chart/{period}', [StatisticalManagerController::class, 'getSalesData'])->name('revenue-chart');
+    // Lấy dữ liệu sản phẩm bán cho biểu đồ
+    Route::get('statistics/product-chart/{period}', [StatisticalManagerController::class, 'getProductSalesData'])->name('product-chart');
+    // Lấy sản phẩm bán chạy nhất
+    Route::get('statistics/top-selling-products', [StatisticalManagerController::class, 'getTopSellingProducts'])->name('top-selling-products');
+
+    //Route::get('statistics/sales', [StatisticalManagerController::class, 'sales']);
+    //Route::get('statistics/sales/{period}', [StatisticalManagerController::class, 'sales']);
+    
+    //Route::get('statistics/sales', [StatisticalManagerController::class, 'sales'])->name('statistics.sales');
+    //Route::get('statistics/products', [StatisticalManagerController::class, 'productSales'])->name('statistics.productSales');
 });
+    

@@ -100,4 +100,8 @@ class Product extends Model
         return $this->belongsToMany(Cart::class, 'san_pham_gio_hang', 'id_sanpham', 'id_giohang')
             ->using(CartItem::class);
     }
+    public function productImages()
+    {
+        return $this->hasMany(ProductImage::class, 'id_sanpham', 'id_sanpham');
+    }
 }

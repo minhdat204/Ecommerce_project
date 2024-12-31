@@ -1687,7 +1687,26 @@ ol {
 	color: #252525;
 	font-weight: 700;
 }
+/* Dat : thêm css cho discount all products*/
+.product__item__text span {
+    font-size: 14px;
+    color: #b2b2b2;
+    display: block;
+    margin-bottom: 4px;
+}
 
+.product__item__text .product__item__price span {
+	display: inline-block;
+	font-weight: 400;
+	text-decoration: line-through;
+	margin-left: 10px;
+}
+
+.discount {
+    font-size: 18px;
+    color: #dd2222;
+    font-weight: 900;
+}
 .product__pagination,
 .blog__pagination {
 	padding-top: 10px;
@@ -3916,4 +3935,67 @@ ol {
 /*Dat: thêm css cho trạng thái còn hàng hoặc hết hàng*/
 .no-border {
     border: none !important;
+}
+
+
+/* Dat: thêm css cho phần category*/
+.category-section {
+    padding: 20px;
+}
+
+
+.category-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-section li {
+    margin-bottom: 10px;
+}
+
+.category-section li a {
+    display: block;
+    padding: 8px 15px;
+    color: #000000;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.category-section li a:hover {
+    color: #7fad39;
+    background: #f8f9fa;
+    padding-left: 20px;
+    font-weight: 700;
+}
+
+/* Parent category styles */
+.category-section > ul > li > a {
+    font-weight: 500;
+    color: #000000;
+}
+
+/* Child category styles */
+.category-section ul ul {
+    margin-left: 15px;
+    margin-top: 5px;
+    border-left: 1px solid #e5e5e5;
+}
+
+.category-section ul ul li {
+    margin-bottom: 5px;
+}
+
+.category-section ul ul li a {
+    font-size: 14px;
+    padding: 6px 15px;
+}
+
+/* Active state */
+.category-section li a.active {
+    color: #7fad39;
+    background: #f8f9fa;
+    font-weight: 700;
 }

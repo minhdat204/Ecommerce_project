@@ -3,7 +3,7 @@
 </div>
 <div class="row">
     <div class="product__discount__slider owl-carousel">
-        @foreach ($ProductsDiscount as $sanpham)
+        @foreach ($productsDiscount as $sanpham)
         <div class="col-lg-4">
             <div class="product__discount__item">
                 <div class="product__discount__item__pic set-bg" data-setbg="img/product/discount/pd-1.jpg">
@@ -18,6 +18,7 @@
                     <span>{{$sanpham->category->tendanhmuc}}</span>
                     <h5><a href="{{route('users.shop_details', $sanpham->slug)}}">{{$sanpham->tensanpham}}</a></h5>
                     <div class="product__item__price">${{$sanpham->gia_khuyen_mai}} <span>${{$sanpham->gia}}</span></div>
+                    <div class="discount">Giảm đến {{floor(($sanpham->gia - $sanpham->gia_khuyen_mai) / $sanpham->gia * 100)}}%</div>
                 </div>
             </div>
         </div>

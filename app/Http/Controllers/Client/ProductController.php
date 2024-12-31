@@ -15,12 +15,43 @@ class ProductController
      */
     public function index()
     {
-        $ProductsDiscount = Product::whereNotNull('gia_khuyen_mai')
+        $productsDiscount = Product::whereNotNull('gia_khuyen_mai')
             ->with('category')
+            ->orderByRaw('((gia - COALESCE(gia_khuyen_mai, gia)) / gia) DESC')
+            ->limit(9)
             ->get();
-        $Products = Product::whereNull('gia_khuyen_mai')->paginate(2);
-        $ProductsCount = Product::whereNull('gia_khuyen_mai')->count();
-        return view('users.pages.shop', compact('Products', 'ProductsDiscount', 'ProductsCount'));
+        // $products = Product::whereNull('gia_khuyen_mai')->with('category')->paginate(6);
+        $products = Product::paginate(9);
+        $productsCount = Product::count();
+        $categories = Category::all();
+        return view('users.pages.shop', compact('products', 'productsDiscount', 'productsCount', 'categories'));
+    }
+
+    public function showCategory(string $slug)
+    {
+        $category = Category::where('slug', $slug)->first();
+        //kiểm tra id có phải danh mục cha không
+        $isParentCategory = is_null($category->id_danhmuc_cha);
+
+        //nếu ko phải thì chỉ hiển thị ds sp trog 1 mục, có thì hiển thị all danh mục con
+        if(!$isParentCategory)
+            $query = Product::where('id_danhmuc', $category->id_danhmuc);
+        else {
+            //lấy danh mục cha và tất cả danh mục con
+            $categoryIds = Category::where('id_danhmuc_cha', $category->id_danhmuc)
+                ->pluck('id_danhmuc')
+                ->push($category->id_danhmuc)
+                ->toArray();
+            //lấy tất cả sản phẩm của danh mục cha và danh mục con
+            $query = Product::whereIn('id_danhmuc', $categoryIds);
+        }
+        //lấy số lượng sản phẩm
+        $productsCount = $query->count();
+        //lấy sản phẩm theo trang
+        $products = $query->paginate(9);
+        //lấy tất cả danh mục
+        $categories = Category::whereNull('id_danhmuc_cha')->with('childCategories')->get();
+        return view('users.pages.shop', compact('products', 'categories', 'category', 'productsCount'));
     }
 
     /**

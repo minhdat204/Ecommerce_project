@@ -6,7 +6,7 @@
                  style="background-image: url('{{ $product->images->first()->duongdan ?? "img/featured/feature-8.jpg" }}')">
                 <div class="hero__text">
                     @if($product->gia_khuyen_mai)
-                        <span>SALE UP TO {{ round((($product->gia - $product->gia_khuyen_mai) / $product->gia) * 100) }}% OFF</span>
+                        <span>SALE UP TO {{ floor((($product->gia - $product->gia_khuyen_mai) / $product->gia) * 100) }}% OFF</span>
                     @else
                         <span>FEATURED PRODUCT</span>
                     @endif

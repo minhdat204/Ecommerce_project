@@ -11,19 +11,19 @@
         </thead>
         <tbody>
             @forelse($cartItems as $item)
-            <tr data-id="{{ $item->id_sp_giohang }}">
+            <tr data-id="{{ $item->id_sp_giohang }}" id="cart-item-{{ $item->id_sp_giohang }}">
                 <td class="shoping__cart__item">
                     <img src="{{ asset($item->product->thumbnail) }}" alt="{{ $item->product->tensanpham }}" width="100">
                     <h5>{{ $item->product->tensanpham }}</h5>
                 </td>
                 <td class="shoping__cart__price">
-                    ${{ number_format($item->product->gia_khuyen_mai ?? $item->product->gia, 2) }}
+                    {{ number_format($item->product->gia_khuyen_mai ?? $item->product->gia, 2) }} VNĐ
                 </td>
                 <td class="shoping__cart__quantity">
                     <div class="quantity">
                         <div class="pro-qty">
                             <span class="dec qtybtn">-</span>
-                            <input type="number"
+                            <input
                                 value="{{ $item->soluong }}"
                                 min="1"
                                 max="{{ $item->product->soluong }}"
@@ -31,16 +31,16 @@
                                 data-id="{{ $item->id_sp_giohang }}"
                                 data-original-value="{{ $item->soluong }}"
                                 onchange="handleQuantityChange(this)"
-                                readonly>
+                                >
                             <span class="inc qtybtn">+</span>
                         </div>
                     </div>
                 </td>
                 <td class="shoping__cart__total">
-                    ${{ number_format(($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong, 2) }}
+                    {{ number_format(($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong, 2) }} VNĐ
                 </td>
                 <td class="shoping__cart__item__close">
-                    <span class="icon_close" onclick="handleRemoveItem(this)"></span>
+                    <span class="icon_close" onclick="removeItem({{ $item->id_sp_giohang }})"></span>
                 </td>
             </tr>
             @empty

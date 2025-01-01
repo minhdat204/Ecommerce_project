@@ -324,3 +324,37 @@ function notification(message, type = 'error', duration = 3000, onClick = null) 
         onClick: onClick || function(){}
     }).showToast();
 }
+
+// Dat: lắng nghe sự kiện pageshow để reload trang khi dùng nút back/forward
+window.addEventListener('pageshow', function(event) {
+    // Define paths that need reload
+    const pathsNeedReload = [
+        '/cart',
+        // Add more paths as needed
+    ];
+
+    // Get current path
+    const currentPath = window.location.pathname;
+
+    // Check if current path needs reload
+    if (!pathsNeedReload.includes(currentPath)) {
+        return; // Exit if not a path that needs reload
+    }
+
+    // Check back-forward cache
+    if (event.persisted) {
+        window.location.reload();
+        return;
+    }
+
+    // Check navigation type
+    if (window.performance && window.performance.getEntriesByType) {
+        const navigationEntries = window.performance.getEntriesByType('navigation');
+        if (navigationEntries.length > 0) {
+            const navigationType = navigationEntries[0].type;
+            if (navigationType === 'back_forward') {
+                window.location.reload();
+            }
+        }
+    }
+});

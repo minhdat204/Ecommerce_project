@@ -360,7 +360,7 @@ window.addEventListener('pageshow', function(event) {
 });
 
 
-//
+// Dat: Hàm chọn danh mục cho tìm kiếm
 function selectCategory(element, id_category = null) {
     const categoryText = element.textContent.trim();
     const categoriesDiv = document.querySelector('.hero__search__categories');

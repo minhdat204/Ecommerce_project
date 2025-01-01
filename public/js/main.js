@@ -358,3 +358,17 @@ window.addEventListener('pageshow', function(event) {
         }
     }
 });
+
+
+//
+function selectCategory(element, id_category = null) {
+    const categoryText = element.textContent.trim();
+    const categoriesDiv = document.querySelector('.hero__search__categories');
+    const categoryDisplay = categoriesDiv.querySelector('.category-display');
+
+    categoryDisplay.textContent = categoryText;
+    if(id_category != null) {
+        const categoryInput = categoriesDiv.querySelector('input[name="category"]');
+        categoryInput.value = id_category;
+    }
+}

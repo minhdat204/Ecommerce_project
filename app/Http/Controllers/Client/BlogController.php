@@ -18,9 +18,9 @@ class BlogController extends Controller
         $posts = Post::query()
             ->when($keyword, function ($query, $keyword) {
                 return $query->where('tieude', 'like', "%$keyword%")
-                             ->orWhere('noidung', 'like', "%$keyword%");
+                    ->orWhere('noidung', 'like', "%$keyword%");
             })
-            ->paginate(3);  // Phân trang 3 bài viết mỗi trang
+            ->paginate(2);  // Phân trang 3 bài viết mỗi trang
 
         if ($request->ajax()) {
             return response()->json([

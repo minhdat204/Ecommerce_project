@@ -10,7 +10,7 @@ class Category extends Model
     use HasFactory;
 
     protected $table = 'danh_muc';
-    protected $primaryKey = 'id_danhmuc';
+    protected $primaryKey = 'id_danhmuc'; // Xác định khóa chính
 
     protected $fillable = [
         'id_danhmuc_cha',

@@ -1,17 +1,20 @@
-<div class="col-lg-6 col-md-6 col-sm-6">
-    <div class="blog__item">
-        <div class="blog__item__pic">
-            <img src="img/blog/blog-2.jpg" alt="">
-        </div>
-        <div class="blog__item__text">
+@foreach ($posts as $post)
+    <div class="col-lg-6 col-md-6">
+        <div class="blog__item">
+            <div class="blog__item__pic">
+                <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->tieude }}">
+            </div>
+            <div class="blog__item__text">
             <ul>
-                <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                <li><i class="fa fa-comment-o"></i> 5</li>
+                <!-- Ngày tạo -->
+                <li><i class="fa fa-calendar-o"></i> {{ $post->created_at->format('F d, Y') }}</li>
+                <!-- Lượt xem -->
+                <li><i class="fa fa-eye"></i> {{ $post->luotxem }}</li>
             </ul>
-            <h5><a href="#">6 ways to prepare breakfast for 30</a></h5>
-            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam
-                quaerat </p>
-            <a href="#" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
+                <h5><a href="{{ route('user.blog_details', $post->slug) }}">{{ $post->tieude }}</a></h5>
+                <p>{{ Str::limit($post->noidung, 150) }}</p>
+                <a href="{{ route('user.blog_details', $post->slug) }}" class="blog__btn">Read More <span class="arrow_right"></span></a>
+            </div>
         </div>
     </div>
-</div>
+@endforeach

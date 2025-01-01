@@ -7,8 +7,12 @@
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Ogani | Template</title>
 
+    <!-- toastify -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
     <!--Bootstrap 5-->
@@ -25,11 +29,14 @@
     <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/login-signup.css')}}" type="text/css">
     @stack('styles')
 </head>
 
 <body>
     @include('users.partials.header')
+
+    @include('users.partials.login-signup')
 
     @include('users.partials.breadcrumb')
 
@@ -51,6 +58,7 @@
     <script src="{{asset('js/owl.carousel.min.js')}}"></script>
     <script src="{{asset('js/main.js')}}"></script>
     <script src="{{asset('js/chat-widget.js')}}"></script>
+    <script src="{{asset('js/login-signup.js')}}"></script>
     @stack('scripts')
 </body>
 

@@ -2,63 +2,59 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Product;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\WebsiteInfo;
 use Illuminate\Http\Request;
 
 class DashboardManagerController
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        // Get statistics
+        $stats = [
+            'products' => [
+                'total' => Product::count(),
+                'active' => Product::where('trangthai', 'active')->count(),
+                'inactive' => Product::where('trangthai', 'inactive')->count()
+            ],
+            'users' => [
+                'total' => User::count(),
+                'new_today' => User::whereDate('created_at', today())->count(),
+                'active' => User::where('trangthai', 'active')->count()
+            ],
+            'orders' => [
+                'total' => Order::count(),
+                'pending' => Order::where('trangthai', 'pending')->count(),
+                'completed' => Order::where('trangthai', 'completed')->count()
+            ]
+        ];
+
+        // Get website info
+        $websiteInfo = WebsiteInfo::first();
+
+        return view('admin.pages.dashboard.index', compact('stats', 'websiteInfo'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function updateWebsiteInfo(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'address' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|email',
+            'content' => 'required|string'
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $websiteInfo = WebsiteInfo::first();
+        if (!$websiteInfo) {
+            $websiteInfo = new WebsiteInfo();
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $websiteInfo->fill($request->all());
+        $websiteInfo->save();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('admin.dashboard.index')
+            ->with('success', 'Thông tin website đã được cập nhật thành công.');
     }
 }

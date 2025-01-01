@@ -23,4 +23,11 @@ class Cart extends Model
     {
         return $this->hasMany(CartItem::class, 'id_giohang', 'id_giohang');
     }
+
+    //cart đến product
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'san_pham_gio_hang', 'id_giohang', 'id_sanpham')
+            ->using(CartItem::class);
+    }
 }

@@ -19,9 +19,13 @@
                     </div>
                 </div>
                 <div class="col-lg-9 col-md-7">
-                    <div class="product__discount">
-                        @include('users.partials.shop.products-discount')
-                    </div>
+                    {{-- kiểm tra nếu $productsDiscount tồn tại --}}
+                    @if (!empty($productsDiscount))
+                        <div class="product__discount">
+                            @include('users.partials.shop.products-discount')
+                        </div>
+                    @endif
+
                     @include('users.partials.shop.products-content')
                 </div>
             </div>

@@ -19,11 +19,9 @@
                         <a onclick="xoanhieu()" href="javascript:void(0)" id="deleteSelected" class="btn btn-danger">
                             <i class="material-icons">&#xE15C;</i> <span>Xóa đã chọn</span>
                         </a>
-
                     </div>
                 </div>
             </div>
-
             <!-- Form Tìm Kiếm -->
             <form method="GET" action="" class="form-inline mb-3">
                 <div class="form-group">
@@ -32,7 +30,6 @@
                 </div>
                 <button type="submit" class="btn btn-default">Tìm kiếm</button>
             </form>
-
             <!-- Bảng Danh Mục -->
             <table class="table table-striped table-hover">
                 <thead>

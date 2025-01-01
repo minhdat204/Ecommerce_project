@@ -1,0 +1,109 @@
+/* Profile Navigation */
+.profile-navigation {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    border-bottom: 2px solid #ddd;
+}
+
+.profile-navigation li {
+    margin-right: 15px;
+}
+
+.profile-navigation a {
+    text-decoration: none;
+    padding: 10px 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    color: #333;
+    transition: background 0.3s ease;
+}
+
+.profile-navigation a.active,
+.profile-navigation a:hover {
+    background: #fff;
+    color: #007bff;
+    border-color: #007bff;
+}
+
+.profile-tab-pane {
+    display: none;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+}
+
+.profile-tab-pane.active {
+    display: block;
+}
+
+/* Profile Avatar */
+.profile-avatar img {
+    border: 3px solid #007bff;
+    padding: 5px;
+    transition: transform 0.3s ease;
+}
+
+.profile-avatar img:hover {
+    transform: scale(1.1);
+}
+
+/* Form Styles */
+.form-control,
+.form-select {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+    --bs-form-select-bg-img: none !important;
+
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Email Address Section */
+.email-address-section {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.email-address-section h5 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.email-address-section p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.email-address-section small {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Action Buttons */
+.action-buttons .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.action-buttons .btn:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+.row-edit {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+}
+

@@ -23,6 +23,13 @@ class CartController2 extends Controller
         }
         return $cart;
     }
+    private function calculateTotal($cartItems)
+    {
+        return $cartItems->sum(function ($item) {
+            $price = $item->product->gia_khuyen_mai ?? $item->product->gia;
+            return $price * $item->soluong;
+        });
+    }
     public function index()
     {
         $cart = $this->getOrCreateCart();
@@ -88,9 +95,12 @@ class CartController2 extends Controller
     }
     public function removeItem($id)
     {
+        $cart = $this->getOrCreateCart();
         CartItem::destroy($id);
+        $total = $this->calculateTotal($cart->fresh()->cartItems);
         return response()->json([
             'success' => true,
+            'cartTotal' => number_format($total, 2) . ' VNĐ'
         ]);
     }
     public function clearCart()
@@ -109,5 +119,30 @@ class CartController2 extends Controller
             'message' => 'Xóa toàn bộ sản phẩm khỏi giỏ hàng thành công.'
         ]);
     }
+    public function updateQuantity(Request $request, $id_sp_giohang)
+    {
+        $request->validate([
+            'soluong' => 'required|integer|min:1'
+        ]);
+        $cartItem = CartItem::findOrFail($id_sp_giohang);
+        $product = Product::findOrFail($cartItem->id_sanpham);
+        if ($request->soluong > $product->soluong) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Số lượng vượt quá tồn kho'
+            ], 400);
+        }
+        $cartItem->update([
+            'soluong' => $request->soluong
+        ]);
+        $cart = $cartItem->cart;
+        $cartTotal = $this->calculateTotal($cart->cartItems);
+        $itemTotal = ($cartItem->product->gia_khuyen_mai ?? $cartItem->product->gia) * $cartItem->soluong;
 
+        return response()->json([
+            'success' => true,
+            'cartTotal' => number_format($cartTotal, 2) . ' VNĐ',
+            'itemTotal' => number_format($itemTotal, 2) . ' VNĐ'
+        ]);
+    }
 }

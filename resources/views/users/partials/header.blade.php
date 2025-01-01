@@ -167,12 +167,26 @@
                 <div class="col-lg-12">
                     <div class="hero__search">
                         <div class="hero__search__form">
-                            <form action="#">
+                            <form action="{{route('shop.search')}}" method="GET">
+                                @csrf
                                 <div class="hero__search__categories">
-                                    All Categories
+                                    <span class="category-display">All Categories</span>
                                     <span class="arrow_carrot-down"></span>
+                                    <div class="hero__search__categories-menu">
+                                        <ul>
+                                            <li><a onclick="selectCategory(this); return false;">All Categories</a></li>
+                                            @foreach($categories as $category)
+                                                <li>
+                                                    <a onclick="selectCategory(this, {{$category->id_danhmuc}}); return false;"">
+                                                        {{ $category->tendanhmuc }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
-                                <input type="text" placeholder="What do yo u need?">
+                                <input type="hidden" name="id_category" value="">
+                                <input type="text" placeholder="What do you need?" name="keyword">
                                 <button type="submit" class="site-btn">SEARCH</button>
                             </form>
                         </div>

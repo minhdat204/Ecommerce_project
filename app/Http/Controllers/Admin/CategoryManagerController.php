@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage; // Add this import
 class CategoryManagerController
 {
     public function index(Request $request)
@@ -30,9 +31,6 @@ class CategoryManagerController
         return view('admin.pages.Category.index', compact('category', 'parentCategories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -64,9 +62,6 @@ class CategoryManagerController
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $category = Category::findOrFail($id);
@@ -79,9 +74,6 @@ class CategoryManagerController
         return view('admin.pages.Category.index', compact('category', 'parentCategories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $request->validate([

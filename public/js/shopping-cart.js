@@ -1,5 +1,6 @@
 function removeItem(cartItemId){
     const row = document.querySelector('#cart-item-' + cartItemId);
+    const cartTotal = document.getElementById('total');
     fetchData('/cart/items/' + cartItemId, 'DELETE', {}, function(data){
         if(data.success) {
             row.style.transition = 'opacity 0.5s';//OR: all 0.5s ease
@@ -8,6 +9,7 @@ function removeItem(cartItemId){
 
             setTimeout(function(){
                 row.remove();
+                cartTotal.innerHTML = data.cartTotal;
                 //document.querySelectorAll('tbody tr') = $('tbody tr')
                 // kiểm nếu giỏ hàng rỗng
                 if($('tbody tr').length === 0) {
@@ -35,6 +37,8 @@ function clearCart(){
     const rows = document.querySelectorAll('tbody tr');
     const tbody = document.querySelector('tbody');
 
+    const cartTotal = document.getElementById('total');
+
     // Show loading
     const button = document.querySelector('#deleteCart');
     button.disabled = true;
@@ -60,6 +64,8 @@ function clearCart(){
                     row.remove();
                 });
 
+                cartTotal.innerHTML = '0.00 VNĐ';
+
                 if(rows.length === 1) {
                     tbody.innerHTML = `
                         <tr>
@@ -78,7 +84,23 @@ function clearCart(){
         button.innerHTML = 'DELETE ALL';
     });
 }
-
+function handleQuantityChange(input){
+    const quantity = parseInt(input.value);
+    const row = input.closest('tr');
+    const cartItemId = row.getAttribute('data-id');
+    const itemTotal = row.querySelector('.shoping__cart__total');
+    const cartTotal = document.getElementById('total');
+    fetchData('/cart/items/' + cartItemId, 'PATCH', {soluong: quantity}, function(data){
+        if(data.success) {
+            itemTotal.innerHTML = data.itemTotal;
+            cartTotal.innerHTML = data.cartTotal;
+            notification("Đã cập nhật số lượng", 'success', 3000);
+        }
+        else {
+            notification(data.message || "Có lỗi xảy ra", 'error');
+        }
+    });
+}
 
 
 // function removeItem(cartItemId){

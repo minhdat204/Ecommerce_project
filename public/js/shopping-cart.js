@@ -66,13 +66,11 @@ function clearCart(){
 
                 cartTotal.innerHTML = '0.00 VNĐ';
 
-                if(rows.length === 1) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="5" class="text-center">Your cart is empty</td>
-                        </tr>
-                    `;
-                }
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center">Your cart is empty</td>
+                    </tr>
+                `;
                 notification("Đã xóa toàn bộ sản phẩm khỏi giỏ hàng", 'success', 3000);
             }, 500);
         }

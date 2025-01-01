@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 class ProductController
 {
     /**
+     * QUY TẮT
+     * 1. phân trang 9 sản phẩm 1 trang
+     * 2. comment rõ ràng phần mình làm
+     * 3. không dược sửa logic của các hàm đã có nếu chưa trao đổi với nhau
+     */
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -54,24 +60,31 @@ class ProductController
         return view('users.pages.shop', compact('products', 'categories', 'category', 'productsCount'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function search(Request $request)
     {
-        //
+        $keyword = $request->input('keyword');
+        $id_category = $request->input('id_category');
+
+        if ($id_category) {
+            //tìm kiếm sản phẩm theo tên hoặc mô tả và danh mục
+            $products = Product::where('id_danhmuc', $id_category)
+                ->where('tensanpham', 'like', "%$keyword%")
+                ->orWhere('mota', 'like', "%$keyword%")
+                ->paginate(9);
+        } else {
+            //tìm kiếm sản phẩm theo tên hoặc mô tả
+            $products = Product::where('tensanpham', 'like', "%$keyword%")
+                ->orWhere('mota', 'like', "%$keyword%")
+                ->paginate(9);
+        }
+
+        $productsCount = $products->count();
+        $categories = Category::all();
+        return view('users.pages.shop', compact('products', 'productsCount', 'categories'));
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * show chi tiết sản phẩm theo slug
      */
     public function show(string $slug)
     {

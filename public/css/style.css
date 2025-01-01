@@ -706,7 +706,6 @@ ol {
 }
 
 .hero__search {
-	overflow: hidden;
 	margin-bottom: 30px;
 }
 
@@ -819,6 +818,84 @@ ol {
 	margin-bottom: 35px;
 }
 
+/* Category Dropdown Styles */
+.hero__search__categories {
+    position: relative;
+    cursor: pointer;
+    background: #fff;
+    padding: 13px 20px;
+    border-right: 1px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb;
+    width: 30%;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.hero__search__categories:hover {
+    background: #7fad39;
+    color: #fff;
+}
+
+.hero__search__categories .arrow_carrot-down {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+}
+
+.hero__search__categories:hover .arrow_carrot-down {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Dropdown Menu */
+.hero__search__categories-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.hero__search__categories:hover .hero__search__categories-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.hero__search__categories-menu ul {
+    padding: 0;
+    margin: 0;
+}
+
+.hero__search__categories-menu li {
+    list-style: none;
+}
+
+.hero__search__categories-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: #1c1c1c;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.hero__search__categories-menu li a:hover {
+    background: #f9f9f9;
+    color: #7fad39;
+    padding-left: 25px;
+}
 /*---------------------
   Categories
 -----------------------*/

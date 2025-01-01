@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\ContactManagerController;
 use App\Http\Controllers\Admin\DashboardManagerController;
 use App\Http\Controllers\Admin\StatisticalManagerController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Client\CartController;
 //client
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\BlogController;
@@ -19,7 +18,7 @@ use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Client\CartController2;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ReviewController;
 
@@ -81,11 +80,11 @@ Route::middleware('auth')->group(function () {
 
 // Cart routes
 Route::group(['prefix' => 'cart', 'middleware' => 'auth'], function () {
-    Route::get('/', [CartController2::class, 'index'])->name('cart.index');
-    Route::post('/items', [CartController2::class, 'addToCart'])->name('cart.add');
-    Route::patch('/items/{id}', [CartController2::class, 'updateQuantity'])->name('cart.update');
-    Route::delete('/items/{id}', [CartController2::class, 'removeItem'])->name('cart.remove');
-    Route::delete('/clear', [CartController2::class, 'clearCart'])->name('cart.clear');
+    Route::get('/', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/items', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::patch('/items/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
+    Route::delete('/items/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
+    Route::delete('/clear', [CartController::class, 'clearCart'])->name('cart.clear');
 })->name('cart.');
 
 // Admin Routes

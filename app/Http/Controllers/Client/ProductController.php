@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Client;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Comment;
+use App\Models\WebsiteInfo;
+
 
 use Illuminate\Http\Request;
 
@@ -117,6 +119,7 @@ class ProductController
         ];
 
         $userReview = null;
+        $websiteInfo = WebsiteInfo::first();
 
         return view('users.pages.shop-details', compact(
             'Product',
@@ -125,10 +128,11 @@ class ProductController
             'totalReviews',
             'averageRating',
             'ratingStats',
-            'userReview'
+            'userReview',
+            'websiteInfo',
         ));
     }
-    /**
+    /**0
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)

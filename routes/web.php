@@ -31,9 +31,9 @@ Route::resource('contact', ContactController::class)->names([
     'store' => 'contact.store',
 ]);
 
-Route::get('/', [HomeController::class, 'index'])->name('users.home');
+Route::get('/', action: [HomeController::class, 'index'])->name('users.home');
 
-Route::get('/shop', [ProductController::class, 'index'])->name('users.shop');
+Route::get('/shop', action: [ProductController::class, 'index'])->name('users.shop');
 
 Route::get('/shop-detail/{slug}', [ProductController::class, 'show'])->name('users.shop_details');
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');

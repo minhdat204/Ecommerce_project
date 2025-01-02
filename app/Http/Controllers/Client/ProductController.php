@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Comment;
-use App\Models\WebsiteInfo;
-
-
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class ProductController
@@ -119,7 +117,6 @@ class ProductController
         ];
 
         $userReview = null;
-        $websiteInfo = WebsiteInfo::first();
 
         return view('users.pages.shop-details', compact(
             'Product',
@@ -129,7 +126,6 @@ class ProductController
             'averageRating',
             'ratingStats',
             'userReview',
-            'websiteInfo',
         ));
     }
     /**0

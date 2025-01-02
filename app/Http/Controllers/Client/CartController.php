@@ -20,7 +20,8 @@ class CartController extends Controller
         $cart = $this->getOrCreateCart();
         $cartItems = CartItem::with('product')
             ->where('id_giohang', $cart->id_giohang)
-            ->get();
+            
+            ->simplePaginate(5);
 
         $total = $this->calculateTotal($cartItems);
         return view('users.pages.shoping-cart', compact('cartItems', 'total'));

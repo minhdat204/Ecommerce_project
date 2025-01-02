@@ -52,3 +52,7 @@
     </table>
 </div>
 
+    <div class="pagination">
+        {{ $cartItems->links() }}
+    </div>
+</br>

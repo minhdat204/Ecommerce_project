@@ -21,6 +21,7 @@
         </div>
     </section>
     <!-- Shopping Cart Section End -->
+
 @endsection
 
 @push('scripts')

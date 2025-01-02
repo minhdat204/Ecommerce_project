@@ -42,9 +42,9 @@
                             </th>
                             <th>ID</th>
                             <th>Tên Sản Phẩm</th>
-                            {{-- <th>Slug</th>
-                        <th>Mô tả</th>
-                        <th>Thông Tin Kỹ Thuật</th> --}}
+                            <th>Slug</th>
+                        {{--<th>Mô tả</th>
+                        <th>Thông Tin Kỹ Thuật</th>--}}
                             <th>Giá</th>
                             <th>Giá Khuyến Mãi</th>
                             <th>Đơn Vị Tính</th>
@@ -75,10 +75,10 @@
                                         {{ Str::limit($product->tensanpham, 30) }}
                                     </a>
                                 </td>
-                                {{-- <td>{{ $product->slug }}</td>
-                                <td title="{{ $product->mota }}">{{ Str::limit($product->mota, 50) }}</td>
+                                <td>{{ $product->slug }}</td>
+                                {{--<td title="{{ $product->mota }}">{{ Str::limit($product->mota, 50) }}</td>
                                 <td title="{{ $product->thongtin_kythuat }}">
-                                    {{ Str::limit($product->thongtin_kythuat, 50) }}</td> --}}
+                                    {{ Str::limit($product->thongtin_kythuat, 50) }}</td>--}}
                                 <td>{{ number_format($product->gia, 0, ',', '.') }} VNĐ</td>
                                 <td>{{ number_format($product->gia_khuyen_mai, 0, ',', '.') }} VNĐ</td>
                                 <td>{{ $product->donvitinh }}</td>

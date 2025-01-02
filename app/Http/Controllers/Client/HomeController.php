@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Client;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\WebsiteInfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class HomeController
@@ -77,8 +79,9 @@ class HomeController
         ->orderBy('so_luong_san_pham', 'desc')
         ->take(8)
         ->get();
+        $websiteInfo = WebsiteInfo::first();
 
 
-        return view('users.pages.home', compact('slider', 'best_selling_products', 'new_products', 'categories'));
+        return view('users.pages.home', compact('slider', 'best_selling_products', 'new_products', 'categories','websiteInfo'));
     }
 }

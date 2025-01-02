@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Client;
 
 use App\Models\Contact;
-use App\Models\WebsiteInfo;
 use Illuminate\Http\Request;
 
 class ContactController
@@ -35,7 +34,6 @@ class ContactController
             'sodienthoai' => 'nullable|string|max:20', 
             'noidung' => 'required|string',
         ]);
-        $websiteInfo = WebsiteInfo::first();
 
         Contact::create([
             'id_nguoidung'=>NULL,
@@ -45,7 +43,7 @@ class ContactController
             'noidung'=>$request->input('noidung'),
             'trangthai'=>'new',
         ]); 
-        return view('users.pages.contact',compact('websiteInfo'));
+        return view('users.pages.contact');
     }
 
     /**

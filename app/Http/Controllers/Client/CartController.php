@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
-use App\Models\WebsiteInfo;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,9 +40,8 @@ class CartController extends Controller
             $price = $item->product->gia_khuyen_mai ?? $item->product->gia;
             return $price * $item->soluong;
         });
-        $websiteInfo = WebsiteInfo::first();
 
-        return view('users.pages.shoping-cart', compact('cartItems', 'total','websiteInfo'));
+        return view('users.pages.shoping-cart', compact('cartItems', 'total'));
     }
     public function addToCart(Request $request)
     {

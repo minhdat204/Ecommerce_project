@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
-use App\Models\WebsiteInfo;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
@@ -29,9 +28,8 @@ class BlogController extends Controller
                 'pagination' => $posts->appends(['keyword' => $keyword])->links('pagination::bootstrap-4')->render(),
             ]);
         }
-        $websiteInfo = WebsiteInfo::first();
         // Trả về view cho request bình thường
-        return view('users.pages.blog', compact('posts','websiteInfo'));
+        return view('users.pages.blog', compact('posts'));
     }
 
     public function show($slug)

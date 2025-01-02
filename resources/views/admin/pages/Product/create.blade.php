@@ -1,28 +1,40 @@
 @extends('Admin.Layout.Layout')
 
 @section('content')
-    <div class="container">
-        <h1 class="my-4">Thêm Sản Phẩm Mới</h1>
+            <h1 class="my-4">Thêm Sản Phẩm Mới</h1>
 
-        <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+            <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-            <!-- Các trường thông tin sản phẩm -->
-            <div class="mb-3">
-                <label for="tensanpham" class="form-label">Tên Sản Phẩm</label>
-                <input type="text" class="form-control @error('tensanpham') is-invalid @enderror" id="tensanpham" name="tensanpham" value="{{ old('tensanpham') }}" required>
-                @error('tensanpham')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
+                <!-- Các trường thông tin sản phẩm -->
+                <div class="mb-3">
+                    <label for="tensanpham" class="form-label">Tên Sản Phẩm</label>
+                    <input type="text" class="form-control @error('tensanpham') is-invalid @enderror" id="tensanpham" name="tensanpham" value="{{ old('tensanpham') }}" required>
+                    @error('tensanpham')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
 
-            <div class="mb-3">
-                <label for="slug" class="form-label">Slug</label>
-                <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug" name="slug" value="{{ old('slug') }}" required>
-                @error('slug')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
+                <div class="mb-3">
+                    <label for="slug" class="form-label"></label>
+                    <input type="hidden" id="slug" name="slug">
+                </div>
+
+        <script>
+            // Chuyển tên sản phẩm thành slug tự động
+            document.getElementById('tensanpham').addEventListener('input', function () {
+                const slug = this.value
+                    .toLowerCase()
+                    .trim()
+                    .normalize('NFD') // Chuẩn hóa Unicode
+                    .replace(/[\u0300-\u036f]/g, '') // Loại bỏ dấu
+                    .replace(/đ/g, 'd') // Thay "đ" thành "d"
+                    .replace(/[^a-z0-9\s-]/g, '') // Loại bỏ ký tự đặc biệt
+                    .replace(/\s+/g, '-') // Thay khoảng trắng bằng dấu "-"
+                    .replace(/-+/g, '-'); // Loại bỏ dấu "-" liên tiếp
+                document.getElementById('slug').value = slug;
+            });
+        </script>
 
             <div class="mb-3">
                 <label for="mota" class="form-label">Mô Tả</label>
@@ -71,12 +83,12 @@
 
             <div class="mb-3">
                 <label for="donvitinh" class="form-label">Đơn Vị Tính</label>
-                <input type="text" class="form-control @error('donvitinh') is-invalid @enderror" id="donvitinh" name="donvitinh" value="{{ old('donvitinh') }}" required>
+                <input type="text" class="form-control @error('donvitinh') is-invalid @enderror" id="donvitinh" name="donvitinh" value="Kg" readonly required>
                 @error('donvitinh')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-
+            
             <div class="mb-3">
                 <label for="xuatxu" class="form-label">Xuất Xứ</label>
                 <input type="text" class="form-control @error('xuatxu') is-invalid @enderror" id="xuatxu" name="xuatxu" value="{{ old('xuatxu') }}" required>
@@ -103,22 +115,78 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-
-            <div class="mb-3">
-                <label for="luotxem" class="form-label">Lượt Xem</label>
-                <input type="number" class="form-control @error('luotxem') is-invalid @enderror" id="luotxem" name="luotxem" value="{{ old('luotxem') }}">
-                @error('luotxem')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
             <div class="mb-3">
                 <label for="images" class="form-label">Hình Ảnh</label>
-                <input type="file" class="form-control @error('images') is-invalid @enderror" id="images" name="images[]" multiple>
+                <input type="file" class="form-control @error('images') is-invalid @enderror" id="images" name="images[]" multiple accept="image/*">
                 @error('images')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+
+                <div id="preview-container" class="d-flex flex-wrap mt-3"></div>
             </div>
+
+            <script>
+                // Xử lý hiển thị hình ảnh xem trước
+                document.getElementById('images').addEventListener('change', function (event) {
+                    const files = event.target.files;
+                    const previewContainer = document.getElementById('preview-container');
+
+                    // Xóa hình ảnh xem trước hiện tại
+                    previewContainer.innerHTML = '';
+
+                    // Duyệt qua danh sách file được chọn
+                    Array.from(files).forEach((file, index) => {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+
+                            // Đọc file và hiển thị hình ảnh
+                            reader.onload = function (e) {
+                                const div = document.createElement('div');
+                                div.className = 'image-item position-relative me-3 mb-3';
+                                div.style.width = '100px';
+                                div.style.height = '100px';
+
+                                div.innerHTML = `
+                                    <img src="${e.target.result}" alt="Hình ảnh xem trước" class="img-thumbnail" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" data-index="${index}">
+                                        X
+                                    </button>
+                                `;
+
+                                previewContainer.appendChild(div);
+                            };
+
+                            reader.readAsDataURL(file);
+                        }
+                    });
+
+                    // Gán sự kiện xóa hình ảnh
+                    setTimeout(() => attachDeleteHandlers(files), 100);
+                });
+
+                function attachDeleteHandlers(files) {
+                    document.querySelectorAll('#preview-container button').forEach((btn) => {
+                        btn.addEventListener('click', function () {
+                            const index = parseInt(this.getAttribute('data-index'));
+                            const dt = new DataTransfer();
+
+                            // Lấy các file trừ file bị xóa
+                            Array.from(files).forEach((file, i) => {
+                                if (i !== index) {
+                                    dt.items.add(file);
+                                }
+                            });
+
+                            // Cập nhật danh sách file
+                            document.getElementById('images').files = dt.files;
+
+                            // Xóa hình ảnh xem trước
+                            this.closest('.image-item').remove();
+                        });
+                    });
+                }
+            </script>
+
 
             <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
         </form>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Comment;
+use App\Models\FavoriteProduct;
 
 use Illuminate\Http\Request;
 
@@ -128,6 +129,23 @@ class ProductController
             'userReview'
         ));
     }
+    public function favorite($id_sanpham)
+{
+    // Lấy id người dùng hiện tại từ Auth
+    $id_nguoidung = 1;
+
+    // Chuẩn bị dữ liệu để thêm vào bảng yêu thích
+    $data = [
+        'id_sanpham' => $id_sanpham,
+        'id_nguoidung' => $id_nguoidung,
+    ];
+
+    // Tạo mới bản ghi trong bảng Favorite
+    FavoriteProduct::create($data);
+
+    return redirect()->back()->with('ok', 'Sản phẩm đã được yêu thích.');
+}
+
     /**
      * Show the form for editing the specified resource.
      */

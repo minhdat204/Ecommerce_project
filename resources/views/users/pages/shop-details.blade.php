@@ -59,7 +59,11 @@
                             </div>
                         </div>
                         <button id="addToCartButton" onclick="addToCart({{ $Product->id_sanpham }}, {{Auth::check()}})" class="primary-btn no-border">ADD TO CART</button>
-                        <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+                        @if($Product->favorited)
+                            <a href="{{ route('users.shop_details.favorite' , $Product->id_sanpham)}}" class="heart-icon"><i class="fa-regular fa-heart"></i></span></a>
+                        @else
+                            <a href="{{ route('users.shop_details.favorite' , $Product->id_sanpham)}}" class="heart-icon"><i class="fa-solid fa-heart"></i></span></a>
+                        @endif
                         <ul>
                             <li><b>Availability</b>
                                 <span>

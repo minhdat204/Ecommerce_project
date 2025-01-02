@@ -40,6 +40,7 @@ Route::get('/shop', [ProductController::class, 'index'])->name('users.shop');
 Route::get('/shop/category/{slug}', [ProductController::class, 'showCategory'])->name('shop.category');
 
 Route::get('/shop-detail/{slug}', [ProductController::class, 'show'])->name('users.shop_details');
+Route::get('/favorite/{id_sanpham}', [ProductController::class, 'favorite'])->name('users.shop_details.favorite');
 Route::get('/blogs', [BlogController::class, 'index'])->name('users.blogs');
 Route::get('blogs/{slug}', [BlogController::class, 'show'])->name('user.blog_details');
 

@@ -100,4 +100,9 @@ class Product extends Model
         return $this->belongsToMany(Cart::class, 'san_pham_gio_hang', 'id_sanpham', 'id_giohang')
             ->using(CartItem::class);
     }
+    public function getFavoritedAttribute()
+    {
+        $favorited=FavoriteProduct::where(['id_sanpham'=> $id_sanpham, 'id_nguoidung'=>$this->id_nguoidung])->first();
+        return $favorited ? false : true;
+    }
 }

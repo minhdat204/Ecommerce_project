@@ -9,6 +9,7 @@
 
 'use strict';
 
+
 (function ($) {
 
     /*------------------
@@ -167,6 +168,7 @@
         maxamount = $("#maxamount"),
         minPrice = rangeSlider.data('min'),
         maxPrice = rangeSlider.data('max');
+
     rangeSlider.slider({
         range: true,
         min: minPrice,
@@ -175,10 +177,14 @@
         slide: function (event, ui) {
             minamount.val('$' + ui.values[0]);
             maxamount.val('$' + ui.values[1]);
+        },
+        stop: function(event, ui) {
+            handlePriceChange(event, ui);
         }
     });
     minamount.val('$' + rangeSlider.slider("values", 0));
     maxamount.val('$' + rangeSlider.slider("values", 1));
+
 
     /*--------------------------
         Select
@@ -363,12 +369,10 @@ window.addEventListener('pageshow', function(event) {
 // Dat: Hàm chọn danh mục cho tìm kiếm
 function selectCategory(element, id_category = null) {
     const categoryText = element.textContent.trim();
-    const categoriesDiv = document.querySelector('.hero__search__categories');
+    const categoriesDiv = document.querySelector('.hero__search__form');
     const categoryDisplay = categoriesDiv.querySelector('.category-display');
+    const categoryInput = categoriesDiv.querySelector('input[name="id_category"]');
 
     categoryDisplay.textContent = categoryText;
-    if(id_category != null) {
-        const categoryInput = categoriesDiv.querySelector('input[name="category"]');
-        categoryInput.value = id_category;
-    }
+    (id_category != null) ? categoryInput.value = id_category : categoryInput.value = '';
 }

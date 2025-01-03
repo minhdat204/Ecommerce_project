@@ -40,6 +40,7 @@ class CartController extends Controller
             $price = $item->product->gia_khuyen_mai ?? $item->product->gia;
             return $price * $item->soluong;
         });
+
         return view('users.pages.shoping-cart', compact('cartItems', 'total'));
     }
     public function addToCart(Request $request)

@@ -60,6 +60,8 @@ Route::get('/mau', function () {
 Route::get('/about-us', function () {
     return view('users.pages.about-us');
 });
+Route::get('/footer', [DashboardManagerController::class, 'showFooter']);
+
 
 
 Route::middleware('guest')->group(function () {

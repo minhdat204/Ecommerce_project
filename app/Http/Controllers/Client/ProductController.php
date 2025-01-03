@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Comment;
-
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class ProductController
@@ -125,10 +125,10 @@ class ProductController
             'totalReviews',
             'averageRating',
             'ratingStats',
-            'userReview'
+            'userReview',
         ));
     }
-    /**
+    /**0
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)

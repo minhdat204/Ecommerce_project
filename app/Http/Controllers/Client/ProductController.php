@@ -122,7 +122,9 @@ class ProductController
         $products = $query->paginate(9);
         //lấy tất cả danh mục
         $categories = Category::whereNull('id_danhmuc_cha')->with('childCategories')->get();
-        return view('users.pages.shop', compact('products', 'categories', 'category', 'productsCount'));
+         // ds sản phẩm mới
+        $new_products = $this->productService->getNewProducts(9);
+        return view('users.pages.shop', compact('products', 'categories', 'category', 'productsCount', 'new_products'));
     }
 
     public function search(Request $request)

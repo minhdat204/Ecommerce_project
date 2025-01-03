@@ -10,7 +10,7 @@ function removeItem(cartItemId){
 
             setTimeout(function(){
                 row.remove();
-                cartTotal.innerHTML = data.cartTotal + (data.discount ? ' (-' + ceil(data.discount) + ')' : '');
+                cartTotal.innerHTML = data.cartTotal + (data.discount ? ' (-' + data.discount + '%)' : '');
                 subTotal.innerHTML = data.subTotal;
                 //document.querySelectorAll('tbody tr') = $('tbody tr')
                 // kiểm nếu giỏ hàng rỗng
@@ -67,8 +67,8 @@ function clearCart(){
                     row.remove();
                 });
 
-                cartTotal.innerHTML = '0 VNĐ';
-                subTotal.innerHTML = '0 VNĐ';
+                cartTotal.innerHTML = '0đ';
+                subTotal.innerHTML = '0đ';
 
                 tbody.innerHTML = `
                     <tr>
@@ -96,7 +96,7 @@ function handleQuantityChange(input){
     fetchData('/cart/items/' + cartItemId, 'PATCH', {soluong: quantity}, function(data){
         if(data.success) {
             itemTotal.innerHTML = data.itemTotal;
-            cartTotal.innerHTML = data.cartTotal + (data.discount ? ' (-' + data.discount + ')' : '');
+            cartTotal.innerHTML = data.cartTotal + (data.discount ? ' (-' + data.discount + '%)' : '');
             subTotal.innerHTML = data.subTotal;
             notification("Đã cập nhật số lượng", 'success', 3000);
         }

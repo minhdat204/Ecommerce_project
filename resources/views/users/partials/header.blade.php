@@ -176,11 +176,24 @@
                                         <ul>
                                             <li><a onclick="selectCategory(this); return false;">All Categories</a></li>
                                             @foreach($categories as $category)
-                                                <li>
-                                                    <a onclick="selectCategory(this, {{$category->id_danhmuc}}); return false;"">
-                                                        {{ $category->tendanhmuc }}
-                                                    </a>
-                                                </li>
+                                                @if($category->id_danhmuc_cha == null)
+                                                    <li class="has-children">
+                                                        <a onclick="selectCategory(this, {{$category->id_danhmuc}}); return false;">
+                                                            {{ $category->tendanhmuc }}
+                                                        </a>
+                                                        @if($category->childCategories->count() > 0)
+                                                            <ul class="submenu">
+                                                                @foreach($category->childCategories as $child)
+                                                                    <li>
+                                                                        <a onclick="selectCategory(this, {{$child->id_danhmuc}}); return false;">
+                                                                            {{ $child->tendanhmuc }}
+                                                                        </a>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @endif
+                                                    </li>
+                                                @endif
                                             @endforeach
                                         </ul>
                                     </div>

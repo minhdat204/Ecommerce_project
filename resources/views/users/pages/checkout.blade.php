@@ -126,105 +126,103 @@
                 padding: 0;
             }
         }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 25px;
+            /* Tăng margin bottom */
+        }
+
+        .form-control {
+            padding: 1rem 0.75rem;
+            height: auto;
+            margin-bottom: 15px;
+            /* Thêm margin bottom cho input */
+        }
+
+        .form-label {
+            position: absolute;
+            top: 0;
+            left: 12px;
+            font-size: 12px;
+            color: #6c757d;
+            background: white;
+            padding: 0 5px;
+            margin: -8px 0 0;
+            pointer-events: none;
+        }
+
+        select.form-control {
+            padding: 0.375rem 0.75rem;
+            margin-bottom: 15px;
+            /* Thêm margin cho select */
+        }
+
+        .row {
+            margin-bottom: 20px;
+            /* Thêm margin cho row */
+        }
+
+        .payment-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 30px 0 20px;
+            /* Tăng margin top và bottom */
+        }
+
+        .form-check {
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            /* Tăng margin bottom */
+        }
+
+        /* Phần vận chuyển */
+        .mb-4 {
+            margin-bottom: 30px !important;
+            /* Tăng margin */
+        }
+
+        /* Khoảng cách cho phần thanh toán */
+        .form-group .form-check:last-child {
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            /* Thêm margin top */
+        }
+
+        /* Điều chỉnh khoảng cách cho phần đơn hàng */
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card .mb-3 {
+            margin-bottom: 1.5rem !important;
+        }
+
+        hr {
+            margin: 20px 0;
+            /* Tăng margin cho đường kẻ */
+        }
+
+        /* Tăng khoảng cách giữa các section */
+        .col-lg-7,
+        .col-lg-5 {
+            margin-bottom: 30px;
+        }
     </style>
     <div class="container mt-5 mb-5">
-        <style>
-            .form-group {
-                position: relative;
-                margin-bottom: 25px;
-                /* Tăng margin bottom */
-            }
-
-            .form-control {
-                padding: 1rem 0.75rem;
-                height: auto;
-                margin-bottom: 15px;
-                /* Thêm margin bottom cho input */
-            }
-
-            .form-label {
-                position: absolute;
-                top: 0;
-                left: 12px;
-                font-size: 12px;
-                color: #6c757d;
-                background: white;
-                padding: 0 5px;
-                margin: -8px 0 0;
-                pointer-events: none;
-            }
-
-            select.form-control {
-                padding: 0.375rem 0.75rem;
-                margin-bottom: 15px;
-                /* Thêm margin cho select */
-            }
-
-            .row {
-                margin-bottom: 20px;
-                /* Thêm margin cho row */
-            }
-
-            .payment-title {
-                font-size: 16px;
-                font-weight: bold;
-                margin: 30px 0 20px;
-                /* Tăng margin top và bottom */
-            }
-
-            .form-check {
-                border: 1px solid #dee2e6;
-                padding: 15px;
-                border-radius: 4px;
-                margin-bottom: 15px;
-                /* Tăng margin bottom */
-            }
-
-            /* Phần vận chuyển */
-            .mb-4 {
-                margin-bottom: 30px !important;
-                /* Tăng margin */
-            }
-
-            /* Khoảng cách cho phần thanh toán */
-            .form-group .form-check:last-child {
-                margin-bottom: 30px;
-            }
-
-            .btn-primary {
-                width: 100%;
-                padding: 12px;
-                margin-top: 20px;
-                /* Thêm margin top */
-            }
-
-            /* Điều chỉnh khoảng cách cho phần đơn hàng */
-            .card {
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-
-            .card .mb-3 {
-                margin-bottom: 1.5rem !important;
-            }
-
-            hr {
-                margin: 20px 0;
-                /* Tăng margin cho đường kẻ */
-            }
-
-            /* Tăng khoảng cách giữa các section */
-            .col-lg-7,
-            .col-lg-5 {
-                margin-bottom: 30px;
-            }
-        </style>
-
         <div class="row">
-            <!-- Phần code HTML giữ nguyên như cũ -->
-            <div class="col-lg-7">
-                <h5 class="mb-4"><strong>Thông Tin Giao Nhận Hàng</strong></h5>
-                <form action="#" method="POST">
+            <form action="{{ route('checkoutCOD') }}" method="POST">
+                @csrf
+                <div class="col-lg-7">
+                    <h5 class="mb-4"><strong>Thông Tin Giao Nhận Hàng</strong></h5>
                     <!-- Họ và tên -->
                     <div class="form-group">
                         <input type="text" id="name" name="name" class="form-control" placeholder=" ">
@@ -255,7 +253,7 @@
                                 <label for="address" class="form-label">Địa chỉ</label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <select id="city" class="form-control">
                                     <option value="">Chọn thành phố</option>
@@ -275,7 +273,7 @@
                                     <option value="">Chọn phường</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <!-- Phương thức vận chuyển -->
@@ -299,33 +297,149 @@
 
                     <!-- Nút đặt hàng -->
                     <button type="submit" class="btn btn-primary">Hoàn Tất Đặt Hàng</button>
-                </form>
-            </div>
-
-            <!-- Đơn hàng -->
-            <div class="col-lg-5">
-                <h5 class="mb-4"><strong>Đơn Hàng Của Bạn</strong></h5>
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between mb-3">
-                        <p>Vải Quất Farm size Regular - 125GR/ Hộp</p>
-                        <p><strong>60.000₫</strong></p>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Tạm tính:</span>
-                        <span>60.000₫</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span>Phí giao hàng:</span>
-                        <span>0₫</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                        <h6><strong>Tổng thanh toán</strong></h6>
-                        <h6><strong>60.000₫</strong></h6>
-                    </div>
                 </div>
-            </div>
+
+                <!-- Đơn hàng -->
+                <div class="col-lg-5">
+                    <h5 class="mb-4"><strong>Đơn Hàng Của Bạn</strong></h5>
+                    <div class="card p-3">
+                        @forelse($cartItems as $item)
+                            <div class="d-flex justify-content-between mb-3">
+                                <!-- Tên sản phẩm -->
+                                <p>
+                                    {{ $item->product->tensanpham }} -
+                                    {{ $item->soluong }} x
+                                    {{ number_format($item->product->gia_khuyen_mai ?? $item->product->gia, 0, ',', '.') }}₫
+                                </p>
+
+                                <!-- Tổng giá từng mục -->
+                                <p><strong>{{ number_format(($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong, 0, ',', '.') }}₫</strong>
+                                </p>
+
+                                <!-- Input ẩn cho thông tin sản phẩm -->
+                                <input type="hidden" name="cartItems[{{ $loop->index }}][id]"
+                                    value="{{ $item->id_sp_giohang }}">
+                                <input type="hidden" name="cartItems[{{ $loop->index }}][product_id]"
+                                    value="{{ $item->id_sanpham }}">
+                                <input type="hidden" name="cartItems[{{ $loop->index }}][quantity]"
+                                    value="{{ $item->soluong }}">
+                                <input type="hidden" name="cartItems[{{ $loop->index }}][price]"
+                                    value="{{ $item->product->gia_khuyen_mai ?? $item->product->gia }}">
+                            </div>
+                            <hr>
+                        @empty
+                            <p class="text-center">Giỏ hàng của bạn đang trống</p>
+                        @endforelse
+
+                        @if ($cartItems->isNotEmpty())
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Tổng tiền hàng:</span>
+                                <span>{{ number_format($cartItems->sum(fn($item) => ($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong), 0, ',', '.') }}₫</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span>Phí giao hàng:</span>
+                                <span>{{ number_format($totalShip, 0, ',', '.') }}đ</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <h6><strong>Tổng thanh toán</strong></h6>
+                                <h6><strong>{{ number_format($cartItems->sum(fn($item) => ($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong) + $totalShip, 0, ',', '.') }}₫</strong>
+                                </h6>
+                            </div>
+                            <input type="hidden" name="totalPrice"
+                                value="{{ $cartItems->sum(fn($item) => ($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong) }}">
+                            <input type="hidden" name="totalShip" value="{{ $totalShip }}">
+                            <input type="hidden" name="totalPayment"
+                                value="{{ $cartItems->sum(fn($item) => ($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong) + $totalShip }}">
+                        @endif
+            </form>
         </div>
     </div>
+    </div>
+    </div>
 @endsection
+{{-- @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkoutForm = document.querySelector('#checkout-form');
+
+            checkoutForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Validate form
+                const name = document.querySelector('#name').value;
+                const phone = document.querySelector('#phone').value;
+                const address = document.querySelector('#address').value;
+                const city = document.querySelector('#city').value;
+                const district = document.querySelector('#district').value;
+                const ward = document.querySelector('#ward').value;
+
+                if (!name || !phone || !address || !city || !district || !ward) {
+                    alert('Vui lòng điền đầy đủ thông tin giao hàng');
+                    return;
+                }
+
+                // Validate phone number
+                const phoneRegex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+                if (!phoneRegex.test(phone)) {
+                    alert('Số điện thoại không hợp lệ');
+                    return;
+                }
+
+                // Validate email if provided
+                const email = document.querySelector('#email').value;
+                if (email) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        alert('Email không hợp lệ');
+                        return;
+                    }
+                }
+
+                // Submit form if validation passes
+                this.submit();
+            });
+
+            // Load địa chỉ
+            const citySelect = document.querySelector('#city');
+            const districtSelect = document.querySelector('#district');
+            const wardSelect = document.querySelector('#ward');
+
+            // Gọi API để load dữ liệu tỉnh/thành phố
+            fetch('/api/cities')
+                .then(response => response.json())
+                .then(cities => {
+                    cities.forEach(city => {
+                        const option = new Option(city.name, city.id);
+                        citySelect.add(option);
+                    });
+                });
+
+            // Load quận/huyện khi chọn tỉnh/thành phố
+            citySelect.addEventListener('change', function() {
+                fetch(`/api/districts/${this.value}`)
+                    .then(response => response.json())
+                    .then(districts => {
+                        districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                        districts.forEach(district => {
+                            const option = new Option(district.name, district.id);
+                            districtSelect.add(option);
+                        });
+                    });
+            });
+
+            // Load phường/xã khi chọn quận/huyện
+            districtSelect.addEventListener('change', function() {
+                fetch(`/api/wards/${this.value}`)
+                    .then(response => response.json())
+                    .then(wards => {
+                        wardSelect.innerHTML = '<option value="">Chọn phường/xã</option>';
+                        wards.forEach(ward => {
+                            const option = new Option(ward.name, ward.id);
+                            wardSelect.add(option);
+                        });
+                    });
+            });
+        });
+    </script>
+@endpush --}}

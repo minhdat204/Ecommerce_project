@@ -23,7 +23,8 @@ class CartController extends Controller
             ->get();
 
         $total = $this->calculateTotal($cartItems);
-        return view('users.pages.shoping-cart', compact('cartItems', 'total'));
+        $totalShip = 15;
+        return view('users.pages.shoping-cart', compact('cartItems', 'total', 'totalShip'));
     }
 
     public function addToCart(Request $request)
@@ -77,7 +78,6 @@ class CartController extends Controller
                 'redirect_url' => route('cart.index'),
                 'cart_total' => '$' . number_format($total, 2)
             ]);
-
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Add to cart error: ' . $e->getMessage());
@@ -121,7 +121,6 @@ class CartController extends Controller
                 'item_total' => '$' . number_format($itemTotal, 2),
                 'cart_total' => $cartTotal
             ]);
-
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Update cart error: ' . $e->getMessage());
@@ -210,5 +209,3 @@ class CartController extends Controller
         }
     }
 }
-
-

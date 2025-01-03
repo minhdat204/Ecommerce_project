@@ -48,6 +48,8 @@ Route::get('/contact', function () {
 })->name('users.contact');
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('/checkoutCOD', [CheckoutController::class, 'checkoutCOD'])->name('checkoutCOD');
+
 // admin
 Route::get('/administrator', function () {
     return view('admin.pages.category'); // giao diện mẫu = Category

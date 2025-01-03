@@ -18,9 +18,9 @@
                 </td>
                 <td class="shoping__cart__price">
                     @if ($item->product->gia_khuyen_mai != 0)
-                        {{ number_format($item->product->gia_khuyen_mai, 0, ',', '.') }} VNĐ
+                        {{ number_format($item->product->gia_khuyen_mai, 0, ',', '.') }}đ
                     @else
-                        {{ number_format($item->product->gia, 0, ',', '.') }} VNĐ
+                        {{ number_format($item->product->gia, 0, ',', '.') }}đ
                     @endif
                 </td>
                 <td class="shoping__cart__quantity">
@@ -42,9 +42,9 @@
                 </td>
                 <td class="shoping__cart__total">
                     @if ($item->product->gia_khuyen_mai != 0)
-                        {{ number_format($item->product->gia_khuyen_mai * $item->soluong, 0, ',', '.') }} VNĐ
+                        {{ number_format($item->product->gia_khuyen_mai * $item->soluong, 0, ',', '.') }}đ
                     @else
-                        {{ number_format($item->product->gia * $item->soluong, 0, ',', '.') }} VNĐ
+                        {{ number_format($item->product->gia * $item->soluong, 0, ',', '.') }}đ
                     @endif
                 </td>
                 <td class="shoping__cart__item__close">

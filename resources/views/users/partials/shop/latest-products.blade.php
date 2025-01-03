@@ -13,9 +13,9 @@
                         <div class="latest-product__item__text">
                             <h6>{{ $product->tensanpham }}</h6>
                             @if($product->gia_khuyen_mai)
-                                <span>{{ number_format($product->gia_khuyen_mai, 0, ',', '.') }} VNĐ</span>
+                                <span>{{ number_format($product->gia_khuyen_mai, 0, ',', '.') }}đ</span>
                             @else
-                                <span>{{ number_format($product->gia, 0, ',', '.') }} VNĐ</span>
+                                <span>{{ number_format($product->gia, 0, ',', '.') }}đ</span>
                             @endif
                         </div>
                     </a>

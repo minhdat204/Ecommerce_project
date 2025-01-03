@@ -17,7 +17,7 @@
                 <div class="product__discount__item__text">
                     <span>{{$sanpham->category->tendanhmuc}}</span>
                     <h5><a href="{{route('users.shop_details', $sanpham->slug)}}">{{$sanpham->tensanpham}}</a></h5>
-                    <div class="product__item__price">${{$sanpham->gia_khuyen_mai}} <span>${{$sanpham->gia}}</span></div>
+                    <div class="product__item__price">{{number_format($sanpham->gia_khuyen_mai, 0, ',', '.')}}đ <span>{{number_format($sanpham->gia, 0, ',', '.')}}đ</span></div>
                     <div class="discount">Giảm đến {{floor(($sanpham->gia - $sanpham->gia_khuyen_mai) / $sanpham->gia * 100)}}%</div>
                 </div>
             </div>

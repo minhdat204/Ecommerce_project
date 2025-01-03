@@ -45,10 +45,10 @@
                     <h5>
                         <div class="product__item__price">
                             @if ($sanpham->gia_khuyen_mai != 0)
-                                {{ number_format($sanpham->gia_khuyen_mai, 0, ',', '.') }} VNĐ
-                                <span>{{ number_format($sanpham->gia, 0, ',', '.') }} VNĐ</span>
+                                {{ number_format($sanpham->gia_khuyen_mai, 0, ',', '.') }}đ
+                                <span>{{ number_format($sanpham->gia, 0, ',', '.') }}đ</span>
                             @else
-                                {{ number_format($sanpham->gia, 0, ',', '.') }} VNĐ
+                                {{ number_format($sanpham->gia, 0, ',', '.') }}đ
                             @endif
                         </div>
                     </h5>

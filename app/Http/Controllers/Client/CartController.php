@@ -47,7 +47,7 @@ class CartController extends Controller
 
         $total = $this->calculateTotal($cartItems);
 
-        $discount = ($subTotal - $total) / $subTotal * 100;
+        $discount = $subTotal > 0 ? ($subTotal - $total) / $subTotal * 100 : 0;
         return view('users.pages.shoping-cart', compact('cartItems', 'subTotal','total', 'discount'));
     }
     public function addToCart(Request $request)
@@ -109,12 +109,12 @@ class CartController extends Controller
 
         $total = $this->calculateTotal($cart->fresh()->cartItems);
 
-        $discount = ($subTotal - $total) / $subTotal * 100;
+        $discount = $subTotal > 0 ? ($subTotal - $total) / $subTotal * 100 : 0;
         return response()->json([
             'success' => true,
-            'cartTotal' => number_format($total, 0, ',', '.') . ' VNĐ',
-            'subTotal' => number_format($subTotal, 0, ',', '.') . ' VNĐ',
-            'discount' => ceil($discount)
+            'cartTotal' => number_format($total, 0, ',', '.') . 'đ',
+            'subTotal' => number_format($subTotal, 0, ',', '.') . 'đ',
+            'discount' => floor($discount)
         ]);
     }
     public function clearCart()
@@ -152,15 +152,15 @@ class CartController extends Controller
         $cart = $cartItem->cart;
         $cartTotal = $this->calculateTotal($cart->cartItems);
         $subTotal = $this->calculateSubTotal($cart->cartItems);
-        $discount = ($subTotal - $cartTotal) / $subTotal * 100;
+        $discount = $subTotal > 0 ? ($subTotal - $cartTotal) / $subTotal * 100 : 0;
         $itemTotal = ($cartItem->product->gia_khuyen_mai ?? $cartItem->product->gia) * $cartItem->soluong;
 
         return response()->json([
             'success' => true,
-            'cartTotal' => number_format($cartTotal, 0, ',', '.') . ' VNĐ',
-            'itemTotal' => number_format($itemTotal, 0, ',', '.') . ' VNĐ',
-            'subTotal' => number_format($subTotal, 0, ',', '.') . ' VNĐ',
-            'discount' => ceil($discount) . '%'
+            'cartTotal' => number_format($cartTotal, 0, ',', '.') . 'đ',
+            'itemTotal' => number_format($itemTotal, 0, ',', '.') . 'đ',
+            'subTotal' => number_format($subTotal, 0, ',', '.') . 'đ',
+            'discount' => floor($discount)
         ]);
     }
 }

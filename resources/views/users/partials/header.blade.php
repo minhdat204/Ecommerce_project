@@ -88,7 +88,7 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-lg-2">
+                <div class="col-lg-3">
                     <div class="header__logo">
                         <a href="{{ route('users.home') }}"><img src="{{ asset('img/logo.png') }}" alt=""></a>
                     </div>
@@ -98,12 +98,12 @@
                         <ul>
                             <li><a href="{{route('users.home')}}">Home</a></li>
                             <li class="active"><a href="{{route('users.shop')}}">Shop</a></li>
-                            <li><a href="{{route('users.blogs')}}">Blog</a></li>
+                            <li><a href="{{route('users.blog')}}">Blog</a></li>
                             <li><a href="{{route('users.contact')}}">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-4">
                     <div class="header__cart">
                         <ul>
                             <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
@@ -167,39 +167,12 @@
                 <div class="col-lg-12">
                     <div class="hero__search">
                         <div class="hero__search__form">
-                            <form action="{{route('shop.search')}}" method="GET">
-                                @csrf
+                            <form action="#">
                                 <div class="hero__search__categories">
-                                    <span class="category-display">All Categories</span>
+                                    All Categories
                                     <span class="arrow_carrot-down"></span>
-                                    <div class="hero__search__categories-menu">
-                                        <ul>
-                                            <li><a onclick="selectCategory(this); return false;">All Categories</a></li>
-                                            @foreach($categories as $category)
-                                                @if($category->id_danhmuc_cha == null)
-                                                    <li class="has-children">
-                                                        <a onclick="selectCategory(this, {{$category->id_danhmuc}}); return false;">
-                                                            {{ $category->tendanhmuc }}
-                                                        </a>
-                                                        @if($category->childCategories->count() > 0)
-                                                            <ul class="submenu">
-                                                                @foreach($category->childCategories as $child)
-                                                                    <li>
-                                                                        <a onclick="selectCategory(this, {{$child->id_danhmuc}}); return false;">
-                                                                            {{ $child->tendanhmuc }}
-                                                                        </a>
-                                                                    </li>
-                                                                @endforeach
-                                                            </ul>
-                                                        @endif
-                                                    </li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    </div>
                                 </div>
-                                <input type="hidden" name="id_category" value="">
-                                <input type="text" placeholder="What do you need?" name="keyword">
+                                <input type="text" placeholder="What do yo u need?">
                                 <button type="submit" class="site-btn">SEARCH</button>
                             </form>
                         </div>

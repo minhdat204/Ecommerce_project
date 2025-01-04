@@ -11,23 +11,19 @@
         </thead>
         <tbody>
             @forelse($cartItems as $item)
-            <tr data-id="{{ $item->id_sp_giohang }}" id="cart-item-{{ $item->id_sp_giohang }}">
-                <td class="shoping__cart__item" onclick="window.location='{{ route('users.shop_details', $item->product->slug) }}'" style="cursor: pointer;">
+            <tr data-id="{{ $item->id_sp_giohang }}">
+                <td class="shoping__cart__item">
                     <img src="{{ asset($item->product->thumbnail) }}" alt="{{ $item->product->tensanpham }}" width="100">
                     <h5>{{ $item->product->tensanpham }}</h5>
                 </td>
                 <td class="shoping__cart__price">
-                    @if ($item->product->gia_khuyen_mai != 0)
-                        {{ number_format($item->product->gia_khuyen_mai, 0, ',', '.') }}đ
-                    @else
-                        {{ number_format($item->product->gia, 0, ',', '.') }}đ
-                    @endif
+                    ${{ number_format($item->product->gia_khuyen_mai ?? $item->product->gia, 2) }}
                 </td>
                 <td class="shoping__cart__quantity">
                     <div class="quantity">
                         <div class="pro-qty">
                             <span class="dec qtybtn">-</span>
-                            <input
+                            <input type="number"
                                 value="{{ $item->soluong }}"
                                 min="1"
                                 max="{{ $item->product->soluong }}"
@@ -35,20 +31,16 @@
                                 data-id="{{ $item->id_sp_giohang }}"
                                 data-original-value="{{ $item->soluong }}"
                                 onchange="handleQuantityChange(this)"
-                                >
+                                readonly>
                             <span class="inc qtybtn">+</span>
                         </div>
                     </div>
                 </td>
                 <td class="shoping__cart__total">
-                    @if ($item->product->gia_khuyen_mai != 0)
-                        {{ number_format($item->product->gia_khuyen_mai * $item->soluong, 0, ',', '.') }}đ
-                    @else
-                        {{ number_format($item->product->gia * $item->soluong, 0, ',', '.') }}đ
-                    @endif
+                    ${{ number_format(($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong, 2) }}
                 </td>
                 <td class="shoping__cart__item__close">
-                    <span class="icon_close" onclick="removeItem({{ $item->id_sp_giohang }})"></span>
+                    <span class="icon_close" onclick="handleRemoveItem(this)"></span>
                 </td>
             </tr>
             @empty
@@ -60,3 +52,7 @@
     </table>
 </div>
 
+    <div class="pagination">
+        {{ $cartItems->links() }}
+    </div>
+</br>

@@ -2,9 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Category;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,11 +19,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('users.partials.header', function ($view) {
-            $categories = Category::whereNull('id_danhmuc_cha')
-                ->with('childCategories')
-                ->get();
-            $view->with('categories', $categories);
-        });
+        //
     }
 }

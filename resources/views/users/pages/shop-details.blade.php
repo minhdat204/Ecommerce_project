@@ -1,6 +1,6 @@
 @extends('users.layouts.layout')
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/comment.css') }}" type="text/css">
+<link rel="stylesheet" href="{{asset('css/comment.css')}}" type="text/css">
 @endpush
 @section('content')
     <!-- Product Details Section Begin -->
@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
-                        <h3>{{ $Product->tensanpham }}</h3>
+                        <h3>{{$Product->tensanpham}}</h3>
                         <!-- Phần chấm điểm -->
                         <div class="product__details__rating">
                             <i class="fa fa-star"></i>
@@ -39,32 +39,33 @@
                         </div>
                         <!-- phần giá -->
                         <div class="product__details__price">
-                            @if ($Product->gia_khuyen_mai)
-                                ${{ $Product->gia_khuyen_mai }}
-                                <span>${{ $Product->gia }}</span>
+                            @if($Product->gia_khuyen_mai)
+                                ${{$Product->gia_khuyen_mai}}
+                                <span>${{$Product->gia}}</span>
                             @else
-                                ${{ $Product->gia }}
+                                ${{$Product->gia}}
                             @endif
                         </div>
                         <!-- phần mô tả -->
-                        <p>{{ $Product->mota }}</p>
+                        <p>{{$Product->mota}}</p>
                         <div class="product__details__quantity">
                             <div class="quantity">
                                 <div class="pro-qty">
                                     <span class="dec qtybtn">-</span>
-                                    <input id="quantity" value="1" min="1"
-                                        max="{{ $Product->soluong }}">
+                                    <input type="text" id="quantity" value="1"
+                                           min="1" max="{{$Product->soluong}}"
+                                           readonly>
                                     <span class="inc qtybtn">+</span>
                                 </div>
                             </div>
                         </div>
-                        <button id="addToCartButton" onclick="addToCart({{ $Product->id_sanpham }}, {{Auth::check()}})" class="primary-btn no-border">ADD TO CART</button>
+                        <button onclick="addToCart()" class="primary-btn no-border">ADD TO CART</button>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Availability</b>
                                 <span>
-                                    @if ($Product->soluong > 0)
-                                        <span class="stock-status in-stock">In Stock ({{ $Product->soluong }} items)</span>
+                                    @if($Product->soluong > 0)
+                                        <span class="stock-status in-stock">In Stock ({{$Product->soluong}} items)</span>
                                     @else
                                         <span class="stock-status out-of-stock">Out of Stock</span>
                                     @endif
@@ -113,7 +114,7 @@
                                         elementum sed sit amet dui. Vestibulum ante ipsum primis in faucibus orci luctus
                                         et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam
                                         vel, ullamcorper sit amet ligula. Proin eget tortor risus.</p>
-                                    <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
+                                        <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
                                         ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
                                         elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
                                         porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
@@ -146,14 +147,7 @@
                             </div>
                             <div class="tab-pane" id="tabs-3" role="tabpanel">
                                 <!-- phần bình luận -->
-                                @include('users.partials.shop-details.comment', [
-                                    'product' => $Product,
-                                    'reviews' => $reviews,
-                                    'totalReviews' => $totalReviews,
-                                    'averageRating' => $averageRating,
-                                    'ratingStats' => $ratingStats,
-                                    'userReview' => $userReview,
-                                ])
+                                @include('users.partials.shop-details.comment')
                             </div>
                         </div>
                     </div>
@@ -174,25 +168,66 @@
                 </div>
             </div>
             <div class="row">
-                @foreach ($relatedProducts as $product)
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="{{ asset('img/product/product-1.jpg') }}">
-                                <ul class="product__item__pic__hover">
-                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="product__item__text">
-                                <h6><a
-                                        href="{{ route('users.shop_details', $product->slug) }}">{{ $product->tensanpham }}</a>
-                                </h6>
-                                <h5>${{ $product->gia }}</h5>
-                            </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="{{ asset('img/product/product-1.jpg') }}">
+                            <ul class="product__item__pic__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Crab Pool Security</a></h6>
+                            <h5>$30.00</h5>
                         </div>
                     </div>
-                @endforeach
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="{{ asset('img/product/product-2.jpg') }}">
+                            <ul class="product__item__pic__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Crab Pool Security</a></h6>
+                            <h5>$30.00</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="{{ asset('img/product/product-3.jpg') }}">
+                            <ul class="product__item__pic__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Crab Pool Security</a></h6>
+                            <h5>$30.00</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="{{ asset('img/product/product-7.jpg') }}">
+                            <ul class="product__item__pic__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Crab Pool Security</a></h6>
+                            <h5>$30.00</h5>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -200,44 +235,43 @@
 @endsection
 
 @push('scripts')
-    {{-- <script>
-        function addToCart() {
-            @if (!Auth::check())
-                window.location.href = "{{ route('login') }}";
-                return;
-            @endif
+<script>
+function addToCart() {
+    @if(!Auth::check())
+        window.location.href = "{{ route('login') }}";
+        return;
+    @endif
 
-            const quantity = parseInt($('#quantity').val());
-            const productId = '{{ $Product->id_sanpham }}';
+    const quantity = parseInt($('#quantity').val());
+    const productId = '{{$Product->id_sanpham}}';
 
-            $.ajax({
-                url: '{{ route('cart.add') }}',
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                data: {
-                    id_sanpham: productId,
-                    soluong: quantity
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // Update cart count in header if needed
+    $.ajax({
+        url: '{{ route('cart.add') }}',
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        data: {
+            id_sanpham: productId,
+            soluong: quantity
+        },
+        success: function(response) {
+            if (response.success) {
+                // Update cart count in header if needed
 
-                        // Show success message
-                        alert(response.message);
-                        // Redirect to cart page
-                        window.location.href = response.redirect_url;
-                    } else {
-                        alert(response.message || 'Error adding product to cart');
-                    }
-                },
-                error: function(xhr) {
-                    console.error('Cart error:', xhr);
-                    alert('Error adding product to cart. Please try again.');
-                }
-            });
+                // Show success message
+                alert(response.message);
+                // Redirect to cart page
+                window.location.href = response.redirect_url;
+            } else {
+                alert(response.message || 'Error adding product to cart');
+            }
+        },
+        error: function(xhr) {
+            console.error('Cart error:', xhr);
+            alert('Error adding product to cart. Please try again.');
         }
-    </script> --}}
-    <script src="{{ asset('js/shop-details.js') }}"></script>
+    });
+}
+</script>
 @endpush

@@ -21,11 +21,12 @@
         </div>
     </section>
     <!-- Shopping Cart Section End -->
+
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/shopping-cart.js') }}"></script>
-{{-- <script>
+
+<script>
 function handleQuantityChange(input) {
     const $input = $(input);
     const $row = $input.closest('tr');
@@ -120,5 +121,5 @@ function updateCartCount(count) {
 function updateCartTotal(total) {
     $('.header__cart__price span').text(total);
 }
-</script> --}}
+</script>
 @endpush

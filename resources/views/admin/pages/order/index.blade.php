@@ -42,9 +42,9 @@
                         </th>
                         <th>STT</th>
                         <th>Mã Đơn Hàng</th>
-                        {{-- <th>Tổng Tiền Hàng</th>
+                        <th>Tổng Tiền Hàng</th>
                         <th>Tổng Giảm Giá</th>
-                        <th>Phí Vận Chuyển</th> --}}
+                        <th>Phí Vận Chuyển</th>
                         <th>Tổng Thanh Toán</th>
                         <th>Phương Thức Thanh Toán</th>
                         <th>Trạng Thái Thanh Toán</th>
@@ -72,9 +72,9 @@
 
                             <td>{{ $stt++ }}</td>
                             <td>{{ $order->ma_don_hang }}</td>
-                            {{-- <td>{{ number_format($order->tong_tien_hang, 0, ',', '.') }} đ</td>
+                            <td>{{ number_format($order->tong_tien_hang, 0, ',', '.') }} đ</td>
                             <td>{{ number_format($order->tong_giam_gia, 0, ',', '.') }} đ</td>
-                            <td>{{ number_format($order->phi_van_chuyen, 0, ',', '.') }} đ</td> --}}
+                            <td>{{ number_format($order->phi_van_chuyen, 0, ',', '.') }} đ</td>
                             <td>{{ number_format($order->tong_thanh_toan, 0, ',', '.') }} đ</td>
                             <td>{{ $order->pt_thanhtoan }}</td>
                             <td>
@@ -108,20 +108,46 @@
                                 </form>
                             </td>
                             <td>
-                                <a href="#deleteOrderModal-{{ $order->id_donhang }}" class="delete" data-toggle="modal">
+                                <a href="#editOrderModal-{{ $order->id }}" class="edit" data-toggle="modal">
+                                    <i class="material-icons" data-toggle="tooltip" title="Sửa">&#xE254;</i>
+                                </a>
+                                <a href="#deleteOrderModal-{{ $order->id }}" class="delete" data-toggle="modal">
                                     <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
                                 </a>
                             </td>
                         </tr>
 
-
-                        <!-- Modal Xóa Đơn Hàng -->
-                        <div id="deleteOrderModal-{{ $order->id_donhang }}" class="modal fade">
+                        {{-- <!-- Modal Sửa Đơn Hàng -->
+                        <div id="editOrderModal-{{ $order->id }}" class="modal fade">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form action="{{ route('admin.order.destroy', $order) }}" method="POST">
+                                    <form action="{{ route('orders.update', $order->id) }}" method="POST">
                                         @csrf
-                                        @method('DELETE') <!-- Chỉnh sửa từ POST thành DELETE -->
+                                        @method('PUT')
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Sửa Đơn Hàng</h4>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="button" class="btn btn-default" data-dismiss="modal"
+                                                value="Hủy">
+                                            <input type="submit" class="btn btn-info" value="Lưu">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div> --}}
+
+                        {{-- <!-- Modal Xóa Đơn Hàng -->
+                        <div id="deleteOrderModal-{{ $order->id }}" class="modal fade">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form action="{{ route('orders.destroy', $order->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
                                         <div class="modal-header">
                                             <h4 class="modal-title">Xóa Đơn Hàng</h4>
                                             <button type="button" class="close" data-dismiss="modal"
@@ -139,9 +165,8 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     @endforeach
-                </tbody>
                 </tbody>
             </table>
 

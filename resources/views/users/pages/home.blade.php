@@ -6,8 +6,14 @@
 @endpush
 @push('scripts')
     <script src="{{asset('js/slideshow.js')}}"></script>
+    <script src="{{ asset('js/addtoCart.js') }}"></script>
+    <script>
+        const csrfToken = '{{ csrf_token() }}';
+        const loginUrl = '{{ route('login') }}';
+        const cartAddUrl = '{{ route('cart.add') }}';
+        const userAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
+    </script>
 @endpush
-
 @section('content')
 
     @include('users.partials.home.slide-banner')

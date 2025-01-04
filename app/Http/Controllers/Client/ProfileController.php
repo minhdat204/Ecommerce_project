@@ -9,7 +9,6 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -19,20 +18,20 @@ class ProfileController extends Controller
     public function index()
     {
 
-        $user = Auth::id();
+        $user = User::findOrFail(3);
         // Đây có thể được thay thế bằng Auth::user() :
         // Lấy các sản phẩm yêu thích của người dùng (ID = 4)
-        $favorites = FavoriteProduct::where('id_nguoidung', $user)
+        $favorites = FavoriteProduct::where('id_nguoidung', $user->id_nguoidung)
             ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
             ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia')
             ->paginate(10);
         $scores = Comment::with('product')
-            ->where('id_nguoidung', $user)
+            ->where('id_nguoidung', $user->id_nguoidung)
             ->select('noidung', 'id_sanpham', 'danhgia')
             ->paginate(10);
         // Lấy danh sách đơn hàng
         $orders = Order::with(['orderDetails.product'])
-            ->where('id_nguoidung', $user)
+            ->where('id_nguoidung', $user->id_nguoidung)
             ->paginate(10);
         return view('users.pages.profile', compact('user', 'favorites', 'scores', 'orders'));
     }

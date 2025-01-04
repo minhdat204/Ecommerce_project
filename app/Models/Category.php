@@ -37,13 +37,4 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'id_danhmuc_cha', 'id_danhmuc');
     }
-
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'slug'
-            ]
-        ];
-    }
 }

@@ -3,7 +3,7 @@
 </div>
 <div class="row">
     <div class="product__discount__slider owl-carousel">
-        @foreach ($productsDiscount as $sanpham)
+        @foreach ($ProductsDiscount as $sanpham)
         <div class="col-lg-4">
             <div class="product__discount__item">
                 <div class="product__discount__item__pic set-bg" data-setbg="img/product/discount/pd-1.jpg">
@@ -11,14 +11,16 @@
                     <ul class="product__item__pic__hover">
                         <li><a href="#"><i class="fa fa-heart"></i></a></li>
                         <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                        <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                        <li>
+                            <a href="#" onclick="addToCart(this)" class="add-to-cart" data-id="{{ $sanpham->id_sanpham }}" data-quantity="1">
+                                <i class="fa fa-shopping-cart"></i>
+                            </a>
                     </ul>
                 </div>
                 <div class="product__discount__item__text">
                     <span>{{$sanpham->category->tendanhmuc}}</span>
                     <h5><a href="{{route('users.shop_details', $sanpham->slug)}}">{{$sanpham->tensanpham}}</a></h5>
-                    <div class="product__item__price">{{number_format($sanpham->gia_khuyen_mai, 0, ',', '.')}}đ <span>{{number_format($sanpham->gia, 0, ',', '.')}}đ</span></div>
-                    <div class="discount">Giảm đến {{floor(($sanpham->gia - $sanpham->gia_khuyen_mai) / $sanpham->gia * 100)}}%</div>
+                    <div class="product__item__price">${{$sanpham->gia_khuyen_mai}} <span>${{$sanpham->gia}}</span></div>
                 </div>
             </div>
         </div>

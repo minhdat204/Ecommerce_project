@@ -1,6 +1,7 @@
 function removeItem(cartItemId){
     const row = document.querySelector('#cart-item-' + cartItemId);
     const cartTotal = document.getElementById('total');
+    const subTotal = document.getElementById('subtotal');
     fetchData('/cart/items/' + cartItemId, 'DELETE', {}, function(data){
         if(data.success) {
             row.style.transition = 'opacity 0.5s';//OR: all 0.5s ease
@@ -9,7 +10,8 @@ function removeItem(cartItemId){
 
             setTimeout(function(){
                 row.remove();
-                cartTotal.innerHTML = data.cartTotal;
+                cartTotal.innerHTML = data.cartTotal + (data.discount ? ' (-' + data.discount + '%)' : '');
+                subTotal.innerHTML = data.subTotal;
                 //document.querySelectorAll('tbody tr') = $('tbody tr')
                 // kiểm nếu giỏ hàng rỗng
                 if($('tbody tr').length === 0) {
@@ -38,6 +40,7 @@ function clearCart(){
     const tbody = document.querySelector('tbody');
 
     const cartTotal = document.getElementById('total');
+    const subTotal = document.getElementById('subtotal');
 
     // Show loading
     const button = document.querySelector('#deleteCart');
@@ -64,7 +67,8 @@ function clearCart(){
                     row.remove();
                 });
 
-                cartTotal.innerHTML = '0.00 VNĐ';
+                cartTotal.innerHTML = '0đ';
+                subTotal.innerHTML = '0đ';
 
                 tbody.innerHTML = `
                     <tr>
@@ -88,10 +92,12 @@ function handleQuantityChange(input){
     const cartItemId = row.getAttribute('data-id');
     const itemTotal = row.querySelector('.shoping__cart__total');
     const cartTotal = document.getElementById('total');
+    const subTotal = document.getElementById('subtotal');
     fetchData('/cart/items/' + cartItemId, 'PATCH', {soluong: quantity}, function(data){
         if(data.success) {
             itemTotal.innerHTML = data.itemTotal;
-            cartTotal.innerHTML = data.cartTotal;
+            cartTotal.innerHTML = data.cartTotal + (data.discount ? ' (-' + data.discount + '%)' : '');
+            subTotal.innerHTML = data.subTotal;
             notification("Đã cập nhật số lượng", 'success', 3000);
         }
         else {
@@ -99,6 +105,7 @@ function handleQuantityChange(input){
         }
     });
 }
+
 
 
 // function removeItem(cartItemId){

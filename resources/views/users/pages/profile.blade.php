@@ -113,9 +113,8 @@
                                         <h5 class="card-title">{{ $favorite->tensanpham }}</h5>
                                         <p class="card-text text-muted">{{ number_format($favorite->gia, 0, ',', '.') }}đ
                                         </p>
-                                        <div class="d-flex justify-content-between">
-                                            <button class="btn btn-sm btn-primary">Redeem Again</button>
-                                            <button class="btn btn-sm btn-secondary">Contact Seller</button>
+                                        <div class="d-flex justify-content-end">
+                                            <button class="btn btn-sm btn-success">Thêm sản phẩm vào giỏ</button>
                                         </div>
                                     </div>
                                 </div>
@@ -147,9 +146,8 @@
                                             {{ number_format($score->product->gia, 0, ',', '.') }}đ</p>
                                         <p><strong>Điểm đánh giá:</strong> {{ $score->danhgia }}</p>
                                         <p><strong>Nội dung:</strong> {{ $score->noidung }}</p>
-                                        <div class="d-flex justify-content-between">
-                                            <button class="btn btn-sm btn-primary">Redeem Again</button>
-                                            <button class="btn btn-sm btn-secondary">Contact Seller</button>
+                                        <div class="d-flex justify-content-end">
+                                            <button class="btn btn-sm btn-primary">Chi tiết sản phẩm</button>
                                         </div>
                                     </div>
                                 </div>

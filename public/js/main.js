@@ -9,6 +9,7 @@
 
 'use strict';
 
+
 (function ($) {
 
     /*------------------
@@ -167,18 +168,23 @@
         maxamount = $("#maxamount"),
         minPrice = rangeSlider.data('min'),
         maxPrice = rangeSlider.data('max');
+
     rangeSlider.slider({
         range: true,
         min: minPrice,
         max: maxPrice,
         values: [minPrice, maxPrice],
         slide: function (event, ui) {
-            minamount.val('$' + ui.values[0]);
-            maxamount.val('$' + ui.values[1]);
+            minamount.val(ui.values[0].toLocaleString('vi-VN') + 'đ');
+            maxamount.val(ui.values[1].toLocaleString('vi-VN') + 'đ');
+        },
+        stop: function(event, ui) {
+            handlePriceChange(event, ui);
         }
     });
-    minamount.val('$' + rangeSlider.slider("values", 0));
-    maxamount.val('$' + rangeSlider.slider("values", 1));
+    minamount.val(rangeSlider.slider("values", 0).toLocaleString('vi-VN') + 'đ');
+    maxamount.val(rangeSlider.slider("values", 1).toLocaleString('vi-VN') + 'đ');
+
 
     /*--------------------------
         Select
@@ -223,3 +229,150 @@
     });
 
 })(jQuery);
+
+//Dat: hàm tái sử dụng fetch api
+function fetchData(url, method, body = null, successCallback, errorCallback, finallyCallback) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+    //thiết lập mặc định các option cho fetch
+    const options = {
+        method,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    };
+
+    //nếu là phương thức ngoài get thì thêm header và body
+    if (method !== 'GET' && body) {
+        options.headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(body);
+    }
+
+    fetch(url, options)
+    .then(response => {
+        if (!response.ok) {
+            notification('Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
+            throw new Error('có lỗi xảy ra, vui lòng thử lại sau.');
+        }
+        return response.json();
+    })
+    .then(data => successCallback(data))
+    .catch(error => {
+        console.error('Error:', error);
+        notification('Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
+        if(errorCallback) errorCallback(error);
+    })
+    .finally(() => {
+        if(finallyCallback) finallyCallback();
+    });
+}
+
+//cải tiến hàm fetch api
+async function fetchData2(url, method, body = null, successCallback, errorCallback, finallyCallback) {
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+        // Thiết lập mặc định các option cho fetch
+        const options = {
+            method,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+            },
+        };
+
+        // Nếu là phương thức ngoài GET thì thêm header và body
+        if (method !== 'GET' && body) {
+            options.headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+        }
+
+        // Gửi yêu cầu fetch
+        const response = await fetch(url, options);
+
+        // Kiểm tra phản hồi
+        if (!response.ok) {
+            const errorMessage = `Lỗi ${response.status}: ${response.statusText}`;
+            console.error('Fetch Error:', errorMessage);
+            notification(errorMessage, 'error');
+            throw new Error(errorMessage);
+        }
+
+        // Chuyển đổi dữ liệu sang JSON
+        const data = await response.json();
+        if (successCallback) successCallback(data);
+    } catch (error) {
+        console.error('Error:', error);
+        notification('Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
+        if (errorCallback) errorCallback(error);
+    }
+    finally {
+        if (finallyCallback) finallyCallback();
+    }
+}
+
+// Dat: Hàm hiển thị thông báo
+function notification(message, type = 'error', duration = 3000, onClick = null) {
+    const bgColors = {
+        error: '#ff6b6b',
+        success: '#7fad39',
+        warning: '#ffd43b',
+        info: '#4dabf7'
+    };
+
+    Toastify({
+        text: message,
+        duration: duration,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: bgColors[type] || bgColors.error,
+        },
+        onClick: onClick || function(){}
+    }).showToast();
+}
+
+// Dat: lắng nghe sự kiện pageshow để reload trang khi dùng nút back/forward
+window.addEventListener('pageshow', function(event) {
+    // Define paths that need reload
+    const pathsNeedReload = [
+        '/cart',
+        // Add more paths as needed
+    ];
+
+    // Get current path
+    const currentPath = window.location.pathname;
+
+    // Check if current path needs reload
+    if (!pathsNeedReload.includes(currentPath)) {
+        return; // Exit if not a path that needs reload
+    }
+
+    // Check back-forward cache
+    if (event.persisted) {
+        window.location.reload();
+        return;
+    }
+
+    // Check navigation type
+    if (window.performance && window.performance.getEntriesByType) {
+        const navigationEntries = window.performance.getEntriesByType('navigation');
+        if (navigationEntries.length > 0) {
+            const navigationType = navigationEntries[0].type;
+            if (navigationType === 'back_forward') {
+                window.location.reload();
+            }
+        }
+    }
+});
+
+
+// Dat: Hàm chọn danh mục cho tìm kiếm
+function selectCategory(element, id_category = null) {
+    const categoryText = element.textContent.trim();
+    const categoriesDiv = document.querySelector('.hero__search__form');
+    const categoryDisplay = categoriesDiv.querySelector('.category-display');
+    const categoryInput = categoriesDiv.querySelector('input[name="id_category"]');
+
+    categoryDisplay.textContent = categoryText;
+    (id_category != null) ? categoryInput.value = id_category : categoryInput.value = '';
+}

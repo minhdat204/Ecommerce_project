@@ -14,7 +14,7 @@ class BlogController extends Controller
     public function index(Request $request)
         {
             // Lấy từ khóa tìm kiếm từ request
-            $keyword = $request->input('keyword'); 
+            $keyword = $request->input('keyword');
 
             // Truy vấn và phân trang, áp dụng tìm kiếm nếu có keyword
             $posts = Post::query()

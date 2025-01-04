@@ -52,13 +52,13 @@
                             <div class="quantity">
                                 <div class="pro-qty">
                                     <span class="dec qtybtn">-</span>
-                                    <input type="text" id="quantity" value="1" min="1"
-                                        max="{{ $Product->soluong }}" readonly>
+                                    <input id="quantity" value="1" min="1"
+                                        max="{{ $Product->soluong }}">
                                     <span class="inc qtybtn">+</span>
                                 </div>
                             </div>
                         </div>
-                        <button onclick="addToCart()" class="primary-btn no-border">ADD TO CART</button>
+                        <button id="addToCartButton" onclick="addToCart({{ $Product->id_sanpham }}, {{Auth::check()}})" class="primary-btn no-border">ADD TO CART</button>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Availability</b>
@@ -200,7 +200,7 @@
 @endsection
 
 @push('scripts')
-    <script>
+    {{-- <script>
         function addToCart() {
             @if (!Auth::check())
                 window.location.href = "{{ route('login') }}";
@@ -238,5 +238,6 @@
                 }
             });
         }
-    </script>
+    </script> --}}
+    <script src="{{ asset('js/shop-details.js') }}"></script>
 @endpush

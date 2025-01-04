@@ -38,6 +38,7 @@ Route::get('/', [HomeController::class, 'index'])->name('users.home');
 
 Route::get('/shop', [ProductController::class, 'index'])->name('users.shop');
 Route::get('/shop/category/{slug}', [ProductController::class, 'showCategory'])->name('shop.category');
+Route::get('/shop/search', [ProductController::class, 'search'])->name('shop.search');
 
 Route::get('/shop-detail/{slug}', [ProductController::class, 'show'])->name('users.shop_details');
 Route::get('/blogs', [BlogController::class, 'index'])->name('users.blogs');

@@ -11,7 +11,7 @@
                         <span>FEATURED PRODUCT</span>
                     @endif
                     <h2>{{ $product->tensanpham }}</h2>
-                    <p>{{ Str::limit($product->mota, 50) }}</p>
+                    <p>{{ Str::limit($product->mota ?? 'No description available', 50) }}</p>
                     <a href="{{ route('users.shop_details', $product->slug) }}" class="primary-btn">SHOP NOW</a>
                 </div>
             </div>

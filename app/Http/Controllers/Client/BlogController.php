@@ -28,7 +28,6 @@ class BlogController extends Controller
                 'pagination' => $posts->appends(['keyword' => $keyword])->links('pagination::bootstrap-4')->render(),
             ]);
         }
-
         // Trả về view cho request bình thường
         return view('users.pages.blog', compact('posts'));
     }

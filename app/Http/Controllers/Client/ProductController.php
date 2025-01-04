@@ -5,15 +5,78 @@ namespace App\Http\Controllers\Client;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Comment;
-use App\Models\FavoriteProduct;
 
 use Illuminate\Http\Request;
 
 class ProductController
 {
     /**
-     * Display a listing of the resource.
+     * QUY TẮT
+     * 1. phân trang 9 sản phẩm 1 trang
+     * 2. comment rõ ràng phần mình làm
+     * 3. không dược sửa logic của các hàm đã có nếu chưa trao đổi với nhau
      */
+
+     protected $productService;
+     // Inject ProductService vào controller để sử dụng các hàm trong đó (vd như lấy sản phẩm mới, sản phẩm bán chạy, )
+     public function __construct(ProductService $productService)
+     {
+         $this->productService = $productService;
+     }
+
+    // lấy ds danh mục theo id hoặc slug
+    private function getCategoryByIdOrSlug($category)
+    {
+        if (is_numeric($category)) {
+            return Category::find($category);
+        }
+        elseif (is_string($category)) {
+            return Category::where('slug', $category)->first();
+        }
+        elseif (is_null($category)) {
+            throw new \InvalidArgumentException('Category cannot be null.');
+        }
+        else {
+            throw new \InvalidArgumentException('Invalid category type. Expected integer ID or string slug.');
+        }
+    }
+    /*
+    lấy ds danh mục con:
+    nhấn vào child thì lấy child, nhấn vào parent thì lấy parent và child
+    */
+    private function getChildCategories($categoryIdOrSlug)
+    {
+        $category = $this->getCategoryByIdOrSlug($categoryIdOrSlug);
+
+        // Kiểm tra danh mục tồn tại hay không
+        if (!$category) {
+            throw new \InvalidArgumentException('Category not found for the provided ID or slug.');
+        }
+
+        // Kiểm tra danh mục là cha hay con
+        $isParentCategory = is_null($category->id_danhmuc_cha);
+
+        if(!$isParentCategory) {
+            // Nếu là danh mục con, trả về danh sách chỉ chứa ID của nó
+            return [$category->id_danhmuc];
+        }
+        // Nếu là danh mục cha, lấy tất cả danh mục con và chính nó
+        $categoryIds = Category::where('id_danhmuc_cha', $category->id_danhmuc)
+            ->pluck('id_danhmuc')
+            ->push($category->id_danhmuc)
+            ->toArray();
+
+        return $categoryIds;
+    }
+    //lấy sản phẩm theo danh mục: truyền (ds sản phẩm , id hoặc slug)
+    private function getProductCategory($products, $categoryIdOrSlug)
+    {
+        $categoryIds = $this->getChildCategories($categoryIdOrSlug);
+        $query = $products->whereIn('id_danhmuc', $categoryIds);
+        return $query;
+    }
+
+    //logic nghiệp vụ
     public function index()
     {
         $productsDiscount = Product::whereNotNull('gia_khuyen_mai')
@@ -22,57 +85,109 @@ class ProductController
             ->limit(9)
             ->get();
         // $products = Product::whereNull('gia_khuyen_mai')->with('category')->paginate(6);
-        $products = Product::paginate(9);
+        $products = Product::with(['images' => function($query) {
+            $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
+        }])->orderBy('id_sanpham', 'desc')->paginate(9);
         $productsCount = Product::count();
         $categories = Category::all();
-        return view('users.pages.shop', compact('products', 'productsDiscount', 'productsCount', 'categories'));
+        $new_products = $this->productService->getNewProducts(9);
+        return view('users.pages.shop', compact('products', 'productsDiscount', 'productsCount', 'categories', 'new_products'));
     }
 
     public function showCategory(string $slug)
     {
+        //lấy danh mục theo slug
         $category = Category::where('slug', $slug)->first();
-        //kiểm tra id có phải danh mục cha không
+        $products = Product::query();
+        //lấy sản phẩm theo danh mục
+        //kiểm tra danh mục đó có thuộc tính danh mục cha không, nếu có cột id_danhmuc_cha thì laf danh mục con, neếu null thì làf cha
         $isParentCategory = is_null($category->id_danhmuc_cha);
 
-        //nếu ko phải thì chỉ hiển thị ds sp trog 1 mục, có thì hiển thị all danh mục con
-        if(!$isParentCategory)
-            $query = Product::where('id_danhmuc', $category->id_danhmuc);
-        else {
-            //lấy danh mục cha và tất cả danh mục con
-            $categoryIds = Category::where('id_danhmuc_cha', $category->id_danhmuc)
-                ->pluck('id_danhmuc')
-                ->push($category->id_danhmuc)
-                ->toArray();
-            //lấy tất cả sản phẩm của danh mục cha và danh mục con
-            $query = Product::whereIn('id_danhmuc', $categoryIds);
-        }
+        // //nếu ko phải thì chỉ hiển thị ds sp trog 1 mục, có thì hiển thị all danh mục con
+        // if(!$isParentCategory)
+        //     $query = $product->where('id_danhmuc', $category->id_danhmuc);
+        // else {
+        //     //lấy danh mục cha và tất cả danh mục con
+        //     $categoryIds = Category::where('id_danhmuc_cha', $category->id_danhmuc)
+        //         ->pluck('id_danhmuc')
+        //         ->push($category->id_danhmuc)
+        //         ->toArray();
+        //     //lấy tất cả sản phẩm của danh mục cha và danh mục con
+        //     $query = Product::whereIn('id_danhmuc', $categoryIds);
+        // }
+        $query = $this->getProductCategory($products, $slug);
         //lấy số lượng sản phẩm
         $productsCount = $query->count();
         //lấy sản phẩm theo trang
         $products = $query->paginate(9);
         //lấy tất cả danh mục
         $categories = Category::whereNull('id_danhmuc_cha')->with('childCategories')->get();
-        return view('users.pages.shop', compact('products', 'categories', 'category', 'productsCount'));
+         // ds sản phẩm mới
+        $new_products = $this->productService->getNewProducts(9);
+        return view('users.pages.shop', compact('products', 'categories', 'category', 'productsCount', 'new_products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function search(Request $request)
     {
-        //
+        $keyword = $request->input('keyword');
+        $id_category = $request->input('id_category');
+        $minPrice = $request->input('minPrice') ?? 0;
+        $maxPrice = $request->input('maxPrice') ??  Product::max('gia');
+
+        // Start query
+        $products = Product::with(['images' => function($query) {
+            $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
+        }]);
+
+        // Filter by category
+        if ($id_category) {
+            // $products->where('id_danhmuc', $id_category);
+            // $products = $this->getProductCategory($products, $id_category);
+            $categoryIds = $this->getChildCategories($id_category);
+            $products->whereIn('id_danhmuc', $categoryIds);
+        }
+
+        // Filter by keyword (in name or description)
+        if ($keyword) {
+            $products->where(function ($query) use ($keyword) {
+                $query->where('tensanpham', 'like', "%$keyword%")
+                      ->orWhere('mota', 'like', "%$keyword%");
+            });
+        }
+
+        // Filter by price range
+        if ($minPrice && $maxPrice) {
+            $products->where(function($query) use ($minPrice, $maxPrice) {
+                $query->whereBetween('gia', [$minPrice, $maxPrice])
+                      ->orWhereBetween('gia_khuyen_mai', [$minPrice, $maxPrice]);
+            });
+        }
+
+        // Count products before pagination
+        $productsCount = $products->count();
+
+        // Paginate products
+        $products = $products->orderBy('id_sanpham', 'desc')->paginate(9);
+
+        // Handle AJAX response
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'html' => view('users.partials.shop.products-content',
+                    compact('products', 'productsCount'))->render(),
+                'count' => $productsCount
+            ], 200, ['Content-Type' => 'application/json']);
+        }
+
+        // Load categories for the view
+        $categories = Category::all();
+        // ds sản phẩm mới
+        $new_products = $this->productService->getNewProducts(9);
+        return view('users.pages.shop', compact('products', 'productsCount', 'categories', 'new_products'));
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * show chi tiết sản phẩm theo slug
      */
     public function show(string $slug)
     {
@@ -129,23 +244,6 @@ class ProductController
             'userReview'
         ));
     }
-    public function favorite($id_sanpham)
-{
-    // Lấy id người dùng hiện tại từ Auth
-    $id_nguoidung = 1;
-
-    // Chuẩn bị dữ liệu để thêm vào bảng yêu thích
-    $data = [
-        'id_sanpham' => $id_sanpham,
-        'id_nguoidung' => $id_nguoidung,
-    ];
-
-    // Tạo mới bản ghi trong bảng Favorite
-    FavoriteProduct::create($data);
-
-    return redirect()->back()->with('ok', 'Sản phẩm đã được yêu thích.');
-}
-
     /**
      * Show the form for editing the specified resource.
      */

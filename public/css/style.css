@@ -706,7 +706,6 @@ ol {
 }
 
 .hero__search {
-	overflow: hidden;
 	margin-bottom: 30px;
 }
 
@@ -819,6 +818,145 @@ ol {
 	margin-bottom: 35px;
 }
 
+/* Dat: Category Dropdown Styles */
+.hero__search__categories {
+    position: relative;
+    cursor: pointer;
+    background: #fff;
+    padding: 13px 20px;
+    border-right: 1px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb;
+    width: 30%;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.hero__search__categories:hover {
+    background: #7fad39;
+    color: #fff;
+}
+
+.hero__search__categories .arrow_carrot-down {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+}
+
+.hero__search__categories:hover .arrow_carrot-down {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Dropdown Menu */
+.hero__search__categories-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    max-height: 300px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.hero__search__categories:hover .hero__search__categories-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.hero__search__categories-menu ul {
+    padding: 0;
+    margin: 0;
+}
+
+.hero__search__categories-menu li {
+    list-style: none;
+}
+
+.hero__search__categories-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: #1c1c1c;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.hero__search__categories-menu li a:hover {
+    background: #f9f9f9;
+    color: #7fad39;
+    padding-left: 25px;
+}
+
+/* Extend existing dropdown styles */
+.hero__search__categories-menu .has-children {
+    position: relative;
+}
+
+.hero__search__categories-menu .submenu {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    width: 200px;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.hero__search__categories-menu .has-children:hover > .submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.hero__search__categories-menu .has-children > a::after {
+    content: '\f105';  /* FontAwesome arrow right */
+    font-family: FontAwesome;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Maintain existing hover styles for submenu items */
+.hero__search__categories-menu .submenu li a {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+.hero__search__categories-menu .submenu li a:hover {
+    background: #f9f9f9;
+    color: #7fad39;
+    padding-left: 25px;
+}
+
+.hero__search__categories-menu::-webkit-scrollbar {
+    display: none;
+}
+
+.hero__search__categories-menu .has-children > a::after {
+    display: none;
+}
+
+.hero__search__categories-menu .has-children > a {
+    position: relative;
+    padding-right: 25px;
+}
 /*---------------------
   Categories
 -----------------------*/
@@ -1063,6 +1201,7 @@ ol {
 .latest-product__item__pic img {
 	height: 110px;
 	width: 110px;
+    object-fit: contain;
 }
 
 .latest-product__item__text {
@@ -1207,7 +1346,7 @@ ol {
 	font-size: 16px;
 	color: #dd2222;
 	font-weight: 700;
-	max-width: 20%;
+	max-width: 32%;
 	border: none;
 	display: inline-block;
 }
@@ -1756,6 +1895,40 @@ ol {
 .blog__pagination a:last-child {
 	margin-right: 0;
 }
+
+/* Dat : css load trong shop*/
+.spinner {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    margin: 50px auto;
+}
+
+.double-bounce1, .double-bounce2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #3498db;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+    animation-delay: -1.0s;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1);
+    }
+}
+
 
 /*---------------------
   Shop Details
@@ -3939,10 +4112,6 @@ ol {
 
 
 /* Dat: thêm css cho phần category*/
-.category-section {
-    padding: 20px;
-}
-
 
 .category-section ul {
     list-style: none;

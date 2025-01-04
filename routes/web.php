@@ -38,6 +38,7 @@ Route::get('/', [HomeController::class, 'index'])->name('users.home');
 
 Route::get('/shop', [ProductController::class, 'index'])->name('users.shop');
 Route::get('/shop/category/{slug}', [ProductController::class, 'showCategory'])->name('shop.category');
+Route::get('/shop/search', [ProductController::class, 'search'])->name('shop.search');
 
 Route::get('/shop-detail/{slug}', [ProductController::class, 'show'])->name('users.shop_details');
 Route::get('/favorite/{id_sanpham}', [ProductController::class, 'favorite'])->name('users.shop_details.favorite');
@@ -61,6 +62,8 @@ Route::get('/mau', function () {
 Route::get('/about-us', function () {
     return view('users.pages.about-us');
 });
+Route::get('/footer', [DashboardManagerController::class, 'showFooter']);
+
 
 
 Route::middleware('guest')->group(function () {

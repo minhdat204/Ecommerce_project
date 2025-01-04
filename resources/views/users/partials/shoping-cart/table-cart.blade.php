@@ -17,7 +17,11 @@
                     <h5>{{ $item->product->tensanpham }}</h5>
                 </td>
                 <td class="shoping__cart__price">
-                    {{ number_format($item->product->gia_khuyen_mai ?? $item->product->gia, 2) }} VNĐ
+                    @if ($item->product->gia_khuyen_mai != 0)
+                        {{ number_format($item->product->gia_khuyen_mai, 0, ',', '.') }}đ
+                    @else
+                        {{ number_format($item->product->gia, 0, ',', '.') }}đ
+                    @endif
                 </td>
                 <td class="shoping__cart__quantity">
                     <div class="quantity">
@@ -37,7 +41,11 @@
                     </div>
                 </td>
                 <td class="shoping__cart__total">
-                    {{ number_format(($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong, 2) }} VNĐ
+                    @if ($item->product->gia_khuyen_mai != 0)
+                        {{ number_format($item->product->gia_khuyen_mai * $item->soluong, 0, ',', '.') }}đ
+                    @else
+                        {{ number_format($item->product->gia * $item->soluong, 0, ',', '.') }}đ
+                    @endif
                 </td>
                 <td class="shoping__cart__item__close">
                     <span class="icon_close" onclick="removeItem({{ $item->id_sp_giohang }})"></span>

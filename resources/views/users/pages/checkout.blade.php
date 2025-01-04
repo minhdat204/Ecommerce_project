@@ -219,7 +219,7 @@
     </style>
     <div class="container mt-5 mb-5">
         <div class="row">
-            <form action="{{ route('checkoutCOD') }}" method="POST">
+            <form id="checkoutForm" method="POST">
                 @csrf
                 <div class="col-lg-7">
                     <h5 class="mb-4"><strong>Thông Tin Giao Nhận Hàng</strong></h5>
@@ -282,21 +282,23 @@
                         <p>Vận chuyển tới: 99 Hoàng Hoa Thám, Phường 6, Quận Bình Thạnh, TP.HCM</p>
                     </div>
 
+
                     <!-- Phương thức thanh toán -->
                     <h5 class="payment-title">Chọn Phương Thức Thanh Toán</h5>
                     <div class="form-group">
                         <div class="form-check">
-                            <input type="radio" id="cod" name="payment" class="form-check-input" checked>
+                            <input type="radio" id="cod" name="payment" value="cod" class="form-check-input"
+                                checked>
                             <label for="cod" class="form-check-label">Thanh toán khi giao hàng (COD)</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="momo" name="payment" class="form-check-input">
+                            <input type="radio" id="momo" name="payment" value="momo" class="form-check-input">
                             <label for="momo" class="form-check-label">Ví MoMo</label>
                         </div>
                     </div>
 
                     <!-- Nút đặt hàng -->
-                    <button type="submit" class="btn btn-primary">Hoàn Tất Đặt Hàng</button>
+                    <button type="button" class="btn btn-primary" onclick="submitCheckoutForm()">Hoàn Tất Đặt Hàng</button>
                 </div>
 
                 <!-- Đơn hàng -->
@@ -358,6 +360,23 @@
     </div>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        function submitCheckoutForm() {
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+            const form = document.getElementById('checkoutForm');
+
+            // Xác định route theo phương thức thanh toán
+            if (paymentMethod === 'cod') {
+                form.action = "{{ route('checkout.checkoutCOD') }}";
+            } else if (paymentMethod === 'momo') {
+                form.action = "{{ route('checkout.momo.payment') }}";
+            }
+
+            form.submit(); // Gửi form
+        }
+    </script>
+@endpush
 {{-- @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {

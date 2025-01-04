@@ -59,9 +59,10 @@ class CheckoutController
         }
 
         // Chuyển hướng đến trang thanh toán thành công
-        return redirect()->route('checkout')
+        return redirect()->route('checkout.index')
             ->with('success', 'Đơn hàng của bạn đã được tạo thành công.');
     }
+
     private function getOrCreateCart()
     {
         return Cart::firstOrCreate([

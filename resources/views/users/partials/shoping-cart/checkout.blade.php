@@ -6,5 +6,5 @@
 
         <li>Tổng thanh toán <span id="total">${{ number_format($total * $totalShip, 2) }}</span></li>
     </ul>
-    <a href="{{ route('checkout') }}" class="primary-btn">Tiến hành thành toán</a>
+    <a href="{{ route('checkout.index') }}" class="primary-btn">Tiến hành thành toán</a>
 </div>

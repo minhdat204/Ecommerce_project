@@ -57,4 +57,8 @@ class DashboardManagerController
         return redirect()->route('admin.dashboard.index')
             ->with('success', 'Thông tin website đã được cập nhật thành công.');
     }
+
+
+    
+
 }

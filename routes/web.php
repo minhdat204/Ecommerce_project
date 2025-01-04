@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\ContactManagerController;
 use App\Http\Controllers\Admin\DashboardManagerController;
 use App\Http\Controllers\Admin\StatisticalManagerController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Client\CartController;
 //client
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\BlogController;
@@ -19,7 +18,11 @@ use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\ReviewController;
+
+Route::post('/reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
 
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
@@ -31,17 +34,15 @@ Route::resource('contact', ContactController::class)->names([
     'store' => 'contact.store',
 ]);
 
-Route::get('/', action: [HomeController::class, 'index'])->name('users.home');
+Route::get('/', [HomeController::class, 'index'])->name('users.home');
 
-Route::get('/shop', action: [ProductController::class, 'index'])->name('users.shop');
+Route::get('/shop', [ProductController::class, 'index'])->name('users.shop');
+Route::get('/shop/category/{slug}', [ProductController::class, 'showCategory'])->name('shop.category');
+Route::get('/shop/search', [ProductController::class, 'search'])->name('shop.search');
 
 Route::get('/shop-detail/{slug}', [ProductController::class, 'show'])->name('users.shop_details');
-Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
-Route::get('blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');
-
-Route::get('/blog', function () {
-    return view('users.pages.blog');
-})->name('users.blog');
+Route::get('/blogs', [BlogController::class, 'index'])->name('users.blogs');
+Route::get('blogs/{slug}', [BlogController::class, 'show'])->name('user.blog_details');
 
 Route::get('/contact', function () {
     return view('users.pages.contact');
@@ -60,12 +61,9 @@ Route::get('/mau', function () {
 Route::get('/about-us', function () {
     return view('users.pages.about-us');
 });
-Route::get('/item-1', function () {
-    return view('users.pages.item-1');
-});
-Route::get('/item-2', function () {
-    return view('users.pages.item-2');
-});
+Route::get('/footer', [DashboardManagerController::class, 'showFooter']);
+
+
 
 Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('login');
@@ -84,11 +82,12 @@ Route::middleware('auth')->group(function () {
 });
 
 // Cart routes
-Route::group(['prefix' => 'cart', 'middleware' => 'auth'], function() {
+Route::group(['prefix' => 'cart', 'middleware' => 'auth'], function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::post('/items', [CartController::class, 'addToCart'])->name('cart.add');
     Route::patch('/items/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
     Route::delete('/items/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
+    Route::delete('/clear', [CartController::class, 'clearCart'])->name('cart.clear');
 })->name('cart.');
 
 // Admin Routes
@@ -159,7 +158,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('dashboard/website-info', [DashboardManagerController::class, 'updateWebsiteInfo'])
         ->name('dashboard.update-website-info');
     // Statistical Routes
-    Route::get('statistics', [StatisticalManagerController::class, 'index'])->name('statistics.index');
+    Route::get('statistics', [StatisticalManagerController::class, 'sales'])->name('statistics.index');
     Route::get('statistics/sales', [StatisticalManagerController::class, 'sales'])->name('statistics.sales');
-    Route::get('statistics/products', [StatisticalManagerController::class, 'products'])->name('statistics.products');
+    Route::get('statistics/products', [StatisticalManagerController::class, 'productSales'])->name('statistics.productSales');
 });

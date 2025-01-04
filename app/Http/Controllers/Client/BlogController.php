@@ -10,7 +10,7 @@ class BlogController extends Controller
 {
     public function index(Request $request){
 
-    $keyword = $request->input('keyword'); 
+    $keyword = $request->input('keyword');
 
     // Truy vấn bài viết với điều kiện tìm kiếm
     $posts = Post::query()
@@ -18,7 +18,7 @@ class BlogController extends Controller
             return $query->where('tieude', 'like', "%$keyword%")
                          ->orWhere('noidung', 'like', "%$keyword%");
         })
-        ->paginate(6);  
+        ->paginate(6);
 
     // Kiểm tra yêu cầu AJAX
     if ($request->ajax()) {
@@ -31,7 +31,7 @@ class BlogController extends Controller
 
     // Trả về view cho yêu cầu bình thường
     return view('users.pages.blog', [
-        'posts' => $posts, 
+        'posts' => $posts,
         'keyword' => $keyword // Thêm biến keyword để sử dụng trong view nếu cần
     ]);
 }

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class HomeController
@@ -30,6 +31,7 @@ class HomeController
 
         //hiển thị 1 số danh mục sản phẩm có trong cơ sở dữ liệu, với công thức là lấy 4 danh mục có nhiều sản phẩm nhất
         $categories = $this->productService->getCategories();
+
 
         return view('users.pages.home', compact('slider', 'best_selling_products', 'new_products', 'categories'));
     }

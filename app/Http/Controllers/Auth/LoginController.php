@@ -8,13 +8,15 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController
 {
-    public function showLoginForm()
-    {
-        if (Auth::check()) {
-            return redirect()->route('users.home');
-        }
-        return view('users.pages.login');
-    }
+
+    //không cần thiết
+    // public function showLoginForm()
+    // {
+    //     if (Auth::check()) {
+    //         return redirect()->route('users.home');
+    //     }
+    //     return view('users.pages.login');
+    // }
 
     public function login(Request $request)
     {
@@ -28,18 +30,26 @@ class LoginController
 
             if ($user->loai_nguoidung !== 'user' || $user->trangthai !== 'active') {
                 Auth::logout();
-                return back()->withErrors([
-                    'login' => 'Tài khoản không có quyền truy cập hoặc đã bị khóa.',
-                ])->withInput($request->except('password'));
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tài khoản không có quyền truy cập hoặc đã bị khóa.',
+                ], 403);
             }
 
             $request->session()->regenerate();
-            return redirect()->intended(route('users.home'));
+            return response()->json([
+                'success' => true,
+                'redirect_url' => $request->input('redirect_url', route('users.home')),
+            ]);
         }
 
-        return back()->withErrors([
-            'login' => 'Thông tin đăng nhập không chính xác.',
-        ])->withInput($request->except('password'));
+        return response()->json([
+            'success' => false,
+            'message' => 'Thông tin đăng nhập không chính xác.',
+        ], 401);
+        // return back()->withErrors([
+        //     'login' => 'Thông tin đăng nhập không chính xác.',
+        // ])->withInput($request->except('password'));
     }
 
     public function logout(Request $request)

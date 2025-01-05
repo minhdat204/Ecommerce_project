@@ -82,7 +82,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Cart routes
-Route::group(['prefix' => 'cart', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'cart', 'middleware' => 'check.guest'], function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::post('/items', [CartController::class, 'addToCart'])->name('cart.add');
     Route::patch('/items/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');

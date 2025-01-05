@@ -58,7 +58,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button id="addToCartButton" onclick="addToCart({{ $Product->id_sanpham }}, {{Auth::check()}})" class="primary-btn no-border">ADD TO CART</button>
+                        <button id="addToCartButton" onclick="addToCart({{ $Product->id_sanpham }})" class="primary-btn no-border">ADD TO CART</button>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Availability</b>

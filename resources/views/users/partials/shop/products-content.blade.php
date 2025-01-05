@@ -29,11 +29,11 @@
     </div>
 </div>
 <div class="row">
-    @foreach ($products as $sanpham)
+    @foreach ($products as $product)
         <div class="col-lg-4 col-md-6 col-sm-6">
             <div class="product__item">
                 <div class="product__item__pic set-bg"
-                    data-setbg="{{ asset('storage/' . ($sanpham->images->isNotEmpty() ? $sanpham->images->first()->duongdan : 'img/products/F60z2Ytjqo1SfLm8GSjV1T8Ucjzv8jV6SsN4DC8S.jpg')) }}">
+                    data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/F60z2Ytjqo1SfLm8GSjV1T8Ucjzv8jV6SsN4DC8S.jpg')) }}">
                     <ul class="product__item__pic__hover">
                         <li><a href="#"><i class="fa fa-heart"></i></a></li>
                         <li><a href="#"><i class="fa fa-retweet"></i></a></li>
@@ -41,14 +41,14 @@
                     </ul>
                 </div>
                 <div class="product__item__text">
-                    <h6><a href="{{ route('users.shop_details', $sanpham->slug) }}">{{ $sanpham->tensanpham }}</a></h6>
+                    <h6><a href="{{ route('users.shop_details', $product->slug) }}">{{ $product->tensanpham }}</a></h6>
                     <h5>
                         <div class="product__item__price">
-                            @if ($sanpham->gia_khuyen_mai != 0)
-                                {{ number_format($sanpham->gia_khuyen_mai, 0, ',', '.') }}đ
-                                <span>{{ number_format($sanpham->gia, 0, ',', '.') }}đ</span>
+                            @if ($product->gia_khuyen_mai != 0)
+                                {{ number_format($product->gia_khuyen_mai, 0, ',', '.') }}đ
+                                <span>{{ number_format($product->gia, 0, ',', '.') }}đ</span>
                             @else
-                                {{ number_format($sanpham->gia, 0, ',', '.') }}đ
+                                {{ number_format($product->gia, 0, ',', '.') }}đ
                             @endif
                         </div>
                     </h5>

@@ -1,4 +1,4 @@
-function addToCart(productId, authCheck) {
+function addToCart(productId) {
     // Kiểm tra trạng thái đăng nhập
     if (!authCheck) {
         notification('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng', 'error');

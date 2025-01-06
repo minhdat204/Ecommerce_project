@@ -161,4 +161,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('statistics', [StatisticalManagerController::class, 'sales'])->name('statistics.index');
     Route::get('statistics/sales', [StatisticalManagerController::class, 'sales'])->name('statistics.sales');
     Route::get('statistics/products', [StatisticalManagerController::class, 'productSales'])->name('statistics.productSales');
+    // index2
+    Route::get('statistics2', [StatisticalManagerController::class, 'index'])->name('statistics.index2');
 });
+Route::get('/get-sales-data', [StatisticalManagerController::class, 'getSalesData']);

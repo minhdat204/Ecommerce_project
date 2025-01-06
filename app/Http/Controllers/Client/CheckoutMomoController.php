@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CheckoutMomoController extends Controller
 {
@@ -29,7 +30,6 @@ class CheckoutMomoController extends Controller
             $totalPrice = $request->input('totalPrice');
             $totalShip = $request->input('totalShip');
             $totalDiscount = 0;
-
             // Lưu thông tin đơn hàng vào database
             $order = Order::create([
                 'id_nguoidung' => $userId,
@@ -56,14 +56,12 @@ class CheckoutMomoController extends Controller
                     'thanh_tien' => $item['price'] * $item['quantity'],
                 ]);
             }
-
             $orderInfo = "Thanh toán đơn hàng " . $maDonHang;
             $result = $this->momoService->createPayment($maDonHang, $totalPayment, $orderInfo);
-
+            // Log response từ MoMo
             if ($result['resultCode'] == 0) {
                 return redirect($result['payUrl']);
             }
-
             return redirect()->back()->with('error', $result['message']);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -72,6 +70,9 @@ class CheckoutMomoController extends Controller
 
     public function momoReturn(Request $request)
     {
+
+        dd($request->resultCode);
+
         if ($request->resultCode == 0) {
             Order::where('ma_don_hang', $request->orderId)
                 ->update([
@@ -86,6 +87,9 @@ class CheckoutMomoController extends Controller
 
     public function momoIPN(Request $request)
     {
+        // Ghi log chi tiết yêu cầu từ MoMo
+        Log::info('MoMo IPN Request', ['request' => $request->all()]);
+
         // Verify signature
         $rawHash = "accessKey=" . config('momo.access_key') .
             "&amount=" . $request->amount .
@@ -102,25 +106,35 @@ class CheckoutMomoController extends Controller
 
         $signature = hash_hmac('sha256', $rawHash, config('momo.secret_key'));
 
+        // Sử dụng dd để kiểm tra các giá trị
+        dd([
+            'rawHash' => $rawHash,
+            'generated_signature' => $signature,
+            'received_signature' => $request->signature,
+            'request' => $request->all()
+        ]);
+
         if ($signature != $request->signature) {
             return response()->json([
                 'message' => 'Invalid signature'
-            ], 400);
+            ]);
         }
 
         if ($request->resultCode == 0) {
-            Order::where('ma_don_hang', $request->orderId)
-                ->update([
-                    'trangthai_thanhtoan' => 'paid',
-                ]);
+            // Xử lý khi thanh toán thành công
+            Log::info('Payment successful', ['orderId' => $request->orderId, 'transId' => $request->transId]);
+            // Cập nhật trạng thái đơn hàng
+            Order::where('ma_don_hang', $request->orderId)->update(['trangthai' => 'paid']);
+            return response()->json([
+                'message' => 'Payment successful'
+            ]);
+        } else {
+            Log::error('Payment failed', ['resultCode' => $request->resultCode, 'message' => $request->message]);
+            return response()->json([
+                'message' => 'Payment failed'
+            ]);
         }
-
-        return response()->json([
-            'message' => 'OK'
-        ]);
     }
-
-
 
     private function generateOrderCode()
     {

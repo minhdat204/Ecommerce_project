@@ -3,6 +3,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
+
 class MomoService
 {
     private $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
@@ -74,8 +76,19 @@ class MomoService
         );
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+
         $result = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if (curl_errno($ch)) {
+            $error_msg = curl_error($ch);
+            Log::error('cURL error', ['error' => $error_msg]);
+        }
+
         curl_close($ch);
+
+        Log::info('MoMo Request', ['url' => $url, 'data' => $data, 'response' => $result, 'http_code' => $httpCode]);
+
         return $result;
     }
 }

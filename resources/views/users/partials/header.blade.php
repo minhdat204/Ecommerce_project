@@ -111,7 +111,7 @@
                                 @auth
                                     <a href="{{route('cart.index')}}"><i class="fa fa-shopping-bag"></i> <span>{{ Auth::check() && Auth::user()->cart ? Auth::user()->cart->cartItems->count() : 0 }}</span></a>
                                 @else
-                                    <a href="#" onclick="openModal()"><i class="fa fa-shopping-bag"></i> <span>0</span></a>
+                                    <a href="#" onclick="openModal('/cart')"><i class="fa fa-shopping-bag"></i> <span>0</span></a>
                                 @endauth
                         </ul>
                         <div class="header__top__right__language">
@@ -138,9 +138,9 @@
                                             <i class="fa fa-shopping-basket"></i> Đơn hàng của tôi
                                         </a>
                                         <div class="dropdown-divider"></div>
-                                        <form action="{{ route('logout') }}" method="POST">
+                                        <form class="logout-form" onsubmit="logout(event)">
                                             @csrf
-                                            <button type="submit" class="dropdown-item">
+                                            <button type="submit" class="dropdown-item" id="logout-btn">
                                                 <i class="fa fa-sign-out"></i> Đăng xuất
                                             </button>
                                         </form>

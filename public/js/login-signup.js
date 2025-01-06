@@ -38,7 +38,7 @@ function showSignup() {
     signupContainer.style.display = 'flex';
 }
 
-let redirect_url = window.location.pathname;
+let redirect_url;
 // hàm mở modal đăng nhập với tham số là url cần chuyển hướng sau khi đăng nhập
 function openModal(url) {
     modal.style.display = "block";
@@ -77,8 +77,8 @@ showLoginForm.onclick = showLogin;
 
 
 
-// Xử lý form đăng nhập và đăng ký
-document.querySelector('.form-grid').addEventListener('submit', function (e) {
+// Xử lý form đăng nhập, đăng ký và đăng xuất
+document.querySelector('.auth-form').addEventListener('submit', function (e) {
     e.preventDefault(); // Ngăn form submit mặc định
 
     const formData = new FormData(this);
@@ -90,20 +90,20 @@ document.querySelector('.form-grid').addEventListener('submit', function (e) {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
         },
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                 // Lưu thông báo vào sessionStorage trước khi chuyển hướng
-                sessionStorage.setItem('message', data.message || "Đăng nhập thành công");
-                window.location.href = redirect_url;
-                //window.location.href = data.redirect_url;
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Lưu thông báo vào sessionStorage trước khi chuyển hướng
+            sessionStorage.setItem('message', data.message);
+            window.location.href = redirect_url ?? data.redirect_url;
+            //window.location.href = data.redirect_url;
 
-            } else {
-                notification(data.message || "Có lỗi xảy ra", 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error)
-            notification('Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
-        });
+        } else {
+            notification(data.message || "Có lỗi xảy ra", 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error)
+        notification('Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
+    });
 });

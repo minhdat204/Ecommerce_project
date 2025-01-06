@@ -77,8 +77,8 @@ showLoginForm.onclick = showLogin;
 
 
 
-// Xử lý form đăng nhập, đăng ký và đăng xuất
-document.querySelector('.auth-form').addEventListener('submit', function (e) {
+// Xử lý form đăng nhập, đăng ký
+document.querySelector('.form-grid').addEventListener('submit', function (e) {
     e.preventDefault(); // Ngăn form submit mặc định
 
     const formData = new FormData(this);
@@ -95,7 +95,7 @@ document.querySelector('.auth-form').addEventListener('submit', function (e) {
         if (data.success) {
             // Lưu thông báo vào sessionStorage trước khi chuyển hướng
             sessionStorage.setItem('message', data.message);
-            window.location.href = redirect_url ?? data.redirect_url;
+            window.location.href = data.redirect_url;
             //window.location.href = data.redirect_url;
 
         } else {
@@ -107,3 +107,72 @@ document.querySelector('.auth-form').addEventListener('submit', function (e) {
         notification('Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
     });
 });
+
+// Xử lý đăng xuất bằng fetch
+function logout(e) {
+    e.preventDefault();
+    const button = document.getElementById('logout-btn');
+
+
+    button.disabled = true;
+    button.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang đăng xuất...';
+
+    fetch('/logout', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            sessionStorage.setItem('message', data.message);
+            window.location.href = data.redirect_url;
+        }
+        else {
+            notification(data.message || "Có lỗi xảy ra", 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        notification('Có lỗi xảy ra khi đăng xuất', 'error');
+        button.disabled = false;
+        button.innerHTML = '<i class="fa fa-sign-out"></i> Đăng xuất';
+    });
+}
+
+// TUỲ CHỌN: Xử lý đăng xuất bằng async/await và try/catch
+async function handleLogout(e) {
+    e.preventDefault();
+    const button = document.getElementById('logout-btn');
+
+    try {
+        button.disabled = true;
+        button.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang đăng xuất...';
+
+        const response = await fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            sessionStorage.setItem('message', data.message);
+            window.location.href = data.redirect_url;
+        } else {
+            throw new Error(data.message || 'Có lỗi xảy ra');
+        }
+    } catch (error) {
+        console.error('Logout error:', error);
+        notification('Có lỗi xảy ra khi đăng xuất', 'error');
+        button.disabled = false;
+        button.innerHTML = '<i class="fa fa-sign-out"></i> Đăng xuất';
+    }
+}

@@ -138,9 +138,9 @@
                                             <i class="fa fa-shopping-basket"></i> Đơn hàng của tôi
                                         </a>
                                         <div class="dropdown-divider"></div>
-                                        <form action="{{ route('logout') }}" method="POST">
+                                        <form class="logout-form" onsubmit="logout(event)">
                                             @csrf
-                                            <button type="submit" class="dropdown-item">
+                                            <button type="submit" class="dropdown-item" id="logout-btn">
                                                 <i class="fa fa-sign-out"></i> Đăng xuất
                                             </button>
                                         </form>

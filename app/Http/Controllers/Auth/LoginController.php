@@ -58,10 +58,14 @@ class LoginController
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return response()->json([
-            'success' => true,
-            'message' => 'Đăng xuất thành công',
-            'redirect_url' => route('users.home'),
-        ]);
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Đăng xuất thành công',
+                'redirect_url' => route('users.home')
+            ]);
+        }
+
+        return redirect()->route('users.home');
     }
 }

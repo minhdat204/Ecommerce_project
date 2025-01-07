@@ -21,6 +21,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ReviewController;
+use App\Http\Controllers\Client\CheckoutMomoController;
 
 Route::post('/reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
 
@@ -48,7 +49,14 @@ Route::get('/contact', function () {
     return view('users.pages.contact');
 })->name('users.contact');
 
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::group(['prefix' => 'checkout', 'as' => 'checkout.'], function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('index');
+    Route::post('/checkoutCOD', [CheckoutController::class, 'checkoutCOD'])->name('checkoutCOD');
+
+    Route::post('/momo-payment', [CheckoutMomoController::class, 'payWithMomo'])->name('momo.payment');
+    Route::get('/momo-return', [CheckoutMomoController::class, 'momoReturn'])->name('momo.return');
+    Route::post('/momo-ipn', [CheckoutMomoController::class, 'momoIPN'])->name('momo.ipn');
+});
 // admin
 Route::get('/administrator', function () {
     return view('admin.pages.category'); // giao diện mẫu = Category

@@ -131,6 +131,11 @@
                                 Statistical</a>
                         </li>
                         <li>
+                            <a href="{{ Route('admin.statistics.index2') }}"><i class="fa fa-dashboard fa-fw"></i>
+                                Statistical 2</a>
+                        </li>
+
+                        <li>
                             <a href="{{ Route('admin.comment.index') }}"><i class="fa fa-dashboard fa-fw"></i>
                                 Comments</a>
                         </li>

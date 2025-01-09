@@ -19,6 +19,10 @@ class Message extends Model
         'trangthai'
     ];
 
+    protected $casts = [
+        'thoigian' => 'datetime',
+    ];
+
     public function chatSession()
     {
         return $this->belongsTo(ChatSession::class, 'id_phienchat', 'id_phienchat');
@@ -26,6 +30,10 @@ class Message extends Model
 
     public function sender()
     {
+        return $this->belongsTo(User::class, 'id_nguoigui', 'id_nguoidung');
+    }
+
+    public function user(){
         return $this->belongsTo(User::class, 'id_nguoigui', 'id_nguoidung');
     }
 }

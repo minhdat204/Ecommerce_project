@@ -16,6 +16,7 @@
             </div>
 
             <div class="chat-messages">
+                @auth
                 <!-- Admin Message -->
                 <div class="message admin">
                     <img src="https://via.placeholder.com/32" alt="Admin" class="message-avatar">
@@ -67,8 +68,22 @@
                         </div>
                     </div>
                 </div>
+                @else
+                {{-- hiển thị nút đăng nhập và subtitle vui lòng đăng nhập để bắt đầu trò chuyện --}}
+                <div class="login-prompt text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-lock fa-3x text-muted"></i>
+                    </div>
+                    <h5>Vui lòng đăng nhập</h5>
+                    <p class="text-muted">Để bắt đầu trò chuyện với shop</p>
+                    <button onclick="openModal()" class="primary-btn no-border">
+                        <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                    </button>
+                </div>
+                @endauth
             </div>
 
+            @auth
             <div class="chat-input">
                 <form onsubmit="sendMessage(event)">
                     <input type="text" placeholder="Nhập tin nhắn..." id="messageInput">
@@ -77,5 +92,6 @@
                     </button>
                 </form>
             </div>
+            @endauth
         </div>
     </div>

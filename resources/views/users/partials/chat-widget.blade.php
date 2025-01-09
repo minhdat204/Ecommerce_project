@@ -17,69 +17,44 @@
 
             <div class="chat-messages">
                 @auth
-                <!-- Admin Message -->
-                <div class="message admin">
-                    <img src="https://via.placeholder.com/32" alt="Admin" class="message-avatar">
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            Xin chào! Tôi có thể giúp gì cho bạn?
+                    @forelse($messages as $message)
+                        <div class="message {{ ($message->user->loai_nguoidung == 'admin') ? 'admin' : 'customer' }}">
+                            <img src="{{ $message->user->avatar ?? 'https://via.placeholder.com/32' }}"
+                                 alt="{{ $message->user->hoten }}"
+                                 class="message-avatar">
+                            <div class="message-content">
+                                <div class="message-bubble">
+                                    {{ $message->noidung }}
+                                </div>
+                                <div class="message-info">
+                                    {{ $message->user->hoten }} • {{ $message->thoigian->format('g:i A') }}
+                                </div>
+                            </div>
                         </div>
-                        <div class="message-info">
-                            Admin • 10:30 AM
+                    @empty
+                        <div class="message admin">
+                            <img src="https://via.placeholder.com/32" alt="Admin" class="message-avatar">
+                            <div class="message-content">
+                                <div class="message-bubble">
+                                    Xin chào! Tôi có thể giúp gì cho bạn?
+                                </div>
+                                <div class="message-info">
+                                    Admin • {{ now()->format('g:i A') }}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Customer Message -->
-                <div class="message customer">
-                    <img src="https://via.placeholder.com/32" alt="Customer" class="message-avatar">
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            Chào shop, tôi muốn hỏi về sản phẩm mới
-                        </div>
-                        <div class="message-info">
-                            Bạn • 10:31 AM
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Admin Message -->
-                <div class="message admin">
-                    <img src="https://via.placeholder.com/32" alt="Admin" class="message-avatar">
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            Vâng, bạn muốn biết thông tin về sản phẩm nào ạ?
-                        </div>
-                        <div class="message-info">
-                            Admin • 10:32 AM
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Customer Message -->
-                <div class="message customer">
-                    <img src="https://via.placeholder.com/32" alt="Customer" class="message-avatar">
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            Tôi quan tâm đến mẫu áo mới nhất trong bộ sưu tập mùa hè
-                        </div>
-                        <div class="message-info">
-                            Bạn • 10:33 AM
-                        </div>
-                    </div>
-                </div>
+                    @endforelse
                 @else
-                {{-- hiển thị nút đăng nhập và subtitle vui lòng đăng nhập để bắt đầu trò chuyện --}}
-                <div class="login-prompt text-center p-4">
-                    <div class="mb-3">
-                        <i class="fas fa-lock fa-3x text-muted"></i>
+                    <div class="login-prompt text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-lock fa-3x text-muted"></i>
+                        </div>
+                        <h5>Vui lòng đăng nhập</h5>
+                        <p class="text-muted">Để bắt đầu trò chuyện với shop</p>
+                        <button onclick="openModal()" class="primary-btn no-border">
+                            <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                        </button>
                     </div>
-                    <h5>Vui lòng đăng nhập</h5>
-                    <p class="text-muted">Để bắt đầu trò chuyện với shop</p>
-                    <button onclick="openModal()" class="primary-btn no-border">
-                        <i class="fas fa-sign-in-alt"></i> Đăng nhập
-                    </button>
-                </div>
                 @endauth
             </div>
 

@@ -11,17 +11,15 @@
                     <div class="product__details__pic">
                         <div class="product__details__pic__item">
                             <img class="product__details__pic__item--large"
-                                src="{{ asset('img/product/details/product-details-1.jpg') }}" alt="">
+                                src="{{ asset('storage/' . ($Product->images->isNotEmpty() ? $Product->images->first()->duongdan : 'img/products/default.jpg')) }}"
+                                alt="{{ $Product->tensanpham }}">
                         </div>
                         <div class="product__details__pic__slider owl-carousel">
-                            <img data-imgbigurl="{{ asset('img/product/details/product-details-2.jpg') }}"
-                                src="{{ asset('img/product/details/thumb-1.jpg') }}" alt="">
-                            <img data-imgbigurl="{{ asset('img/product/details/product-details-3.jpg') }}"
-                                src="{{ asset('img/product/details/thumb-2.jpg') }}" alt="">
-                            <img data-imgbigurl="{{ asset('img/product/details/product-details-5.jpg') }}"
-                                src="{{ asset('img/product/details/thumb-3.jpg') }}" alt="">
-                            <img data-imgbigurl="{{ asset('img/product/details/product-details-4.jpg') }}"
-                                src="{{ asset('img/product/details/thumb-4.jpg') }}" alt="">
+                            @foreach($Product->images as $image)
+                                <img data-imgbigurl="{{ asset('storage/' . $image->duongdan) }}"
+                                    src="{{ asset('storage/' . $image->duongdan) }}"
+                                    alt="{{ $Product->tensanpham }}">
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -177,7 +175,8 @@
                 @foreach ($relatedProducts as $product)
                     <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="{{ asset('img/product/product-1.jpg') }}">
+                            <div class="product__item__pic set-bg"
+                                data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/default.jpg')) }}">
                                 <ul class="product__item__pic__hover">
                                     <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                     <li><a href="#"><i class="fa fa-retweet"></i></a></li>

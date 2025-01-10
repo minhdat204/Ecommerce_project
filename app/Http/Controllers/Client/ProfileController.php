@@ -21,7 +21,7 @@ class ProfileController extends Controller
 
         $user = Auth::id();
         // Đây có thể được thay thế bằng Auth::user() :
-        // Lấy các sản phẩm yêu thích của người dùng (ID = 4)
+        // Lấy các sản phẩm yêu thích của người dùng (ID = 4)        
         $favorites = FavoriteProduct::where('id_nguoidung', $user)
             ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
             ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia')
@@ -40,8 +40,34 @@ class ProfileController extends Controller
     {
         return view('users.pages.profile', compact('user', 'favorites', 'scores'));
     }
-    public function edit(string $id) {}
-    public function update(Request $request, $id) {}
+    public function edit(string $id) {
+        $user = Auth::user();
+        return view('users.pages.edit-profile', compact('user'));
+    }
+    public function update(Request $request, $id) {
+        $user = Auth::user();
+
+    // Validate dữ liệu
+        $request->validate([
+            'hoten' => 'required|string|max:255', // Full Name
+            'tendangnhap' => 'required|string|max:50|unique:users,tendangnhap,' . $user->id, // User ID
+            'gioitinh' => 'required|in:Male,Female,Other', // Gender
+            'diachi' => 'nullable|string|max:255', // Address
+            'sodienthoai' => 'nullable|string|max:15', // Phone
+        ]); 
+
+    // Cập nhật thông tin người dùng
+            $user->update([
+                'hoten' => $request->hoten,
+                'tendangnhap' => $request->tendangnhap,
+                'gioitinh' => $request->gioitinh,
+                'diachi' => $request->diachi,
+                'sodienthoai' => $request->sodienthoai,
+            ]);
+            $user->save();
+    // Thông báo thành công và chuyển hướng
+    return redirect()->route('profile.index')->with('success');
+    }
     public function destroy(string $id)
     {
         // Logic xóa người dùng hoặc các sản phẩm yêu thích, đánh giá, nếu cần

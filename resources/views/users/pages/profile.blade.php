@@ -25,8 +25,9 @@
         <div class="profile-content mt-4">
             <!-- Personal Tab -->
             <div class="profile-tab-pane" style="display: block;">
-                <form method="POST" action="{{ route('profile.update', $user) }}">
+                <form method="POST" action="{{ route('profile.update', Auth::id()) }}">
                     @csrf
+                    @method('PUT')
                     <div class="row justify-content-center">
                         <div class="col-md-8">
                             <div class="row">
@@ -41,12 +42,12 @@
                                         <div class="col-md-6">
                                             <label for="user-fullname" class="form-label">Full Name</label>
                                             <input type="text" class="form-control" id="user-fullname" name="hoten"
-                                                value="{{ Auth::user()->hoten }}">
+                                                value="{{ old('hoten', Auth::user()->hoten) }}">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="user-id" class="form-label">User ID</label>
                                             <input type="text" class="form-control" id="user-id" name="id_nguoidung"
-                                                value="{{ Auth::user()->id_nguoidung }}" readonly>
+                                                value="{{ old('id_nguoidung', Auth::user()->id_nguoidung) }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -73,12 +74,12 @@
                                         <div class="col-md-6">
                                             <label for="user-address" class="form-label">Address</label>
                                             <input type="text" class="form-control" id="user-address" name="diachi"
-                                                value="{{ Auth::user()->diachi }}">
+                                                value="{{ old('diachi', Auth::user()->diachi) }}">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="user-phone" class="form-label">Phone</label>
                                             <input type="text" class="form-control" id="user-phone" name="sodienthoai"
-                                                value="{{ Auth::user()->sodienthoai }}">
+                                                value="{{ old('sodienthoai', Auth::user()->sodienthoai) }}">
                                         </div>
                                     </div>
                                     <div class="email-address-section border p-3 rounded">
@@ -92,14 +93,13 @@
                                     </div>
                                 </div>
                                 <div class="row-edit">
-                                    <button class="btn btn-sm btn-primary">Edit</button>
+                                    <button class="btn btn-sm btn-primary">Save</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-
             <!-- Favorites List Tab -->
             <div class="profile-tab-pane" style="display: none;">
                 <div class="favorite-page-container">

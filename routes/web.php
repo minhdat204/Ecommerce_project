@@ -27,6 +27,8 @@ Route::post('/reviews/store', [ReviewController::class, 'store'])->name('reviews
 Route::resource('profile', ProfileController::class)->names([
     'index'   => 'profile.index',
 ]);
+Route::put('/profile/update/{id}', [ProfileController::class, 'update'])->name('profile.update');
+
 Route::get('/orders/{id}', [OrderController::class, 'orderDetail'])->name('orders.detail');
 Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 

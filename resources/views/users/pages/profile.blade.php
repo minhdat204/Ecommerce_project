@@ -42,12 +42,12 @@
                                         <div class="col-md-6">
                                             <label for="user-fullname" class="form-label">Full Name</label>
                                             <input type="text" class="form-control" id="user-fullname" name="hoten"
-                                                value="{{ old('hoten', Auth::user()->hoten) }}">
-                                        </div>
+                                                value="{{ Auth::user()->hoten }}">                                        
+                                            </div>
                                         <div class="col-md-6">
                                             <label for="user-id" class="form-label">User ID</label>
                                             <input type="text" class="form-control" id="user-id" name="id_nguoidung"
-                                                value="{{ old('id_nguoidung', Auth::user()->id_nguoidung) }}" readonly>
+                                                value="{{ Auth::user()->id_nguoidung }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -74,7 +74,7 @@
                                         <div class="col-md-6">
                                             <label for="user-address" class="form-label">Address</label>
                                             <input type="text" class="form-control" id="user-address" name="diachi"
-                                                value="{{ old('diachi', Auth::user()->diachi) }}">
+                                            value="{{ Auth::user()->diachi }}">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="user-phone" class="form-label">Phone</label>
@@ -93,7 +93,7 @@
                                     </div>
                                 </div>
                                 <div class="row-edit">
-                                    <button class="btn btn-sm btn-primary">Save</button>
+                                    <button class="btn btn-sm btn-primary">Edit</button>
                                 </div>
                             </div>
                         </div>

@@ -22,6 +22,7 @@
                                 </ul>
                             </div>
                             <div class="featured__item__text">
+                                <span>{{$product->category->tendanhmuc}}</span>
                                 <h6><a href="{{ route('users.shop_details', $product->slug) }}">{{ $product->tensanpham }}</a></h6>
                                 <h5>{{ $product->gia }}</h5>
                             </div>

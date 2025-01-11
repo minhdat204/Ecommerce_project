@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
-    public function checkCanReview($productId)
+public function checkCanReview($productId)
     {
         $userId = Auth::id();
 
@@ -37,8 +37,7 @@ class ReviewController extends Controller
             'message' => $purchaseCount == 0 ?
                 'Bạn cần mua sản phẩm trước khi đánh giá' : ($canReview ? null : 'Bạn đã đánh giá đủ số lần cho các lần mua')
         ];
-    }
-    public function store(Request $request)
+    }    public function store(Request $request)
     {
         // Validate dữ liệu từ form
         $validatedData = $request->validate([

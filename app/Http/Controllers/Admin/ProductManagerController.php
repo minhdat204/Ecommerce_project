@@ -15,7 +15,7 @@ class ProductManagerController
     public function index(Request $request)
 {
     $search = $request->input('search');
-    
+
     // Bắt đầu truy vấn với eager loading category và images
     $products = Product::with(['category', 'images'])
         ->when($search, function ($query, $search) {
@@ -41,16 +41,16 @@ public function store(Request $request)
 {
     // Validate dữ liệu
     $request->validate([
-        'tensanpham' => 'required|string',
+        'tensanpham' => 'required|string|max:255',
         'slug' => 'required|string',
         'mota' => 'required|string',
         'thongtin_kythuat' => 'required|string',
         'id_danhmuc' => 'required|string', // Dữ liệu truyền vào là tên danh mục
-        'gia' => 'required|numeric',
-        'gia_khuyen_mai' => 'nullable|numeric',
+        'gia' => 'required|numeric|min:0',
+        'gia_khuyen_mai' => 'nullable|numeric|min:0|lt:gia',
         'donvitinh' => 'required|string',
         'xuatxu' => 'required|string',
-        'soluong' => 'required|numeric',
+        'soluong' => 'required|numeric|min:0',
         'trangthai' => 'required|string',
         'luotxem' => 'nullable|numeric',
         'images' => 'nullable|array',
@@ -63,46 +63,51 @@ public function store(Request $request)
         // Nếu không tìm thấy danh mục, trả về lỗi
         return redirect()->back()->withErrors(['id_danhmuc' => 'Danh mục không tồn tại.']);
     }
+    $tensanpham = $request->tensanpham;
+    $slug = Str::slug($tensanpham);
 
-    // Lưu sản phẩm
+    $slugCount = 1;
+    $originalSlug = $slug;
+    while (Product::where('slug', $slug)->exists()) {
+        $slug = $originalSlug . '-' . $slugCount;
+        $slugCount++;
+    }
+
     $product = new Product();
     $product->tensanpham = $request->tensanpham;
-    $product->slug = $request->slug;
+    $product->slug = $slug;
     $product->mota = $request->mota;
     $product->thongtin_kythuat = $request->thongtin_kythuat;
-    $product->id_danhmuc = $category->id_danhmuc; // Gán id_danhmuc lấy từ bảng danh_muc
+    $product->id_danhmuc = $category->id_danhmuc;
     $product->gia = $request->gia;
     $product->gia_khuyen_mai = $request->gia_khuyen_mai;
     $product->donvitinh = $request->donvitinh;
     $product->xuatxu = $request->xuatxu;
     $product->soluong = $request->soluong;
-    $product->trangthai = $request->trangthai;
-    $product->luotxem = $request->luotxem;
+    $product->trangthai = $request->trangthai === 'active' ? 1 : 0;
+    $product->luotxem = $request->luotxem ?? 0;
     $product->save();
 
-    // Xử lý hình ảnh
-    // Lưu hình ảnh
-    if ($request->hasFile('images')) {
+     // Xử lý hình ảnh
+     if ($request->hasFile('images')) {
         $images = $request->file('images');
         foreach ($images as $image) {
             // Lưu ảnh vào thư mục storage/app/public/img/products
             $imagePath = $image->store('img/products', 'public');
-    
+
             // Lưu đường dẫn hình ảnh vào bảng hinh_anh_san_pham
             $productImage = new ProductImage();
             $productImage->id_sanpham = $product->id_sanpham; // Giả sử bảng có khóa ngoại id_sanpham
             $productImage->duongdan = $imagePath;
             $productImage->alt = $request->tensanpham; // Hoặc tùy chọn khác
-    
-            // Bỏ qua việc lưu `created_at` và `updated_at`
+
+            // Bỏ qua việc lưu `created_at` và `updated_at` nếu sử dụng Eloquent, vì đã có time stamp tự động
             $productImage->save();
         }
     }
-    
 
     return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được thêm thành công!');
 }
-
 
 
 
@@ -130,7 +135,7 @@ public function store(Request $request)
     public function update(Request $request, string $id_sanpham)
 {
     // Lấy thông tin sản phẩm theo ID
-    $product = Product::findOrFail($id_sanpham); 
+    $product = Product::findOrFail($id_sanpham);
 
     // Validate dữ liệu
     $request->validate([
@@ -195,15 +200,4 @@ public function destroy($id_sanpham)
 
     return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được ẩn');
 }
-public function hide($id)
-{
-    $product = Product::findOrFail($id);
-    
-    // Cập nhật trạng thái sản phẩm thành 'inactive'
-    $product->trangthai = 'inactive';
-    $product->save();
-
-    return redirect()->route('admin.product.index')->with('success', 'Sản phẩm đã được ẩn');
-}
-
 }

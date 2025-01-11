@@ -96,10 +96,18 @@
                 <div class="col-lg-5">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="{{route('users.home')}}">Home</a></li>
-                            <li class="active"><a href="{{route('users.shop')}}">Shop</a></li>
-                            <li><a href="{{route('users.blogs')}}">Blog</a></li>
-                            <li><a href="{{route('users.contact')}}">Contact</a></li>
+                            <li class="{{ Route::is('users.home') ? 'active' : '' }}">
+                                <a href="{{route('users.home')}}">Home</a>
+                            </li>
+                            <li class="{{ Route::is('users.shop') ? 'active' : '' }}">
+                                <a href="{{route('users.shop')}}">Shop</a>
+                            </li>
+                            <li class="{{ Route::is('users.blogs') ? 'active' : '' }}">
+                                <a href="{{route('users.blogs')}}">Blog</a>
+                            </li>
+                            <li class="{{ Route::is('users.contact') ? 'active' : '' }}">
+                                <a href="{{route('users.contact')}}">Contact</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>

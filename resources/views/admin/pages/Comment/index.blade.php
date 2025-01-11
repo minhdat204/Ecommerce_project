@@ -1,8 +1,4 @@
 @extends('Admin.Layout.Layout')
-@section('namepage', 'Quản lý Bình Luận')
-@push('scripts')
-    <script src="{{ asset('js/delete_comment.js') }}"></script>  <!-- Kết nối file JavaScript -->
-@endpush
 @section('content')
     <div class="container">
         <div class="table-wrapper">

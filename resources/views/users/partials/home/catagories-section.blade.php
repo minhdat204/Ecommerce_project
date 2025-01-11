@@ -14,7 +14,7 @@
                 @foreach ($categories as $category)
                 <div class="col-lg-3">
                     <div class="categories__item set-bg" data-setbg="img/categories/cat-1.jpg">
-                        <h5><a href="#">{{$category->tendanhmuc}}</a></h5>
+                        <h5><a href="{{ route('shop.category', $category->slug) }}">{{$category->tendanhmuc}}</a></h5>
                     </div>
                 </div>
                 @endforeach

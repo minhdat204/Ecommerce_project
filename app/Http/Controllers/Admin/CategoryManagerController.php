@@ -13,6 +13,7 @@ class CategoryManagerController
         $search = $request->input('search');
 
         $categories = Category::with('parentCategory')
+            //when(column,operator,value)
             ->when($search, function ($query) use ($search) {
                 return $query->where('tendanhmuc', 'LIKE', '%' . trim($search) . '%')
                     ->orWhere('mota', 'LIKE', '%' . trim($search) . '%');

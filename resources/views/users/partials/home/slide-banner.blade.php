@@ -15,7 +15,7 @@
                     <a href="{{ route('users.shop_details', $product->slug) }}" class="primary-btn">SHOP NOW</a>
                 </div>
                 <div class="hero__image" style="flex: 1; position: relative; height: 400px; overflow: hidden;">
-                    <img src="{{ 'storage/' . $product->images->first()->duongdan ?? 'img/featured/feature-8.jpg' }}"
+                    <img src="{{ $product->images->first() ? 'storage/' . $product->images->first()->duongdan : 'img/featured/feature-8.jpg' }}"
                          style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); max-width: 100%; height: auto; mix-blend-mode: darken;"
                          alt="{{ $product->tensanpham }}">
                 </div>

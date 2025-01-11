@@ -6,6 +6,18 @@
       0 => 'Laravel\\Pail\\PailServiceProvider',
     ),
   ),
+  'laravel/reverb' => 
+  array (
+    'aliases' => 
+    array (
+      'Output' => 'Laravel\\Reverb\\Output',
+    ),
+    'providers' => 
+    array (
+      0 => 'Laravel\\Reverb\\ApplicationManagerServiceProvider',
+      1 => 'Laravel\\Reverb\\ReverbServiceProvider',
+    ),
+  ),
   'laravel/sail' => 
   array (
     'providers' => 

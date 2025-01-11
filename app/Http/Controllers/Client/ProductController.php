@@ -79,16 +79,18 @@ class ProductController
     //logic nghiệp vụ
     public function index()
     {
-        $productsDiscount = Product::whereNotNull('gia_khuyen_mai')
+        $productsDiscount = Product::where('trangthai', 'active')
+            ->whereNotNull('gia_khuyen_mai')
             ->with('category')
             ->orderByRaw('((gia - COALESCE(gia_khuyen_mai, gia)) / gia) DESC')
             ->limit(9)
             ->get();
         // $products = Product::whereNull('gia_khuyen_mai')->with('category')->paginate(6);
-        $products = Product::with(['images' => function($query) {
-            $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
-        }])->orderBy('id_sanpham', 'desc')->paginate(9);
-        $productsCount = Product::count();
+        $products = Product::where('trangthai', 'active')
+            ->with(['images' => function($query) {
+                $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
+            }])->orderBy('id_sanpham', 'desc')->paginate(9);
+        $productsCount = Product::where('trangthai', 'active')->count();
         $categories = Category::all();
         $new_products = $this->productService->getNewProducts(9);
         return view('users.pages.shop', compact('products', 'productsDiscount', 'productsCount', 'categories', 'new_products'));
@@ -98,7 +100,7 @@ class ProductController
     {
         //lấy danh mục theo slug
         $category = Category::where('slug', $slug)->first();
-        $products = Product::query();
+        $products = Product::where('trangthai', 'active');
         //lấy sản phẩm theo danh mục
         //kiểm tra danh mục đó có thuộc tính danh mục cha không, nếu có cột id_danhmuc_cha thì laf danh mục con, neếu null thì làf cha
         $isParentCategory = is_null($category->id_danhmuc_cha);
@@ -130,14 +132,15 @@ class ProductController
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');
-        $id_category = $request->input('id_category');
+        $id_category = $request->input('slug') ? Category::where('slug', $request->input('slug'))->first()->id_danhmuc : $request->input('id_category');
         $minPrice = $request->input('minPrice') ?? 0;
         $maxPrice = $request->input('maxPrice') ??  Product::max('gia');
 
         // Start query
-        $products = Product::with(['images' => function($query) {
-            $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
-        }]);
+        $products = Product::where('trangthai', 'active')
+            ->with(['images' => function($query) {
+                $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
+            }]);
 
         // Filter by category
         if ($id_category) {
@@ -192,10 +195,14 @@ class ProductController
     public function show(string $slug)
     {
         //Dat : lấy chi tiết sản phẩm dựa vào slug
-        $Product = Product::with('images')->where('slug', $slug)->first();
+        $Product = Product::where('trangthai', 'active')
+            ->with('images')
+            ->where('slug', $slug)
+            ->first();
 
         //Dat: lấy 4 sản phẩm liên quan (Điểm liên quan = lượt xem 60% + ngẫu nhiên 40%)
-        $initialRelated = Product::where('id_danhmuc', $Product->id_danhmuc)
+        $initialRelated = Product::where('trangthai', 'active')
+            ->where('id_danhmuc', $Product->id_danhmuc)
             ->where('id_sanpham', '!=', $Product->id_sanpham)
             ->orderByRaw('(luotxem * 0.6) + (RAND() * 0.4) DESC')
             ->take(4)
@@ -203,7 +210,8 @@ class ProductController
 
         if ($initialRelated->count() < 4) {
             $remainingCount = 4 - $initialRelated->count();
-            $randomProducts = Product::where('id_sanpham', '!=', $Product->id_sanpham)
+            $randomProducts = Product::where('trangthai', 'active')
+                ->where('id_sanpham', '!=', $Product->id_sanpham)
                 ->whereNotIn('id_sanpham', $initialRelated->pluck('id_sanpham'))
                 ->inRandomOrder()
                 ->take($remainingCount)

@@ -223,13 +223,15 @@ class ProductController
         }
 
         //Khoa: lấy dữ liệu comments
-        $reviews = Comment::where('id_sanpham', $Product->id_sanpham)
+        $reviewsQuery = Comment::where('id_sanpham', $Product->id_sanpham)
             ->whereNull('parent_id')
             ->with('user')
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc');
 
-        $totalReviews = $reviews->count();
+        $totalReviews = $reviewsQuery->count();
+
+        $reviews = $reviewsQuery->paginate(1);
+
         $averageRating = $reviews->avg('danhgia') ?? 0;
 
         $ratingStats = [

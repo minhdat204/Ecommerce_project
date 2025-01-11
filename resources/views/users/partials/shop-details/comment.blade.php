@@ -1,3 +1,15 @@
+<style>
+    .star {
+        color: #ccc;
+        /* Màu mặc định của ngôi sao */
+        font-size: 20px;
+    }
+
+    .star.filled {
+        color: gold;
+        /* Màu vàng cho ngôi sao được đánh giá */
+    }
+</style>
 <div class="review-container">
     <!-- Rating Summary -->
     <div class="rating-summary">

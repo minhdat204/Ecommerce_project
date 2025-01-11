@@ -56,6 +56,7 @@
     15 => 'App\\Providers\\AppServiceProvider',
     16 => 'App\\Providers\\ChatServiceProvider',
     17 => 'App\\Providers\\FooterServiceProvider',
+
   ),
   'deferred' => 
   array (

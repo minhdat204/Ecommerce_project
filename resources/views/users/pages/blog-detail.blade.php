@@ -10,7 +10,7 @@
             <span class="me-3"><i class="fa fa-eye"></i> {{ number_format($post->luotxem) }} lượt xem</span>
         </div>
         <div class="blog-thumbnail mb-4 text-center">
-            <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->tieude }}" class="img-fluid rounded">
+            <img src="{{ asset('img/blog/blog-2.jpg') }}" alt="{{ $post->tieude }}" class="img-fluid rounded">
         </div>
         <div class="blog-content">
             @if($post->slug == 'loi-ich-cua-rau-cu-organic')
@@ -24,7 +24,7 @@
                 <p>{{$post->noidung}}</p>
                 @elseif($post->slug == 'cong-thuc-mon-an-tu-thuc-pham-organic')
                 <h2>{{$post->title}}</h2>
-                <p>{{$post->noidung}}</p>        
+                <p>{{$post->noidung}}</p>
             @endif
         </div>
     </div>

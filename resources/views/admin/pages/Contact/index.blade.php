@@ -1,8 +1,6 @@
 @extends('Admin.Layout.Layout')
 @section('namepage', 'Quản lý Liên Hệ')
-@push('scripts')
-    <script src="{{ asset('js/delete_contact.js') }}"></script> <!-- Kết nối file JavaScript -->
-@endpush
+
 @section('content')
     <div class="container">
         <div class="table-wrapper">

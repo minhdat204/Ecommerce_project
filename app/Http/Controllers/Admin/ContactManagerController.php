@@ -12,7 +12,7 @@ class ContactManagerController
     public function index()
     {
         //
-        $contacts = Contact :: with ('user') 
+        $contacts = Contact :: with ('user')
         -> select ('id_lienhe', 'ten', 'email', 'sodienthoai', 'noidung', 'trangthai', 'id_nguoidung')
         -> paginate (10);
         return view('admin.pages.contact.index', compact('contacts'));
@@ -58,7 +58,7 @@ class ContactManagerController
         //
             $contact = Contact::findOrFail($id_lienhe); // Tìm liên hệ theo ID
             $contact->trangthai = $request->input('trangthai'); // Lấy giá trị trạng thái từ form
-            $contact->save(); 
+            $contact->save();
 
         return redirect()->back()->with('success', 'Cập nhật trạng thái thành công.');
     }
@@ -75,7 +75,7 @@ class ContactManagerController
             $contacts->delete();
             return redirect()->route('admin.contact.index')->with('success', 'Liên hệ đã được xóa');
         }
-    
+
         return redirect()->route('admin.contact.index')->with('error', 'Không tìm thấy liên hệ');
     }
 }

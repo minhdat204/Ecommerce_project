@@ -52,14 +52,13 @@ class CommentManagerController
     public function destroy(string $id)
     {
 
-        try {
-            $comment = Comment::findOrFail($id); // Tìm bình luận theo ID
-            $comment->delete(); // Xóa bình luận
+        $comments = Comment::find($id);
 
-            // Chuyển hướng lại trang danh sách với thông báo thành công
-            return redirect()->route('admin.comment.index')->with('success', 'Bình luận đã được xóa.');
-        } catch (\Exception $e) {
-            return redirect()->route('admin.comment.index')->with('error', 'Xóa bình luận thất bại.');
+        if ($comments) {
+            $comments->delete();
+            return redirect()->route('admin.comment.index')->with('success', 'Bình luận đã được xóa');
         }
+
+        return redirect()->route('admin.comment.index')->with('error', 'Không tìm thấy bình luận');
     }
 }

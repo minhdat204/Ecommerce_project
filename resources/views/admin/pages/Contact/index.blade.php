@@ -1,13 +1,10 @@
 @extends('Admin.Layout.Layout')
 @section('namepage', 'Quản lý Liên Hệ')
-@push('scripts')
-    <script src="{{ asset('js/delete_contact.js') }}"></script> <!-- Kết nối file JavaScript -->
-@endpush
 @section('content')
     <div class="container">
-        <div class="table-wrapper">
-            @if(session('success'))
-                <div class="alert alert-success">
+        <div class="table-wrapper">@if(session('success'))
+                <div class="alert alert
+            -success">
                     {{ session('success') }}
                 </div>
             @endif
@@ -29,6 +26,7 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
+                        <th>ID Liên hệ </th>
                         <th>Tên Liên Hệ </th>
                         <th>Email</th>
                         <th>Số Điện Thoại</th>
@@ -40,11 +38,21 @@
                 <tbody>
                     @foreach ($contacts as $contact)
                         <tr>
+                            <td>{{ $contact->id_lienhe }}</td>
                             <td>{{ $contact->ten ?? 'Không xác định' }}</td>
                             <td>{{ $contact->email }}</td>
                             <td>{{ $contact->sodienthoai }}</td>
                             <td>{{ $contact->noidung }}</td>
-                            <td>{{ $contact->trangthai ? 'Đã xử lý' : 'Chưa xử lý' }}</td>
+                            <td>
+                                        @if($contact->trangthai == 'new')
+                                            Chưa phản hồi
+                                        @elseif($contact->trangthai == 'processing')
+                                            Chưa phản hồi
+                                        @elseif($contact->trangthai == 'resolved')
+                                            Đã phản hồi
+                                        @endif
+
+                            </td>
                             <td>
                                 <!-- Nút Xóa -->
                                 <a href="#" class="delete" data-toggle="modal" data-target="#deleteContactModal{{ $contact->id_lienhe }}">
@@ -82,6 +90,7 @@
                             </div>
                         </div>
                         <!-- Modal Chỉnh Sửa Trạng Thái -->
+                                                <!-- Modal Chỉnh Sửa Trạng Thái -->
                         <div id="editContactModal{{ $contact->id_lienhe }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editContactModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -99,8 +108,8 @@
                                             <div class="form-group">
                                                 <label for="trangthai">Trạng thái:</label>
                                                 <select name="trangthai" id="trangthai" class="form-control">
-                                                    <option value="0" {{ $contact->trangthai == 0 ? 'selected' : '' }}>Chưa xử lý</option>
-                                                    <option value="1" {{ $contact->trangthai == 1 ? 'selected' : '' }}>Đã xử lý</option>
+                                                    <option value="processing" {{ $contact->trangthai == 'processing' ? 'selected' : '' }}>Chưa phản hồi</option>
+                                                    <option value="resolved" {{ $contact->trangthai == 'resolved' ? 'selected' : '' }}>Đã phản hồi</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -112,6 +121,7 @@
                                 </div>
                             </div>
                         </div>
+
 
                     @endforeach
                 </tbody>

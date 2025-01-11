@@ -33,7 +33,7 @@ class ProfileController extends Controller
         // Lấy danh sách đơn hàng
         $orders = Order::with(['orderDetails.product'])
             ->where('id_nguoidung', $user)
-            ->paginate(10);
+            ->paginate(2);
         return view('users.pages.profile', compact('user', 'favorites', 'scores', 'orders'));
     }
     public function show($userId)

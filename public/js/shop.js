@@ -4,11 +4,15 @@ function handlePriceChange(event, ui) {
     const productContent = document.getElementById("product__content");
     const loadingSpinner = document.getElementById("loading-spinner");
 
+    const pathParts = window.location.pathname.split('/');
+    const slug = pathParts[pathParts.length - 1]; // Get the last part of the path as slug
+
     const filters = {
         keyword: new URLSearchParams(window.location.search).get("keyword") || "",
         id_category: new URLSearchParams(window.location.search).get("id_category") || "",
         minPrice: ui.values[0],
         maxPrice: ui.values[1],
+        slug: slug // Add the slug to filters
     };
 
     // Show loading indicator

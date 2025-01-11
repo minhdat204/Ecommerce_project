@@ -18,7 +18,6 @@
             <li><a href="#">Favorites List</a></li>
             <li><a href="#">Scored List</a></li>
             <li><a href="#">Order List</a></li>
-
         </ul>
 
         <!-- Tab Content -->
@@ -253,7 +252,48 @@
                     </div>
 
                     <div class="pagination-container mt-4">
-                        {{ $orders->links() }}
+                        @if ($orders->lastPage() > 1)
+                            @if ($orders->currentPage() > 1)
+                                <a href="{{ $orders->appends(request()->except('page'))->previousPageUrl() }}">
+                                    <i class="fa fa-long-arrow-left"></i>
+                                </a>
+                            @endif
+
+                            @php
+                                $start = max($orders->currentPage() - 2, 1);
+                                $end = min($start + 4, $orders->lastPage());
+                                $start = max(min($start, $orders->lastPage() - 4), 1);
+                            @endphp
+
+                            @if ($start > 1)
+                                <a href="{{ $orders->appends(request()->except('page'))->url(1) }}">1</a>
+                                @if ($start > 2)
+                                    <span>...</span>
+                                @endif
+                            @endif
+
+                            @for ($i = $start; $i <= $end; $i++)
+                                <a href="{{ $orders->appends(request()->except('page'))->url($i) }}"
+                                    class="{{ $orders->currentPage() == $i ? 'active' : '' }}">
+                                    {{ $i }}
+                                </a>
+                            @endfor
+
+                            @if ($end < $orders->lastPage())
+                                @if ($end < $orders->lastPage() - 1)
+                                    <span>...</span>
+                                @endif
+                                <a href="{{ $orders->appends(request()->except('page'))->url($orders->lastPage()) }}">
+                                    {{ $orders->lastPage() }}
+                                </a>
+                            @endif
+
+                            @if ($orders->hasMorePages())
+                                <a href="{{ $orders->appends(request()->except('page'))->nextPageUrl() }}">
+                                    <i class="fa fa-long-arrow-right"></i>
+                                </a>
+                            @endif
+                        @endif
                     </div>
                 </div>
             </div>

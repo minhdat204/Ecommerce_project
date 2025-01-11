@@ -19,6 +19,7 @@ use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ReviewController;
@@ -83,6 +84,7 @@ Route::middleware('check.user')->group(function () {
     //logout
     Route::middleware('auth')->group(function () {
         Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+        Route::post('/fire/message', [ChatController::class, 'fireMessage'])->name('sent.message');
     });
 
     //cart

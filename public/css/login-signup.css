@@ -223,3 +223,10 @@ textarea.form-input {
     border-color: #ff4444;
     box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2);
 }
+
+
+/* disable btn nếu cần*/
+.login-button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}

@@ -11,7 +11,6 @@
                 <form class="form-grid" method="POST" action="{{route('login')}}">
                     @csrf
                     <input type="hidden" name="redirect_url" id="redirectUrl" value="{{ url()->current() }}">
-
                     <div class="form-group full-width">
                         <label class="form-label">Email</label>
                         <input type="email" class="form-input" placeholder="Enter your email" name="email">

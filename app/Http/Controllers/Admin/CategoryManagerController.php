@@ -6,6 +6,9 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage; // Add this import
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
 class CategoryManagerController
 {
     public function index(Request $request)
@@ -33,14 +36,29 @@ class CategoryManagerController
 
     public function store(Request $request)
     {
-        $request->validate([
-            'CategoryName' => 'required|string|max:100|unique:danh_muc,tendanhmuc',  // Kiểm tra tên danh mục
-            'CategoryParent' => 'nullable|exists:danh_muc,id_danhmuc',  // Kiểm tra danh mục cha (nếu có)
-            'CategoryContent' => 'nullable|string',  // Mô tả có thể rỗng
-            'CategoryImage' => 'nullable|image|max:2048',  // Kiểm tra ảnh nếu có
-            'TrangThai' => 'required|in:active,inactive',  // Trạng thái chỉ có thể là 'active' hoặc 'inactive'
+        $validator = Validator::make($request->all(), [
+            'CategoryName' => 'required|string|max:100|unique:danh_muc,tendanhmuc',
+            'CategoryImage' => 'required|image|max:2048',
+            'CategoryContent' => 'required',
+            'TrangThai' => 'required|in:active,inactive'
+        ], [
+            'CategoryName.required' => 'Tên danh mục không được để trống',
+            'CategoryName.unique' => 'Tên danh mục đã tồn tại',
+            'CategoryName.max' => 'Tên danh mục không được vượt quá 100 ký tự',
+            'CategoryImage.required' => 'Hình ảnh không được để trống',
+            'CategoryImage.image' => 'File phải là hình ảnh',
+            'CategoryImage.max' => 'Kích thước hình ảnh không được vượt quá 2MB',
+            'CategoryContent.required' => 'Mô tả không được để trống',
+            'TrangThai.required' => 'Trạng thái không được để trống',
+            'TrangThai.in' => 'Trạng thái không hợp lệ',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('showModal', true); // Thêm flag để hiển thị modal
+        }
         $slug = Str::slug($request->CategoryName, '-');
         if ($request->hasFile('CategoryImage')) {
             $imagePath = $request->file('CategoryImage')->store('categories', 'public');
@@ -76,13 +94,30 @@ class CategoryManagerController
 
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'CategoryName' => 'required|string|max:255',
+        $validator = Validator::make($request->all(), [
+            'CategoryName' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('danh_muc', 'tendanhmuc')->ignore($id, 'id_danhmuc')
+            ],
             'CategoryContent' => 'required',
             'Status' => 'required|in:active,inactive',
-            'CategoryImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'CategoryImage' => 'nullable|image|max:2048'
+        ], [
+            'CategoryName.required' => 'Tên danh mục không được để trống',
+            'CategoryName.unique' => 'Tên danh mục đã tồn tại',
+            'CategoryContent.required' => 'Mô tả không được để trống',
+            'CategoryImage.image' => 'File phải là hình ảnh'
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('showModal', true)
+                ->with('editId', $id);
+        }
         try {
 
             $category = Category::findOrFail($id);

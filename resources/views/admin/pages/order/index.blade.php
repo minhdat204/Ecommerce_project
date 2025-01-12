@@ -2,6 +2,42 @@
 @section('namepage', 'Orders')
 
 @section('content')
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --success-color: #16a34a;
+            --warning-color: #eab308;
+            --danger-color: #dc2626;
+            --background-color: #f1f5f9;
+            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: #f8fafc;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            background: white;
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+    </style>
     <div class="container">
         <div class="table-wrapper">
             <!-- Tiêu đề bảng -->
@@ -10,29 +46,35 @@
                     <div class="col-sm-6">
                         <h2>Quản lý <b>Đơn Hàng</b></h2>
                     </div>
-                    <div class="col-sm-6">
-                        <!-- Nút Thêm Đơn hàng Mới -->
-                        <a href="#addCategoryModal" class="btn btn-success" data-toggle="modal">
-                            <i class="material-icons">&#xE147;</i> <span>Thêm Đơn hàng Mới</span>
-                        </a>
-                        <!-- Nút Xóa Đã Chọn -->
-                        <a onclick="xoanhieu()" href="javascript:void(0)" id="deleteSelected" class="btn btn-danger">
-                            <i class="material-icons">&#xE15C;</i> <span>Xóa đã chọn</span>
-                        </a>
-                    </div>
                 </div>
             </div>
-            <!-- Form Tìm Kiếm -->
-            <form method="GET" action="" class="form-inline mb-3">
-                <div class="form-group">
-                    <input type="text" name="search" class="form-control" placeholder="Tìm kiếm danh mục..."
-                        value=" ">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="filters">
+                        <button class="filter-btn active">Tất cả</button>
+                        <button class="filter-btn">Chờ xử lý</button>
+                        <button class="filter-btn">Đang xử lý</button>
+                        <button class="filter-btn">Đang giao</button>
+                        <button class="filter-btn">Đã giao</button>
+                        <button class="filter-btn">Đã hủy</button>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-default">Tìm kiếm</button>
-            </form>
+                <div class="col-sm">
+                    <!-- Form Tìm Kiếm -->
+                    <form method="GET" action="" class="form-inline mb-3">
+                        <div class="form-group">
+                            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm danh mục..."
+                                value=" ">
+                        </div>
+                        <button type="submit" class="btn btn-default">Tìm kiếm</button>
+                    </form>
+
+                </div>
+            </div>
             <!-- Bảng Đơn Hàng -->
             <table class="table table-striped table-hover">
                 <thead>
+
                     <tr>
                         <th>
                             <span class="custom-checkbox">
@@ -92,12 +134,14 @@
                                     @csrf
                                     @method('PUT')
                                     <select class="form-control" name="trangthai" onchange="this.form.submit()">
-                                        <option value="pending" {{ $order->trangthai == 'pending' ? 'selected' : '' }}>Đang
+                                        <option value="pending" {{ $order->trangthai == 'pending' ? 'selected' : '' }}>
+                                            Đang
                                             chờ xử lý</option>
                                         <option value="confirmed" {{ $order->trangthai == 'confirmed' ? 'selected' : '' }}>
                                             Đã xác nhận</option>
                                         <option value="processing"
-                                            {{ $order->trangthai == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
+                                            {{ $order->trangthai == 'processing' ? 'selected' : '' }}>Đang xử lý
+                                        </option>
                                         <option value="shipping" {{ $order->trangthai == 'shipping' ? 'selected' : '' }}>
                                             Đang giao hàng</option>
                                         <option value="completed" {{ $order->trangthai == 'completed' ? 'selected' : '' }}>
@@ -161,38 +205,6 @@
         @method('DELETE')
     </form>
 
-    <!-- Modal Thêm Danh Mục Mới -->
-    <div id="addCategoryModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h4 class="modal-title">Thêm Danh Mục Mới</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Tên Danh Mục</label>
-                            <input type="text" class="form-control" name="CategoryName" placeholder="Nhập tên danh mục"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <label>Trạng thái</label>
-                            <select class="form-control" name="Status" required>
-                                <option value="1">Kích hoạt</option>
-                                <option value="0">Vô hiệu hóa</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
-                        <input type="submit" class="btn btn-success" value="Thêm">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
 @endsection
 

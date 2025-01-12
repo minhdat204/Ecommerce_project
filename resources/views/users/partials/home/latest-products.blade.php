@@ -1,4 +1,4 @@
-<!-- Featured Section Begin -->
+<!-- Latest Section Begin -->
 <section class="featured spad">
     <div class="container">
         <div class="row">
@@ -41,4 +41,4 @@
         </div>
     </div>
 </section>
-<!-- Featured Section End -->
+<!-- Latest Section End -->

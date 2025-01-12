@@ -86,7 +86,7 @@ class CartController extends Controller
                 $availableQuantity = $product->soluong - $productIsExist->soluong;
                 return response()->json([
                     'success' => false,
-                    'message' =>  "Chỉ còn {$availableQuantity} sản phẩm có sẵn. Vui lòng giảm số lượng."
+                    'message' =>  "Số lượng còn lại trong kho là {$availableQuantity} sản phẩm."
                 ]);
             }
             //cập nhật số lượng sản phẩm trong giỏ hàng
@@ -101,8 +101,7 @@ class CartController extends Controller
             ]);
         }
         return response()->json([
-            'success' => true,
-            'redirect_url' => route('cart.index')
+            'success' => true
         ]);
     }
     public function removeItem($id)

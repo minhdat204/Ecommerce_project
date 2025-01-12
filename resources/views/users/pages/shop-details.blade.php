@@ -50,13 +50,18 @@
                             <div class="quantity">
                                 <div class="pro-qty">
                                     <span class="dec qtybtn">-</span>
+                                    @if ($Product->soluong > 0)
                                     <input id="quantity" value="1" min="1"
                                         max="{{ $Product->soluong }}">
+                                    @else
+                                    <input value="0" min="0"
+                                        max="{{ $Product->soluong }}">
+                                    @endif
                                     <span class="inc qtybtn">+</span>
                                 </div>
                             </div>
                         </div>
-                        <button id="addToCartButton" onclick="addToCart({{ $Product->id_sanpham }})" class="primary-btn no-border">ADD TO CART</button>
+                        <button {{ $Product->soluong > 0 ? '' : 'disabled' }} onclick="addToCart({{ $Product->id_sanpham }})" class="primary-btn no-border">ADD TO CART</button>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Availability</b>

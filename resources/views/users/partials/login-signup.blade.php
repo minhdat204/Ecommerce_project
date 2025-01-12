@@ -15,6 +15,7 @@
                     <div class="form-group full-width">
                         <label class="form-label">Email</label>
                         <input type="email" class="form-input" placeholder="Enter your email" name="email">
+                        <span class="error-message" id="email-error"></span>
                     </div>
 
                     <div class="form-group full-width">
@@ -23,6 +24,7 @@
                             <input type="password" class="form-input" placeholder="Enter your password" name="password">
                             <button type="button" class="password-toggle">Hide</button>
                         </div>
+                        <span class="error-message" id="password-error"></span>
                         <a href="#" class="forgot-password">I forgot my password</a>
                     </div>
 

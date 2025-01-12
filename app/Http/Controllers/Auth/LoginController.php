@@ -23,6 +23,10 @@ class LoginController
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string'
+        ], [
+            'email.required' => 'Vui lòng nhập email',
+            'email.email' => 'Email không hợp lệ',
+            'password.required' => 'Vui lòng nhập mật khẩu'
         ]);
 
         if (Auth::attempt($credentials)) {

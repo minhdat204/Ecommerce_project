@@ -77,10 +77,36 @@ showLoginForm.onclick = showLogin;
 
 
 
-// Xử lý form đăng nhập, đăng ký
+/*
+Xử lý form đăng nhập, đăng ký
+*/
 document.querySelector('.form-grid').addEventListener('submit', function (e) {
     e.preventDefault(); // Ngăn form submit mặc định
 
+    // Reset errors
+    clearErrors();
+
+     // Validate
+     let isValid = true;
+     const email = this.querySelector('input[name="email"]');
+     const password = this.querySelector('input[name="password"]');
+
+     if (!email.value.trim()) {
+         showError(email, 'Email is required');
+         isValid = false;
+     } else if (!isValidEmail(email.value)) {
+         showError(email, 'Please enter a valid email');
+         isValid = false;
+     }
+
+     if (!password.value.trim()) {
+         showError(password, 'Password is required');
+         isValid = false;
+     }
+
+     if (!isValid) return;
+
+     // Submit form
     const formData = new FormData(this);
 
     fetch(this.action, {
@@ -108,7 +134,39 @@ document.querySelector('.form-grid').addEventListener('submit', function (e) {
     });
 });
 
-// Xử lý đăng xuất bằng fetch
+
+// hàm hiển thị thông báo lỗi
+function showError(input, message) {
+    input.classList.add('error');
+    const errorElement = document.getElementById(`${input.name}-error`);
+    if (errorElement) {
+        errorElement.style.display = 'block';
+        errorElement.textContent = message;
+    }
+}
+
+// hàm clear thông báo lỗi
+function clearErrors() {
+    document.querySelectorAll('.error-message').forEach(el => {
+        el.style.display = 'none';
+        el.textContent = '';
+    });
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.classList.remove('error');
+    });
+}
+
+//hàm kiểm tra email
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+/*
+end đăng nhập, đăng ký
+*/
+
+/*
+Xử lý đăng xuất bằng fetch
+*/
 function logout(e) {
     e.preventDefault();
     const button = document.getElementById('logout-btn');

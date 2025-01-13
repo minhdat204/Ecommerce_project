@@ -56,7 +56,9 @@ function closeModal() {
 }
 
 // Khi người dùng click nút, mở modal
-btn.onclick = openModal;
+if (btn) {
+    btn.onclick = openModal;
+}
 
 // Khi người dùng click vào nút đóng, đóng modal
 span.onclick = closeModal;

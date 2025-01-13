@@ -30,7 +30,7 @@ class LoginController
             $minutes = ceil($timeLeft / 60);
             return response()->json([
             'success' => false,
-            'message' => "Tài khoản này đã bị tạm khóa. Vui lòng thử lại sau {$minutes} phút"
+            'message' => "Tài khoản này đã bị khóa. Vui lòng thử lại sau {$minutes} phút"
             ], 423);
         }
 

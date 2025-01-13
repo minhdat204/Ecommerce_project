@@ -18,6 +18,9 @@
                     <input type="text" name="email" placeholder="Your Email" required>
                 </div>
                 <div class="col-lg-12 text-center">
+                    <input type="text" name="sodienthoai" placeholder="Your Phone" required>
+                </div>
+                <div class="col-lg-12 text-center">
                     <textarea name="noidung" placeholder="Your message" required></textarea>
                     <button type="submit" class="site-btn">SEND MESSAGE</button>
                 </div>

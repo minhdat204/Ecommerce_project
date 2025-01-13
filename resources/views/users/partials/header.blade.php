@@ -96,10 +96,18 @@
                 <div class="col-lg-5">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="{{route('users.home')}}">Home</a></li>
-                            <li class="active"><a href="{{route('users.shop')}}">Shop</a></li>
-                            <li><a href="{{route('users.blogs')}}">Blog</a></li>
-                            <li><a href="{{route('users.contact')}}">Contact</a></li>
+                            <li class="{{ Route::is('users.home') ? 'active' : '' }}">
+                                <a href="{{route('users.home')}}">Home</a>
+                            </li>
+                            <li class="{{ Route::is('users.shop') ? 'active' : '' }}">
+                                <a href="{{route('users.shop')}}">Shop</a>
+                            </li>
+                            <li class="{{ Route::is('users.blogs') ? 'active' : '' }}">
+                                <a href="{{route('users.blogs')}}">Blog</a>
+                            </li>
+                            <li class="{{ Route::is('users.contact') ? 'active' : '' }}">
+                                <a href="{{route('users.contact')}}">Contact</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -111,7 +119,7 @@
                                 @auth
                                     <a href="{{route('cart.index')}}"><i class="fa fa-shopping-bag"></i> <span>{{ Auth::check() && Auth::user()->cart ? Auth::user()->cart->cartItems->count() : 0 }}</span></a>
                                 @else
-                                    <a href="#" onclick="openModal()"><i class="fa fa-shopping-bag"></i> <span>0</span></a>
+                                    <a href="#" onclick="openModal('/cart')"><i class="fa fa-shopping-bag"></i> <span>0</span></a>
                                 @endauth
                         </ul>
                         <div class="header__top__right__language">
@@ -138,9 +146,9 @@
                                             <i class="fa fa-shopping-basket"></i> Đơn hàng của tôi
                                         </a>
                                         <div class="dropdown-divider"></div>
-                                        <form action="{{ route('logout') }}" method="POST">
+                                        <form class="logout-form" onsubmit="logout(event)">
                                             @csrf
-                                            <button type="submit" class="dropdown-item">
+                                            <button type="submit" class="dropdown-item" id="logout-btn">
                                                 <i class="fa fa-sign-out"></i> Đăng xuất
                                             </button>
                                         </form>

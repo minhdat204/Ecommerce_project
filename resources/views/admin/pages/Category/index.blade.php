@@ -255,11 +255,6 @@
         </div>
     </div>
 
-    <!-- Form Xóa Đã Chọn (ẩn) -->
-    <form id="deleteSelectedForm" method="POST">
-        @csrf
-        @method('DELETE')
-    </form>
 
 
     <!-- Modal Thêm Danh Mục Mới -->

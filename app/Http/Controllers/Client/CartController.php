@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,7 @@ class CartController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('check.guest');
     }
     private function getOrCreateCart()
     {
@@ -43,6 +44,9 @@ class CartController extends Controller
         $cartItems = CartItem::with('product')
             ->where('id_giohang', $cart->id_giohang)
             ->get();
+
+        $cartItems->load('product.images');
+
         $subTotal = $this->calculateSubTotal($cartItems);
 
         $total = $this->calculateTotal($cartItems);

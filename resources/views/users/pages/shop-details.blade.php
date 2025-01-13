@@ -11,17 +11,15 @@
                     <div class="product__details__pic">
                         <div class="product__details__pic__item">
                             <img class="product__details__pic__item--large"
-                                src="{{ asset('img/product/details/product-details-1.jpg') }}" alt="">
+                                src="{{ asset('storage/' . ($Product->images->isNotEmpty() ? $Product->images->first()->duongdan : 'img/products/default.jpg')) }}"
+                                alt="{{ $Product->tensanpham }}">
                         </div>
                         <div class="product__details__pic__slider owl-carousel">
-                            <img data-imgbigurl="{{ asset('img/product/details/product-details-2.jpg') }}"
-                                src="{{ asset('img/product/details/thumb-1.jpg') }}" alt="">
-                            <img data-imgbigurl="{{ asset('img/product/details/product-details-3.jpg') }}"
-                                src="{{ asset('img/product/details/thumb-2.jpg') }}" alt="">
-                            <img data-imgbigurl="{{ asset('img/product/details/product-details-5.jpg') }}"
-                                src="{{ asset('img/product/details/thumb-3.jpg') }}" alt="">
-                            <img data-imgbigurl="{{ asset('img/product/details/product-details-4.jpg') }}"
-                                src="{{ asset('img/product/details/thumb-4.jpg') }}" alt="">
+                            @foreach($Product->images as $image)
+                                <img data-imgbigurl="{{ asset('storage/' . $image->duongdan) }}"
+                                    src="{{ asset('storage/' . $image->duongdan) }}"
+                                    alt="{{ $Product->tensanpham }}">
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -58,7 +56,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button id="addToCartButton" onclick="addToCart({{ $Product->id_sanpham }}, {{Auth::check()}})" class="primary-btn no-border">ADD TO CART</button>
+                        <button id="addToCartButton" onclick="addToCart({{ $Product->id_sanpham }})" class="primary-btn no-border">ADD TO CART</button>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Availability</b>
@@ -96,7 +94,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
-                                    aria-selected="false">Reviews <span>(1)</span></a>
+                                    aria-selected="false">Reviews <span>({{$totalReviews}})</span></a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -154,7 +152,54 @@
                                     'ratingStats' => $ratingStats,
                                     'userReview' => $userReview,
                                 ])
+                                <!-- Pagination Section Begin -->
+                            <div class="product__pagination">
+                                @if ($reviews->lastPage() > 1)
+                                    @if ($reviews->currentPage() > 1)
+                                        <a href="{{ $reviews->appends(request()->except('page'))->previousPageUrl() }}">
+                                            <i class="fa fa-long-arrow-left"></i>
+                                        </a>
+                                    @endif
+
+                                    @php
+                                        $start = max($reviews->currentPage() - 2, 1);
+                                        $end = min($start + 4, $reviews->lastPage());
+                                        $start = max(min($start, $reviews->lastPage() - 4), 1);
+                                    @endphp
+
+                                    @if ($start > 1)
+                                        <a href="{{ $reviews->appends(request()->except('page'))->url(1) }}">1</a>
+                                        @if ($start > 2)
+                                            <span>...</span>
+                                        @endif
+                                    @endif
+
+                                    @for ($i = $start; $i <= $end; $i++)
+                                        <a href="{{ $reviews->appends(request()->except('page'))->url($i) }}"
+                                            class="{{ $reviews->currentPage() == $i ? 'active' : '' }}">
+                                            {{ $i }}
+                                        </a>
+                                    @endfor
+
+                                    @if ($end < $reviews->lastPage())
+                                        @if ($end < $reviews->lastPage() - 1)
+                                            <span>...</span>
+                                        @endif
+                                        <a href="{{ $reviews->appends(request()->except('page'))->url($reviews->lastPage()) }}">
+                                            {{ $reviews->lastPage() }}
+                                        </a>
+                                    @endif
+
+                                    @if ($reviews->hasMorePages())
+                                        <a href="{{ $reviews->appends(request()->except('page'))->nextPageUrl() }}">
+                                            <i class="fa fa-long-arrow-right"></i>
+                                        </a>
+                                    @endif
+                                @endif
                             </div>
+                            <!-- Pagination Section End -->
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -177,11 +222,12 @@
                 @foreach ($relatedProducts as $product)
                     <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="{{ asset('img/product/product-1.jpg') }}">
+                            <div class="product__item__pic set-bg"
+                                data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/default.jpg')) }}">
                                 <ul class="product__item__pic__hover">
                                     <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                     <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                    <li><a href="javascript:void(0)" onclick="quickAddToCart({{ $product->id_sanpham }})"><i class="fa fa-shopping-cart"></i></a></li>
                                 </ul>
                             </div>
                             <div class="product__item__text">

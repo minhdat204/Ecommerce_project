@@ -376,3 +376,27 @@ function selectCategory(element, id_category = null) {
     categoryDisplay.textContent = categoryText;
     (id_category != null) ? categoryInput.value = id_category : categoryInput.value = '';
 }
+
+// Dat: mở modal đăng nhập nếu chưa đăng nhập khi truy cập 1 số trang cần đăng nhập
+document.addEventListener('DOMContentLoaded', function() {
+    // Check for openLogin parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('openLogin')) {
+        openModal();
+        // Clean URL without reloading
+        window.history.replaceState({}, '', window.location.pathname);
+    }
+});
+
+// Dat: Hiển thị thông báo khi có trong sessionStorage
+window.onload = function() {
+    // Kiểm tra xem có thông báo nào trong sessionStorage không
+    const message = sessionStorage.getItem('message');
+    if (message) {
+        // Hiển thị thông báo nếu có
+        notification(message, 'success', 3000);
+
+        // Xóa thông báo trong sessionStorage sau khi đã hiển thị
+        sessionStorage.removeItem('message');
+    }
+};

@@ -19,9 +19,11 @@ use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ReviewController;
+use App\Http\Controllers\Client\CheckoutMomoController;
 
 Route::middleware('check.user')->group(function () {
     //review
@@ -58,7 +60,14 @@ Route::middleware('check.user')->group(function () {
     })->name('users.contact');
 
     //checkout
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::group(['prefix' => 'checkout', 'as' => 'checkout.'], function () {
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('index');
+        Route::post('/checkoutCOD', [CheckoutController::class, 'checkoutCOD'])->name('checkoutCOD');
+
+        Route::post('/momo-payment', [CheckoutMomoController::class, 'payWithMomo'])->name('momo.payment');
+        Route::get('/momo-return', [CheckoutMomoController::class, 'momoReturn'])->name('momo.return');
+        Route::post('/momo-ipn', [CheckoutMomoController::class, 'momoIPN'])->name('momo.ipn');
+    });
 
     //about us
     Route::get('/about-us', function () {
@@ -83,6 +92,7 @@ Route::middleware('check.user')->group(function () {
     //logout
     Route::middleware('auth')->group(function () {
         Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+        Route::post('/fire/message', [ChatController::class, 'fireMessage'])->name('sent.message');
     });
 
     //cart

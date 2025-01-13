@@ -331,6 +331,31 @@ function notification(message, type = 'error', duration = 3000, onClick = null) 
     }).showToast();
 }
 
+// Dat: hàm show thông báo điều hướng
+let isRedirectNotificationActive = false;
+function showRedirectNotification(message, duration = 6000, url) {
+    if (isRedirectNotificationActive) return;
+
+    isRedirectNotificationActive = true;
+
+    Toastify({
+        text: message,
+        duration: duration,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: "#3c3c3c",
+            color: "#fff"
+        },
+        onClick: function() {
+            window.location.href = url;
+        },
+        callback: function() {
+            isRedirectNotificationActive = false;
+        }
+    }).showToast();
+}
+
 // Dat: hàm hiển thị thông báo xác nhận
 function showConfirm(message, callback) {
     Swal.fire({
@@ -355,24 +380,25 @@ window.addEventListener('pageshow', function(event) {
     // Define paths that need reload
     const pathsNeedReload = [
         '/cart',
-        // Add more paths as needed
+        '/favorites',
+        // thêm các path khác cần reload ở đây
     ];
 
-    // Get current path
+    // lấy đường dẫn hiện tại
     const currentPath = window.location.pathname;
 
-    // Check if current path needs reload
+    // Check nếu đường dẫn hiện tại không nằm trong danh sách cần reload
     if (!pathsNeedReload.includes(currentPath)) {
         return; // Exit if not a path that needs reload
     }
 
-    // Check back-forward cache
+    // Check back/forward cache
     if (event.persisted) {
         window.location.reload();
         return;
     }
 
-    // Check navigation type
+    // Check loại navigation
     if (window.performance && window.performance.getEntriesByType) {
         const navigationEntries = window.performance.getEntriesByType('navigation');
         if (navigationEntries.length > 0) {
@@ -398,11 +424,11 @@ function selectCategory(element, id_category = null) {
 
 // Dat: mở modal đăng nhập nếu chưa đăng nhập khi truy cập 1 số trang cần đăng nhập
 document.addEventListener('DOMContentLoaded', function() {
-    // Check for openLogin parameter
+    // Kiểm tra xem có tham số truy cập openLogin không
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('openLogin')) {
         openModal();
-        // Clean URL without reloading
+        // Xóa tham số truy cập openLogin
         window.history.replaceState({}, '', window.location.pathname);
     }
 });
@@ -419,3 +445,22 @@ window.onload = function() {
         sessionStorage.removeItem('message');
     }
 };
+
+// Dat: hàm cập nhật số lượng sản phẩm giỏ hàng và tổng tiền
+function updateCartCountAndTotal(cartTotal, cartCount) {
+    // lấy phần tử để Cập nhật số lượng sp giỏ hàng trên header
+    const cartCountElement = document.getElementById('cart-count');
+    // lấy phần tử để cập nhật tổng tiền ở header
+    const headerCartTotalElement = document.getElementById('cart-total');
+
+    // cập nhật số lượng sp giỏ hàng trên header
+    const currentCount = parseInt(cartCountElement.textContent);
+    cartCountElement.textContent = cartCount ?? 0;
+    // cập nhật tổng tiền ở header
+    headerCartTotalElement.textContent = cartTotal ?? '0đ';
+}
+// Dat: hàm cập nhật số lượng sản phẩm yêu thích
+function updateFavoriteCount(count) {
+    const favoriteCountElement = document.getElementById('favorite-count');
+    favoriteCountElement.textContent = count ?? 0;
+}

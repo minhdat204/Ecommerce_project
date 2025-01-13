@@ -19,6 +19,7 @@
                 <td class="shoping__cart__price">
                     @if ($item->product->gia_khuyen_mai != 0)
                         {{ number_format($item->product->gia_khuyen_mai, 0, ',', '.') }}đ
+                        <span class="text-decoration-line-through text-muted">{{ number_format($item->product->gia, 0, ',', '.') }}đ</span>
                     @else
                         {{ number_format($item->product->gia, 0, ',', '.') }}đ
                     @endif

@@ -2258,8 +2258,6 @@ ol {
 }
 
 .shoping__cart__table table tbody tr td {
-	padding-top: 30px;
-	padding-bottom: 30px;
 	border-bottom: 1px solid #ebebeb;
 }
 
@@ -2283,6 +2281,14 @@ ol {
 	color: #1c1c1c;
 	font-weight: 700;
 	width: 100px;
+}
+
+.shoping__cart__price span{
+    font-size: 15px;
+    color: #b2b2b2!important;
+    display: block;
+    font-weight: 400;
+    text-decoration: line-through!important;
 }
 
 .shoping__cart__table table tbody tr td.shoping__cart__total {
@@ -2439,9 +2445,11 @@ ol {
     padding-bottom: 20px;
 }
 
+.favorites__table table thead th.favorite__product {
+    text-align: left;
+}
+
 .favorites__table table tbody tr td {
-    padding-top: 30px;
-    padding-bottom: 30px;
     border-bottom: 1px solid #ebebeb;
 }
 
@@ -2469,9 +2477,11 @@ ol {
 }
 
 .favorite__price span {
+    font-size: 15px;
     color: #b2b2b2;
+    display: block;
+    font-weight: 400;
     text-decoration: line-through;
-    margin-left: 10px;
 }
 
 .favorite__status {

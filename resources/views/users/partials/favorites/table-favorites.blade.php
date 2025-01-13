@@ -13,12 +13,12 @@
         <tbody>
             @forelse($favorites as $favorite)
             <tr id="favorite-item-{{ $favorite->id_yeuthich }}">
-                <td class="favorite__item">
-                    <img src="{{ asset($favorite->product->thumbnail) }}" alt="">
+                <td class="favorite__item" onclick="window.location='{{ route('users.shop_details', $favorite->product->slug) }}'" style="cursor: pointer;">
+                    <img src="{{ asset('storage/' . ($favorite->product->images->isNotEmpty() ? $favorite->product->images->first()->duongdan : 'img/products/default.jpg')) }}" alt="{{ $favorite->product->tensanpham }}" width="100">
                     <h5>{{ $favorite->product->tensanpham }}</h5>
                 </td>
                 <td class="favorite__price">
-                    @if($favorite->product->gia_khuyen_mai)
+                    @if($favorite->product->gia_khuyen_mai != 0)
                         {{ number_format($favorite->product->gia_khuyen_mai) }}đ
                         <span>{{ number_format($favorite->product->gia) }}đ</span>
                     @else

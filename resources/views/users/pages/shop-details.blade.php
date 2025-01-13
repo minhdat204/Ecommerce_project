@@ -62,7 +62,15 @@
                             </div>
                         </div>
                         <button {{ $Product->soluong > 0 ? '' : 'disabled' }} onclick="addToCart({{ $Product->id_sanpham }})" class="primary-btn no-border">ADD TO CART</button>
-                        <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+                        <div class="favorite-btn-wrapper">
+                            <button type="button"
+                                    class="favorite-btn {{ $isFavorited ? 'active' : '' }}"
+                                    data-id="{{ $Product->id_sanpham }}"
+                                    onclick="toggleFavorite({{ $Product->id_sanpham }})">
+                                <i class="fa fa-heart-o heart-empty"></i>
+                                <i class="fa fa-heart heart-filled"></i>
+                            </button>
+                        </div>
                         <ul>
                             <li><b>Availability</b>
                                 <span>

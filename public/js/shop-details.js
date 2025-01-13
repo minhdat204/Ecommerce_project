@@ -74,3 +74,62 @@ function addToCart(productId) {
         button.innerHTML = 'ADD TO CART';
     });
 }
+
+function toggleFavorite(productId) {
+    if (!authCheck) {
+        notification('Vui lòng đăng nhập để thêm sản phẩm vào yêu thích', 'error');
+        setTimeout(() => openModal(), 500);
+        return;
+    }
+
+    const btn = document.querySelector(`.favorite-btn[data-id="${productId}"]`);
+    if (!btn) return;
+
+    // Disable button & add loading state
+    btn.disabled = true;
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+
+    fetch(`/favorites/toggle/${productId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Toggle active class
+            btn.classList.toggle('active');
+
+            // Update icons
+            const emptyHeart = btn.querySelector('.heart-empty');
+            const filledHeart = btn.querySelector('.heart-filled');
+
+            if (emptyHeart && filledHeart) {
+                if (data.isAdded) {
+                    emptyHeart.style.opacity = 0;
+                    filledHeart.style.opacity = 1;
+                    filledHeart.style.transform = 'scale(1)';
+                } else {
+                    emptyHeart.style.opacity = 1;
+                    filledHeart.style.opacity = 0;
+                    filledHeart.style.transform = 'scale(0)';
+                }
+            }
+
+            notification(data.message, 'success');
+        } else {
+            notification(data.message || 'Có lỗi xảy ra', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        notification('Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
+    })
+    .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = originalContent;
+    });
+}

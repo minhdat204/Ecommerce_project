@@ -26,7 +26,7 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>ID Liên hệ </th>
+                        <th>STT</th> 
                         <th>Tên Liên Hệ </th>
                         <th>Email</th>
                         <th>Số Điện Thoại</th>
@@ -36,9 +36,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($contacts as $contact)
+                    @foreach ($contacts  as $index =>$contact)
                         <tr>
-                            <td>{{ $contact->id_lienhe }}</td>
+                            <td>{{$index + 1}}</td>
                             <td>{{ $contact->ten ?? 'Không xác định' }}</td>
                             <td>{{ $contact->email }}</td>
                             <td>{{ $contact->sodienthoai }}</td>
@@ -89,7 +89,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Modal Chỉnh Sửa Trạng Thái -->
                                                 <!-- Modal Chỉnh Sửa Trạng Thái -->
                         <div id="editContactModal{{ $contact->id_lienhe }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editContactModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">

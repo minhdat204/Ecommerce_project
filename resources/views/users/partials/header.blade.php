@@ -116,21 +116,21 @@
                         <ul>
                             <li>
                                 @auth
-                                    <a href="{{ route('favorites.index') }}"><i class="fa fa-heart"></i> <span>{{ Auth::user()->favorites ? Auth::user()->favorites->count() : 0 }}</span></a>
+                                    <a href="{{ route('favorites.index') }}"><i class="fa fa-heart"></i> <span id="favorite-count">{{ Auth::user()->favoriteProducts ? Auth::user()->favoriteProducts->count() : 0 }}</span></a>
                                 @else
                                     <a href="#" onclick="openModal('/favorites')"><i class="fa fa-heart"></i> <span>0</span></a>
                                 @endauth
                             </li>
                             <li>
                                 @auth
-                                    <a href="{{route('cart.index')}}"><i class="fa fa-shopping-bag"></i> <span>{{ Auth::check() && Auth::user()->cart ? Auth::user()->cart->cartItems->count() : 0 }}</span></a>
+                                    <a href="{{route('cart.index')}}"><i class="fa fa-shopping-bag"></i> <span id="cart-count">{{ Auth::check() && Auth::user()->cart ? Auth::user()->cart->cartItems->count() : 0 }}</span></a>
                                 @else
                                     <a href="#" onclick="openModal('/cart')"><i class="fa fa-shopping-bag"></i> <span>0</span></a>
                                 @endauth
                             </li>
                         </ul>
                         <div class="header__top__right__language">
-                            <div class="header__cart__price">Giỏ hàng: <span>150.000đ</span></div>
+                            <div class="header__cart__price">Giỏ hàng: <span id="cart-total">{{ Auth::check() && Auth::user()->cart ? number_format(Auth::user()->cart->cartItems->sum(function($item) { return $item->soluong * $item->product->gia_khuyen_mai ?? $item->product->gia; }), 0, ',', '.') : 0 }}đ</span></div>
                         </div>
                         <div class="header__top__right__auth">
                             @auth

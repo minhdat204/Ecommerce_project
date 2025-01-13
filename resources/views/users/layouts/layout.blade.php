@@ -65,6 +65,7 @@
         var authCheck = @json(auth()->check());
     </script>
     <script src="{{asset('js/quickAddToCart.js')}}"></script>
+    <script src="{{asset('js/quickToggleFavorite.js')}}"></script>
     {{-- sweetalert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('scripts')

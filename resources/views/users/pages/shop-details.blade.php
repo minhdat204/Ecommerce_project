@@ -61,12 +61,12 @@
                                 </div>
                             </div>
                         </div>
-                        <button {{ $Product->soluong > 0 ? '' : 'disabled' }} onclick="addToCart({{ $Product->id_sanpham }})" class="primary-btn no-border">ADD TO CART</button>
-                        <div class="favorite-btn-wrapper">
+                        <button id="addToCartButton" {{ $Product->soluong > 0 ? '' : 'disabled' }} onclick="addToCart({{ $Product->id_sanpham }})" class="primary-btn no-border">ADD TO CART</button>
+                        <div class="favorite-btn-wrapper" onclick="toggleFavorite({{ $Product->id_sanpham }})">
                             <button type="button"
                                     class="favorite-btn {{ $isFavorited ? 'active' : '' }}"
                                     data-id="{{ $Product->id_sanpham }}"
-                                    onclick="toggleFavorite({{ $Product->id_sanpham }})">
+                                    >
                                 <i class="fa fa-heart-o heart-empty"></i>
                                 <i class="fa fa-heart heart-filled"></i>
                             </button>

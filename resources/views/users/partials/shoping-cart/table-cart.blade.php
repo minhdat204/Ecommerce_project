@@ -54,7 +54,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" class="text-center">Your cart is empty</td>
+                <td colspan="5" class="text-center range-cart-favorites">Your cart is empty</td>
             </tr>
             @endforelse
         </tbody>

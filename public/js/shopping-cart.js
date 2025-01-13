@@ -1,89 +1,93 @@
 function removeItem(cartItemId){
-    const row = document.querySelector('#cart-item-' + cartItemId);
-    const cartTotal = document.getElementById('total');
-    const subTotal = document.getElementById('subtotal');
-    fetchData('/cart/items/' + cartItemId, 'DELETE', {}, function(data){
-        if(data.success) {
-            row.style.transition = 'opacity 0.5s';//OR: all 0.5s ease
-            row.style.opacity = 0;
-            // row.style.transform = 'translateX(20px)';
+    showConfirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?', function() {
+        const row = document.querySelector('#cart-item-' + cartItemId);
+        const cartTotal = document.getElementById('total');
+        const subTotal = document.getElementById('subtotal');
+        fetchData('/cart/items/' + cartItemId, 'DELETE', {}, function(data){
+            if(data.success) {
+                row.style.transition = 'opacity 0.5s';//OR: all 0.5s ease
+                row.style.opacity = 0;
+                // row.style.transform = 'translateX(20px)';
 
-            setTimeout(function(){
-                row.remove();
-                cartTotal.innerHTML = data.cartTotal + (data.discount ? ' (-' + data.discount + '%)' : '');
-                subTotal.innerHTML = data.subTotal;
-                //document.querySelectorAll('tbody tr') = $('tbody tr')
-                // kiểm nếu giỏ hàng rỗng
-                if($('tbody tr').length === 0) {
-                    $('tbody').html(
-                        `<tr>
-                            <td colspan="5" class="text-center">Your cart is empty</td>
-                        </tr>`
-                    );
-                    // document.querySelector('tbody').innerHTML = `
-                    //     <tr>
-                    //         <td colspan="5" class="text-center">Your cart is empty</td>
-                    //     </tr>
-                    // `;
-                }
-                notification("Đã xóa sản phẩm khỏi giỏ hàng", 'success', 3000);
-            }, 500);
-        }
-        else {
-            notification(data.message || "Có lỗi xảy ra", 'error');
-        }
+                setTimeout(function(){
+                    row.remove();
+                    cartTotal.innerHTML = data.cartTotal + (data.discount ? ' (-' + data.discount + '%)' : '');
+                    subTotal.innerHTML = data.subTotal;
+                    //document.querySelectorAll('tbody tr') = $('tbody tr')
+                    // kiểm nếu giỏ hàng rỗng
+                    if($('tbody tr').length === 0) {
+                        $('tbody').html(
+                            `<tr>
+                                <td colspan="5" class="text-center">Your cart is empty</td>
+                            </tr>`
+                        );
+                        // document.querySelector('tbody').innerHTML = `
+                        //     <tr>
+                        //         <td colspan="5" class="text-center">Your cart is empty</td>
+                        //     </tr>
+                        // `;
+                    }
+                    notification("Đã xóa sản phẩm khỏi giỏ hàng", 'success', 3000);
+                }, 500);
+            }
+            else {
+                notification(data.message || "Có lỗi xảy ra", 'error');
+            }
+        });
     });
 }
 
 function clearCart(){
-    const rows = document.querySelectorAll('tbody tr');
-    const tbody = document.querySelector('tbody');
+    showConfirm('Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng không?', function() {
+        const rows = document.querySelectorAll('tbody tr');
+        const tbody = document.querySelector('tbody');
 
-    const cartTotal = document.getElementById('total');
-    const subTotal = document.getElementById('subtotal');
+        const cartTotal = document.getElementById('total');
+        const subTotal = document.getElementById('subtotal');
 
-    // Show loading
-    const button = document.querySelector('#deleteCart');
-    button.disabled = true;
-    button.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Deleting...';
+        // Show loading
+        const button = document.querySelector('#deleteCart');
+        button.disabled = true;
+        button.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Deleting...';
 
-    fetchData('/cart/clear', 'DELETE', {}, function(data){
-        if(data.success) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="5" class="text-center">
-                        <i class="fa fa-spinner fa-spin"></i> Loading...
-                    </td>
-                </tr>
-            `;
-
-            rows.forEach(row => {
-                row.style.transition = 'opacity 0.5s';
-                row.style.opacity = 0;
-            });
-            //chuyên hướng sau 0.5s
-            setTimeout(() => {
-                rows.forEach(row => {
-                    row.remove();
-                });
-
-                cartTotal.innerHTML = '0đ';
-                subTotal.innerHTML = '0đ';
-
+        fetchData('/cart/clear', 'DELETE', {}, function(data){
+            if(data.success) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="5" class="text-center">Your cart is empty</td>
+                        <td colspan="5" class="text-center">
+                            <i class="fa fa-spinner fa-spin"></i> Loading...
+                        </td>
                     </tr>
                 `;
-                notification("Đã xóa toàn bộ sản phẩm khỏi giỏ hàng", 'success', 3000);
-            }, 500);
-        }
-        else {
-            notification(data.message || "Có lỗi xảy ra", 'error');
-        }
-    }, null, function(){
-        button.disabled = false;
-        button.innerHTML = 'DELETE ALL';
+
+                rows.forEach(row => {
+                    row.style.transition = 'opacity 0.5s';
+                    row.style.opacity = 0;
+                });
+                //chuyên hướng sau 0.5s
+                setTimeout(() => {
+                    rows.forEach(row => {
+                        row.remove();
+                    });
+
+                    cartTotal.innerHTML = '0đ';
+                    subTotal.innerHTML = '0đ';
+
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="text-center">Your cart is empty</td>
+                        </tr>
+                    `;
+                    notification("Đã xóa toàn bộ sản phẩm khỏi giỏ hàng", 'success', 3000);
+                }, 500);
+            }
+            else {
+                notification(data.message || "Có lỗi xảy ra", 'error');
+            }
+        }, null, function(){
+            button.disabled = false;
+            button.innerHTML = 'DELETE ALL';
+        });
     });
 }
 function handleQuantityChange(input){
@@ -105,7 +109,6 @@ function handleQuantityChange(input){
         }
     });
 }
-
 
 
 // function removeItem(cartItemId){

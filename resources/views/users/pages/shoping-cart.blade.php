@@ -1,4 +1,7 @@
 @extends('users.layouts.layout')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/modal-confirm.css') }}">
+@endpush
 @section('content')
     <!-- Shopping Cart Section Begin -->
     <section class="shoping-cart spad">

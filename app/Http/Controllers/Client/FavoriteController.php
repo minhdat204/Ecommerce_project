@@ -42,10 +42,14 @@ class FavoriteController extends Controller
             $isAdded = true;
         }
 
+        // số lượng sản phẩm yêu thích
+        $favoriteCount = FavoriteProduct::where('id_nguoidung', Auth::id())->count();
         return response()->json([
             'success' => true,
             'message' => $message,
-            'isAdded' => $isAdded
+            'isAdded' => $isAdded,
+            'redirect_url' => route('favorites.index'),
+            'favoriteCount' => $favoriteCount
         ]);
     }
 
@@ -57,9 +61,12 @@ class FavoriteController extends Controller
 
         $favorite->delete();
 
+        // số lượng sản phẩm yêu thích
+        $favoriteCount = FavoriteProduct::where('id_nguoidung', Auth::id())->count();
         return response()->json([
             'success' => true,
-            'message' => 'Đã xóa sản phẩm khỏi danh sách yêu thích'
+            'message' => 'Đã xóa sản phẩm khỏi danh sách yêu thích',
+            'favoriteCount' => $favoriteCount
         ]);
     }
 

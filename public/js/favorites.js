@@ -1,23 +1,7 @@
-// function toggleFavorite(productId) {
-//     if (!authCheck) {
-//         notification('Please login to add favorites', 'error');
-//         setTimeout(() => openModal(), 500);
-//         return;
-//     }
-
-//     fetchData(`/favorites/toggle/${productId}`, 'POST', null,
-//         (data) => {
-//             if (data.success) {
-//                 const icon = document.querySelector(`.favorite-icon[data-id="${productId}"]`);
-//                 icon.classList.toggle('active');
-//                 notification(data.message, 'success');
-//             }
-//             else {
-//                 notification(data.message || 'Có ', 'error');
-//             }
-//         }
-//     );
-// }
+// view empty
+const contentHtmlEmptyFavorites = `<tr>
+                            <td colspan="5" class="text-center range-cart-favorites">Your favorites list is empty</td>
+                        </tr>`;
 
 function removeFavorite(favoriteId) {
     showConfirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích không?', () => {
@@ -30,13 +14,14 @@ function removeFavorite(favoriteId) {
                     row.style.opacity = 0;
                     setTimeout(() => {
                         row.remove();
+                        // kiểm nếu danh sách yêu thích rỗng
                         if ($('tbody tr').length === 0) {
                             $('tbody').html(
-                                `<tr>
-                                    <td colspan="5" class="text-center">Your cart is empty</td>
-                                </tr>`
+                                contentHtmlEmptyFavorites
                             );
                         }
+                        // cập nhật số lượng yêu thích trên header
+                        updateFavoriteCount(data.favoriteCount);
                         notification(data.message, 'success', 3000);
                     }, 500);
                 }
@@ -75,11 +60,10 @@ function clearFavorites() {
 
                 setTimeout(() => {
                     rows.forEach(row => row.remove());
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="5" class="text-center">Your favorites list is empty</td>
-                        </tr>
-                    `;
+                    // Hiển thị thông báo danh sách yêu thích trống
+                    tbody.innerHTML = contentHtmlEmptyFavorites;
+                    // cập nhật số lượng yêu thích trên header
+                    updateFavoriteCount(0);
                     notification("Đã xóa toàn bộ danh sách yêu thích", 'success', 3000);
                 }, 500);
             } else {

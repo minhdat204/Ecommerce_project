@@ -30,6 +30,8 @@
     <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/login-signup.css')}}" type="text/css">
+    {{-- sweetalert2 --}}
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     @stack('styles')
 </head>
 
@@ -63,6 +65,8 @@
         var authCheck = @json(auth()->check());
     </script>
     <script src="{{asset('js/quickAddToCart.js')}}"></script>
+    {{-- sweetalert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('scripts')
 </body>
 

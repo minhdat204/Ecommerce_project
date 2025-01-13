@@ -2023,7 +2023,7 @@ ol {
 .favorite-btn-wrapper {
     position: relative;
     display: inline-block;
-    padding: 16px 16px;
+    padding: 18px 18px;
     background: #f5f5f5;
     border-radius: 30px;
     /* margin-left: 20px; */
@@ -2049,7 +2049,6 @@ ol {
 }
 
 .favorite-btn i {
-    font-size: 18px;
     position: relative;
     transition: all 0.3s;
 }
@@ -2453,6 +2452,11 @@ ol {
     border-bottom: 1px solid #ebebeb;
 }
 
+.range-cart-favorites{
+    padding-top: 30px;
+	padding-bottom: 30px;
+}
+
 .favorites__table table tbody tr td.favorite__item {
     width: 630px;
     text-align: left;
@@ -2519,6 +2523,57 @@ ol {
 
 .icon_close:hover {
     color: #dd2222;
+}
+
+.favorites__table .action-icons {
+    display: inline-flex;
+    gap: 6px;
+}
+
+.favorites__table .action-icon {
+    font-size: 30px;
+    color: #1c1c1c;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+    /* border: 1px solid #ebebeb; */
+    background: #ffffff;
+    display: block;
+    /* border-radius: 50%; */
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.favorites__table .action-icon i {
+    position: relative;
+    transform: rotate(0);
+    transition: all 0.3s;
+}
+
+.favorites__table .action-icon:hover {
+    background: #ffffff;
+    border-color: #ffffff;
+}
+
+.favorites__table .action-icon:hover i {
+    color: #1c1c1c;
+    transform: rotate(360deg);
+}
+
+.favorites__table .action-icon.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.favorites__table .action-icon.disabled:hover {
+    background: #ffffff;
+    border-color: #ebebeb;
+}
+
+.favorites__table .action-icon.disabled:hover i {
+    color: #1c1c1c;
+    transform: rotate(0);
 }
 
 /*---------------------

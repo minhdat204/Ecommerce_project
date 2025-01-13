@@ -1,3 +1,4 @@
+// add to cart
 function addToCart(productId) {
     // Kiểm tra trạng thái đăng nhập
     if (!authCheck) {
@@ -49,9 +50,12 @@ function addToCart(productId) {
     .then(data => {
         //nếu thêm thành công thì thông báo và chuyển hướng đến trang giỏ hàng
         if(data.success) {
-            notification("Đã thêm vào giỏ hàng", 'success', 3000, function(){
-                window.location.href = data.redirect_url;
-            });
+            // cập nhật số lượng sp giỏ hàng trên header và tổng tiền
+            updateCartCountAndTotal(data.cartTotal, data.cartCount);
+            notification("Đã thêm vào giỏ hàng", 'success', 3000);
+            setTimeout(() => {
+                showRedirectNotification(`Nhấp vào đây để chuyển hướng đến giỏ hàng`, 6000, data.redirect_url);
+            }, 1000);
 
             // chuyên hướng sau 1s
             // setTimeout(() => {
@@ -100,7 +104,9 @@ function toggleFavorite(productId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Toggle active class
+            // cập nhật số lượng yêu thích trên header
+            updateFavoriteCount(data.favoriteCount);
+            // chuẩn hóa trạng thái của nút yêu thích
             btn.classList.toggle('active');
 
             // Update icons

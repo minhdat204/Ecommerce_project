@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Comment;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController
 {
@@ -200,6 +201,12 @@ class ProductController
             ->where('slug', $slug)
             ->first();
 
+        $isFavorited = false;
+        if (Auth::check()) {
+            $isFavorited = $Product->favoriteProducts()
+                ->where('id_nguoidung', Auth::id())
+                ->exists();
+        }
         //Dat: lấy 4 sản phẩm liên quan (Điểm liên quan = lượt xem 60% + ngẫu nhiên 40%)
         $initialRelated = Product::where('trangthai', 'active')
             ->where('id_danhmuc', $Product->id_danhmuc)
@@ -251,7 +258,8 @@ class ProductController
             'totalReviews',
             'averageRating',
             'ratingStats',
-            'userReview'
+            'userReview',
+            'isFavorited'
         ));
     }
 }

@@ -24,6 +24,7 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Client\CheckoutMomoController;
+use App\Http\Controllers\Client\FavoriteController;
 
 Route::middleware('check.user')->group(function () {
     //review
@@ -103,6 +104,13 @@ Route::middleware('check.user')->group(function () {
         Route::delete('/items/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
         Route::delete('/clear', [CartController::class, 'clearCart'])->name('cart.clear');
     })->name('cart.');
+
+    Route::group(['prefix' => 'favorites', 'middleware' => 'check.guest'], function () {
+        Route::get('/', [FavoriteController::class, 'index'])->name('favorites.index');
+        Route::post('/toggle/{product}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+        Route::delete('/items/{favorite}', [FavoriteController::class, 'remove'])->name('favorites.remove');
+        Route::delete('/clear', [FavoriteController::class, 'clear'])->name('favorites.clear');
+    })->name('favorites.');
 
     //Dat: thêm tiếp các route client ở đây
 });

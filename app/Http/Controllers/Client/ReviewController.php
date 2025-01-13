@@ -35,7 +35,7 @@ public function checkCanReview($productId)
         return [
             'canReview' => $canReview,
             'message' => $purchaseCount == 0 ?
-                'Bạn cần mua sản phẩm trước khi đánh giá' : ($canReview ? null : 'Bạn đã đánh giá đủ số lần cho các lần mua')
+                'Bạn cần mua sản phẩm trước khi đánh giá' : ($canReview ? null : 'Bạn đã đánh giá ')
         ];
     }    public function store(Request $request)
     {

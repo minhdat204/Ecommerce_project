@@ -100,24 +100,38 @@ class CartController extends Controller
                 'soluong' => $request->soluong
             ]);
         }
+        //tính tổng tiền không giảm giá
+        $cartTotal = $this->calculateTotal($cart->fresh()->cartItems);
+        // số lượng sản phẩm trong giỏ hàng
+        $cartCount = $cart->cartItems->count();
         return response()->json([
-            'success' => true
+            'success' => true,
+            'redirect_url' => route('cart.index'),
+            'cartTotal' => number_format($cartTotal, 0, ',', '.') . 'đ',
+            'cartCount' => $cartCount
         ]);
     }
     public function removeItem($id)
     {
         $cart = $this->getOrCreateCart();
         CartItem::destroy($id);
+        //tính tổng tiền không giảm giá
         $subTotal = $this->calculateSubTotal($cart->fresh()->cartItems);
 
+        //tính tổng tiền
         $total = $this->calculateTotal($cart->fresh()->cartItems);
 
+        //tính phần trăm giảm giá
         $discount = $subTotal > 0 ? ($subTotal - $total) / $subTotal * 100 : 0;
+
+        // số lượng sản phẩm trong giỏ hàng
+        $cartCount = $cart->cartItems->count();
         return response()->json([
             'success' => true,
             'cartTotal' => number_format($total, 0, ',', '.') . 'đ',
             'subTotal' => number_format($subTotal, 0, ',', '.') . 'đ',
-            'discount' => floor($discount)
+            'discount' => floor($discount),
+            'cartCount' => $cartCount
         ]);
     }
     public function clearCart()

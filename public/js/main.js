@@ -331,6 +331,25 @@ function notification(message, type = 'error', duration = 3000, onClick = null) 
     }).showToast();
 }
 
+// Dat: hàm hiển thị thông báo xác nhận
+function showConfirm(message, callback) {
+    Swal.fire({
+        title: 'Xác nhận',
+        text: message,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#7fad39',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+    });
+}
+
 // Dat: lắng nghe sự kiện pageshow để reload trang khi dùng nút back/forward
 window.addEventListener('pageshow', function(event) {
     // Define paths that need reload

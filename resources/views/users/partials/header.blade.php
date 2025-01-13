@@ -114,13 +114,20 @@
                 <div class="col-lg-5">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
+                            <li>
+                                @auth
+                                    <a href="{{ route('favorites.index') }}"><i class="fa fa-heart"></i> <span>{{ Auth::user()->favorites ? Auth::user()->favorites->count() : 0 }}</span></a>
+                                @else
+                                    <a href="#" onclick="openModal('/favorites')"><i class="fa fa-heart"></i> <span>0</span></a>
+                                @endauth
+                            </li>
                             <li>
                                 @auth
                                     <a href="{{route('cart.index')}}"><i class="fa fa-shopping-bag"></i> <span>{{ Auth::check() && Auth::user()->cart ? Auth::user()->cart->cartItems->count() : 0 }}</span></a>
                                 @else
                                     <a href="#" onclick="openModal('/cart')"><i class="fa fa-shopping-bag"></i> <span>0</span></a>
                                 @endauth
+                            </li>
                         </ul>
                         <div class="header__top__right__language">
                             <div class="header__cart__price">Giỏ hàng: <span>150.000đ</span></div>

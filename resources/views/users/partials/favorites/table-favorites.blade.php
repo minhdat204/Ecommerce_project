@@ -33,11 +33,13 @@
                     @endif
                 </td>
                 <td>
-                    <button onclick="addToCart({{ $favorite->product->id_sanpham }})"
-                            class="site-btn"
-                            {{ $favorite->product->soluong > 0 ? '' : 'disabled' }}>
-                        ADD TO CART
-                    </button>
+                    <div class="action-icons">
+                        <a href="javascript:void(0)"
+                            onclick="quickAddToCart({{ $favorite->product->id_sanpham }})"
+                            class="action-icon {{ $favorite->product->soluong > 0 ? '' : 'disabled' }}">
+                            <i class="fa fa-shopping-cart"></i>
+                        </a>
+                    </div>
                 </td>
                 <td>
                     <span class="icon_close" onclick="removeFavorite({{ $favorite->id_yeuthich }})"></span>
@@ -45,7 +47,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" class="text-center">Your favorites list is empty</td>
+                <td colspan="5" class="text-center range-cart-favorites">Your favorites list is empty</td>
             </tr>
             @endforelse
         </tbody>

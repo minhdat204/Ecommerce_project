@@ -1,4 +1,4 @@
-<!-- Featured Section Begin -->
+<!-- Best-selling Section Begin -->
 <section class="featured spad">
     <div class="container">
         <div class="row">
@@ -18,11 +18,7 @@
                             @if ($product->gia_khuyen_mai != 0)
                                 <div class="product__discount__percent">-{{floor(($product->gia - $product->gia_khuyen_mai) / $product->gia * 100)}}%</div>
                             @endif
-                                <ul class="featured__item__pic__hover">
-                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    <li><a href="javascript:void(0)" onclick="quickAddToCart({{ $product->id_sanpham }})"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
+                            @include('users.partials.pic-hover', ['product' => $product])
                             </div>
                             <div class="featured__item__text">
                                 <span>{{$product->category->tendanhmuc}}</span>
@@ -41,4 +37,4 @@
         </div>
     </div>
 </section>
-<!-- Featured Section End -->
+<!-- Best-selling Section End -->

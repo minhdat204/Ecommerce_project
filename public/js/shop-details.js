@@ -1,3 +1,4 @@
+// add to cart
 function addToCart(productId) {
     // Kiểm tra trạng thái đăng nhập
     if (!authCheck) {
@@ -49,9 +50,12 @@ function addToCart(productId) {
     .then(data => {
         //nếu thêm thành công thì thông báo và chuyển hướng đến trang giỏ hàng
         if(data.success) {
-            notification("Đã thêm vào giỏ hàng", 'success', 3000, function(){
-                window.location.href = data.redirect_url;
-            });
+            // cập nhật số lượng sp giỏ hàng trên header và tổng tiền
+            updateCartCountAndTotal(data.cartTotal, data.cartCount);
+            notification("Đã thêm vào giỏ hàng", 'success', 3000);
+            setTimeout(() => {
+                showRedirectNotification(`Nhấp vào đây để chuyển hướng đến giỏ hàng`, 6000, data.redirect_url);
+            }, 1000);
 
             // chuyên hướng sau 1s
             // setTimeout(() => {
@@ -72,5 +76,66 @@ function addToCart(productId) {
     .finally(() => {
         button.disabled = false;
         button.innerHTML = 'ADD TO CART';
+    });
+}
+
+function toggleFavorite(productId) {
+    if (!authCheck) {
+        notification('Vui lòng đăng nhập để thêm sản phẩm vào yêu thích', 'error');
+        setTimeout(() => openModal(), 500);
+        return;
+    }
+
+    const btn = document.querySelector(`.favorite-btn[data-id="${productId}"]`);
+    if (!btn) return;
+
+    // Disable button & add loading state
+    btn.disabled = true;
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+
+    fetch(`/favorites/toggle/${productId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // cập nhật số lượng yêu thích trên header
+            updateFavoriteCount(data.favoriteCount);
+            // chuẩn hóa trạng thái của nút yêu thích
+            btn.classList.toggle('active');
+
+            // Update icons
+            const emptyHeart = btn.querySelector('.heart-empty');
+            const filledHeart = btn.querySelector('.heart-filled');
+
+            if (emptyHeart && filledHeart) {
+                if (data.isAdded) {
+                    emptyHeart.style.opacity = 0;
+                    filledHeart.style.opacity = 1;
+                    filledHeart.style.transform = 'scale(1)';
+                } else {
+                    emptyHeart.style.opacity = 1;
+                    filledHeart.style.opacity = 0;
+                    filledHeart.style.transform = 'scale(0)';
+                }
+            }
+
+            notification(data.message, 'success');
+        } else {
+            notification(data.message || 'Có lỗi xảy ra', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        notification('Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
+    })
+    .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = originalContent;
     });
 }

@@ -19,6 +19,7 @@
                 <td class="shoping__cart__price">
                     @if ($item->product->gia_khuyen_mai != 0)
                         {{ number_format($item->product->gia_khuyen_mai, 0, ',', '.') }}đ
+                        <span class="text-decoration-line-through text-muted">{{ number_format($item->product->gia, 0, ',', '.') }}đ</span>
                     @else
                         {{ number_format($item->product->gia, 0, ',', '.') }}đ
                     @endif
@@ -53,7 +54,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" class="text-center">Your cart is empty</td>
+                <td colspan="5" class="text-center range-cart-favorites">Your cart is empty</td>
             </tr>
             @endforelse
         </tbody>

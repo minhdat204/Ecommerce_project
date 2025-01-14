@@ -9,6 +9,8 @@ class ChatSession extends Model
     protected $table = 'phien_chat';
     protected $primaryKey = 'id_phienchat';
 
+    public $timestamps = false;// chỉ áp dụng cho created_at và updated_at
+
     protected $fillable = [
         'id_nguoidung',
         'id_admin',

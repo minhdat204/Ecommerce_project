@@ -43,14 +43,14 @@ class ProductService
             'gia_khuyen_mai',
             'slug',
             'mota',
-            'id_danhmuc', // Add category id
+            'id_danhmuc',
         ])
             ->where('trangthai', 'active')
             ->where('soluong', '>', 0)
             ->with(['images' => function ($query) {
                 $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
             }])
-            ->with(['category' => function ($query) { // Add category relationship
+            ->with(['category' => function ($query) {
                 $query->select('id_danhmuc', 'tendanhmuc');
             }])
             ->withCount(['orderDetails as so_luong_da_ban'])
@@ -68,21 +68,21 @@ class ProductService
             'gia_khuyen_mai',
             'slug',
             'mota',
-            'id_danhmuc', // Add category id
+            'id_danhmuc',
         ])
             ->where('trangthai', 'active')
             ->where('soluong', '>', 0)
             ->with(['images' => function ($query) {
                 $query->select('id_sanpham', 'duongdan', 'alt')->limit(1);
             }])
-            ->with(['category' => function ($query) { // Add category relationship
+            ->with(['category' => function ($query) {
                 $query->select('id_danhmuc', 'tendanhmuc');
             }])
             ->orderBy('created_at', 'desc')
             ->take($take)
             ->get();
     }
-    //hiển thị 1 số danh mục sản phẩm có trong cơ sở dữ liệu, với công thức là lấy 4 danh mục có nhiều sản phẩm nhất
+    //hiển thị 1 số danh mục sản phẩm có trong cơ sở dữ liệu, với công thức là lấy 8 danh mục có nhiều sản phẩm nhất
     public function getCategories($take = 8)
     {
         return Category::withCount(['products as so_luong_san_pham' => function($query) {

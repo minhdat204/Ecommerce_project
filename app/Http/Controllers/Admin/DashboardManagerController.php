@@ -49,35 +49,35 @@ class DashboardManagerController
             'facebook_link' => 'nullable|url|max:255', // Validate link Facebook
             'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Validate logo (ảnh)
         ]);
-    
+
         $websiteInfo = WebsiteInfo::first();
         if (!$websiteInfo) {
             $websiteInfo = new WebsiteInfo();
         }
-    
+
         $websiteInfo->address = $request->address;
         $websiteInfo->phone = $request->phone;
         $websiteInfo->email = $request->email;
         $websiteInfo->content = $request->content;
         $websiteInfo->facebook_link = $request->facebook_link;
-    
+
         if ($request->hasFile('logo_image')) {
             if ($websiteInfo->logo_image && Storage::exists($websiteInfo->logo_image)) {
                 Storage::delete($websiteInfo->logo_image);
             }
-    
+
             $path = $request->file('logo_image')->store('logos', 'public');
-            $websiteInfo->logo_image = $path; 
+            $websiteInfo->logo_image = $path;
         }
-    
+
         $websiteInfo->save();
-    
+
         return redirect()->route('admin.dashboard.index')
             ->with('success', 'Thông tin website đã được cập nhật thành công.');
     }
-    
 
 
-    
+
+
 
 }

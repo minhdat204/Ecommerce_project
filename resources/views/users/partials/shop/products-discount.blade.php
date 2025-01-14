@@ -9,7 +9,9 @@
                 <div class="product__discount__item__pic set-bg"
                     data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/default.jpg')) }}">
                     <div class="product__discount__percent">-{{floor(($product->gia - $product->gia_khuyen_mai) / $product->gia * 100)}}%</div>
+                    <ul class="product__item__pic__hover">
                     @include('users.partials.pic-hover', ['product' => $product])
+                    </ul>
                 </div>
                 <div class="product__discount__item__text">
                     <span>{{$product->category->tendanhmuc}}</span>

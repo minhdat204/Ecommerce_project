@@ -5,12 +5,14 @@
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="footer__about">
                     <div class="footer__about__logo">
-                        <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" alt=""></a>
+                    <a href="{{ url('/') }}">
+                            <img src="{{ $websiteInfo->logo_image ? asset('storage/' . $websiteInfo->logo_image) : asset('img/logo.png') }}" alt="Logo">
+                    </a>
                     </div>
                     <p>{{ $websiteInfo->content ?? 'Ogani là một công ty chuyên cung cấp thực phẩm sạch...' }}</p>
                     <div class="footer__widget">
                         <div class="footer__widget__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="{{ $websiteInfo->facebook_link ?? '#' }}"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-instagram"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
                             <a href="#"><i class="fa fa-pinterest"></i></a>

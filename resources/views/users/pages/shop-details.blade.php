@@ -237,7 +237,9 @@
                         <div class="product__item">
                             <div class="product__item__pic set-bg"
                                 data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/default.jpg')) }}">
-                                @include('users.partials.pic-hover', ['product' => $product])
+                                <ul class="product__item__pic__hover">
+                                    @include('users.partials.pic-hover', ['product' => $product])
+                                </ul>
                             </div>
                             <div class="product__item__text">
                                 <h6><a

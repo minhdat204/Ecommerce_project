@@ -18,7 +18,9 @@
                             @if ($product->gia_khuyen_mai != 0)
                                 <div class="product__discount__percent">-{{floor(($product->gia - $product->gia_khuyen_mai) / $product->gia * 100)}}%</div>
                             @endif
-                            @include('users.partials.pic-hover', ['product' => $product])
+                            <ul class="featured__item__pic__hover">
+                                @include('users.partials.pic-hover', ['product' => $product])
+                            </ul>
                             </div>
                             <div class="featured__item__text">
                                 <span>{{$product->category->tendanhmuc}}</span>

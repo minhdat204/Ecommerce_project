@@ -237,11 +237,7 @@
                         <div class="product__item">
                             <div class="product__item__pic set-bg"
                                 data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/default.jpg')) }}">
-                                <ul class="product__item__pic__hover">
-                                    <li><a href="javascript:void(0)" onclick="quickToggleFavorite({{ $product->id_sanpham }})"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    <li><a href="javascript:void(0)" onclick="quickAddToCart({{ $product->id_sanpham }})"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
+                                @include('users.partials.pic-hover', ['product' => $product])
                             </div>
                             <div class="product__item__text">
                                 <h6><a

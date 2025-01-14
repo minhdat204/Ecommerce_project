@@ -2,6 +2,11 @@
 @section('namepage', 'Dashboard')
 
 @section('content')
+    <style>
+        .invalid-feedback {
+            color: red;
+        }
+    </style>
     <div class="container">
         <div class="table-wrapper">
             @if (session('success'))
@@ -168,6 +173,12 @@
                                                 <label>Tên Danh Mục</label>
                                                 <input type="text" class="form-control" name="CategoryName"
                                                     value="{{ old('CategoryName', $category->tendanhmuc) }}" required>
+                                                @error('CategoryName')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+
                                             </div>
 
                                             <div class="form-group">
@@ -255,18 +266,14 @@
         </div>
     </div>
 
-    <!-- Form Xóa Đã Chọn (ẩn) -->
-    <form id="deleteSelectedForm" method="POST">
-        @csrf
-        @method('DELETE')
-    </form>
 
 
     <!-- Modal Thêm Danh Mục Mới -->
-    <div id="addCategoryModal" class="modal fade">
+    <div id="addCategoryModal" class="modal fade {{ $errors->any() ? 'show' : '' }}"
+        style="{{ $errors->any() ? 'display: block' : '' }}">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ Route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
                         <h4 class="modal-title">Thêm Danh Mục Mới</h4>
@@ -284,8 +291,13 @@
                         </div>
                         <div class="form-group">
                             <label>Tên Danh Mục</label>
-                            <input type="text" class="form-control" name="CategoryName"
-                                placeholder="Nhập tên danh mục" required>
+                            <input type="text" class="form-control @error('CategoryName') is-invalid @enderror"
+                                name="CategoryName" value="{{ old('CategoryName') }}">
+                            @error('CategoryName')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label>Mô tả</label>
@@ -313,30 +325,56 @@
         </div>
     </div>
 
+    <script>
+        $(document).ready(function() {
+            // Hiển thị modal nếu có lỗi validation
+            @if ($errors->any())
+                @if (session('showModal') === true)
+                    $('#editCategoryModal').modal('show');
+                @else
+                    $('#addCategoryModal').modal('show');
+                @endif
+            @endif
 
+            // Tự động ẩn alert sau 5 giây
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+
+            // Reset form khi đóng modal
+            function resetModal(modalId) {
+                $(modalId).on('hidden.bs.modal', function() {
+                    $(this).find('form')[0].reset(); // Reset form
+                    $('.is-invalid').removeClass('is-invalid'); // Xóa class lỗi
+                    $('.invalid-feedback').remove(); // Xóa thông báo lỗi
+                    $('.alert').remove(); // Xóa alert
+                });
+            }
+            resetModal('#addCategoryModal');
+            resetModal('#editCategoryModal');
+
+            // Hiển thị preview ảnh khi chọn file
+            function setupImagePreview(inputSelector, previewSelector) {
+                $(inputSelector).change(function() {
+                    if (this.files && this.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            $(previewSelector).html('<img src="' + e.target.result +
+                                '" class="img-thumbnail" style="max-height: 100px;">');
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+            }
+            setupImagePreview('input[name="CategoryImage"]', '#imagePreview');
+        });
+    </script>
 @endsection
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
-            // Kích hoạt tooltip
-            $('[data-toggle="tooltip"]').tooltip();
+        // validate
 
-            // Chọn/Bỏ chọn tất cả checkbox
-            var checkbox = $('table tbody input[type="checkbox"]');
-            $("#selectAll").click(function() {
-                checkbox.prop('checked', this.checked);
-            });
-
-            checkbox.click(function() {
-                if (!this.checked) {
-                    $("#selectAll").prop("checked", false);
-                }
-            });
-
-            // Tự động ẩn thông báo sau 3 giây
-            $('.alert').delay(3000).fadeOut(500);
-        });
 
         function deleteCategory(id) {
             if (confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {

@@ -56,7 +56,9 @@ function closeModal() {
 }
 
 // Khi người dùng click nút, mở modal
-btn.onclick = openModal;
+if (btn) {
+    btn.onclick = openModal;
+}
 
 // Khi người dùng click vào nút đóng, đóng modal
 span.onclick = closeModal;
@@ -77,10 +79,40 @@ showLoginForm.onclick = showLogin;
 
 
 
-// Xử lý form đăng nhập, đăng ký
+/*
+Xử lý form đăng nhập, đăng ký
+*/
 document.querySelector('.form-grid').addEventListener('submit', function (e) {
     e.preventDefault(); // Ngăn form submit mặc định
 
+    // Reset errors
+    clearErrors();
+
+     // Validate
+     let isValid = true;
+     const email = this.querySelector('input[name="email"]');
+     const password = this.querySelector('input[name="password"]');
+
+     if (!email.value.trim()) {
+         showError(email, 'Email is required');
+         isValid = false;
+     } else if (!isValidEmail(email.value)) {
+         showError(email, 'Please enter a valid email');
+         isValid = false;
+     }
+
+     // Password validation
+    if (!password.value.trim()) {
+        showError(password, 'Password is required');
+        isValid = false;
+    } else if (!isValidPassword(password.value)) {
+        showError(password, 'Password must be at least 8 characters with 1 lowercase letter, 1 number, and no whitespace');
+        isValid = false;
+    }
+
+     if (!isValid) return;
+
+     // Submit form
     const formData = new FormData(this);
 
     fetch(this.action, {
@@ -90,14 +122,15 @@ document.querySelector('.form-grid').addEventListener('submit', function (e) {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
         },
     })
-    .then(response => response.json())
+    .then(response => {
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             // Lưu thông báo vào sessionStorage trước khi chuyển hướng
             sessionStorage.setItem('message', data.message);
             window.location.href = data.redirect_url;
             //window.location.href = data.redirect_url;
-
         } else {
             notification(data.message || "Có lỗi xảy ra", 'error');
         }
@@ -108,7 +141,97 @@ document.querySelector('.form-grid').addEventListener('submit', function (e) {
     });
 });
 
-// Xử lý đăng xuất bằng fetch
+
+// hàm hiển thị thông báo lỗi
+function showError(input, message) {
+    input.classList.add('error');
+    const errorElement = document.getElementById(`${input.name}-error`);
+    if (errorElement) {
+        errorElement.style.display = 'block';
+        errorElement.textContent = message;
+    }
+}
+
+// hàm clear thông báo lỗi
+function clearErrors() {
+    document.querySelectorAll('.error-message').forEach(el => {
+        el.style.display = 'none';
+        el.textContent = '';
+    });
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.classList.remove('error');
+    });
+}
+
+//hàm kiểm tra email
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+//hàm kiểm tra pass
+function isValidPassword(password) {
+    // Password validation regex breakdown:
+    // ^               - Start of string
+    // (?=.*[a-z])    - At least one lowercase letter
+    // (?=.*\d)       - At least one digit
+    // (?!\s)         - No whitespace allowed
+    // .{8,}          - At least 8 characters long
+    // $              - End of string
+    return /^(?=.*[a-z])(?=.*\d)(?!\s).{8,}$/.test(password);
+}
+
+// Add validation helper functions
+function validatePassword(password) {
+    const minLength = password.length >= 8;
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const noWhitespace = !/\s/.test(password);
+    return minLength && hasLowerCase && hasNumber && noWhitespace;
+}
+
+// Add real-time validation
+document.querySelector('input[name="password"]').addEventListener('input', function() {
+    const password = this.value.trim();
+    const errorElement = document.getElementById('password-error');
+
+    if (password === '') {
+        // Don't show error for empty field during typing
+        this.classList.remove('error');
+        errorElement.style.display = 'none';
+    } else if (!validatePassword(password)) {
+        this.classList.add('error');
+        errorElement.style.display = 'block';
+        errorElement.textContent = 'Password must be at least 8 characters with 1 lowercase letter, 1 number, and no whitespace';
+    } else {
+        // Clear error when validation passes
+        this.classList.remove('error');
+        errorElement.style.display = 'none';
+    }
+});
+
+// Update email validation
+document.querySelector('input[name="email"]').addEventListener('input', function() {
+    const email = this.value.trim();
+    const errorElement = document.getElementById('email-error');
+
+    if (email === '') {
+        this.classList.remove('error');
+        errorElement.style.display = 'none';
+    } else if (!isValidEmail(email)) {
+        this.classList.add('error');
+        errorElement.style.display = 'block';
+        errorElement.textContent = 'Please enter a valid email';
+    } else {
+        this.classList.remove('error');
+        errorElement.style.display = 'none';
+    }
+});
+/*
+end đăng nhập, đăng ký
+*/
+
+/*
+Xử lý đăng xuất bằng fetch
+*/
 function logout(e) {
     e.preventDefault();
     const button = document.getElementById('logout-btn');

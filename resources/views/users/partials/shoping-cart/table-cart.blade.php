@@ -13,12 +13,13 @@
             @forelse($cartItems as $item)
             <tr data-id="{{ $item->id_sp_giohang }}" id="cart-item-{{ $item->id_sp_giohang }}">
                 <td class="shoping__cart__item" onclick="window.location='{{ route('users.shop_details', $item->product->slug) }}'" style="cursor: pointer;">
-                    <img src="{{ asset($item->product->thumbnail) }}" alt="{{ $item->product->tensanpham }}" width="100">
+                    <img src="{{ asset('storage/' . ($item->product->images->isNotEmpty() ? $item->product->images->first()->duongdan : 'img/products/default.jpg')) }}" alt="{{ $item->product->tensanpham }}" width="100">
                     <h5>{{ $item->product->tensanpham }}</h5>
                 </td>
                 <td class="shoping__cart__price">
                     @if ($item->product->gia_khuyen_mai != 0)
                         {{ number_format($item->product->gia_khuyen_mai, 0, ',', '.') }}đ
+                        <span class="text-decoration-line-through text-muted">{{ number_format($item->product->gia, 0, ',', '.') }}đ</span>
                     @else
                         {{ number_format($item->product->gia, 0, ',', '.') }}đ
                     @endif
@@ -53,7 +54,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" class="text-center">Your cart is empty</td>
+                <td colspan="5" class="text-center range-cart-favorites">Your cart is empty</td>
             </tr>
             @endforelse
         </tbody>

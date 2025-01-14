@@ -96,26 +96,41 @@
                 <div class="col-lg-5">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="{{route('users.home')}}">Home</a></li>
-                            <li class="active"><a href="{{route('users.shop')}}">Shop</a></li>
-                            <li><a href="{{route('users.blogs')}}">Blog</a></li>
-                            <li><a href="{{route('users.contact')}}">Contact</a></li>
+                            <li class="{{ Route::is('users.home') ? 'active' : '' }}">
+                                <a href="{{route('users.home')}}">Home</a>
+                            </li>
+                            <li class="{{ Route::is('users.shop') ? 'active' : '' }}">
+                                <a href="{{route('users.shop')}}">Shop</a>
+                            </li>
+                            <li class="{{ Route::is('users.blogs') ? 'active' : '' }}">
+                                <a href="{{route('users.blogs')}}">Blog</a>
+                            </li>
+                            <li class="{{ Route::is('users.contact') ? 'active' : '' }}">
+                                <a href="{{route('users.contact')}}">Contact</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-5">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
                             <li>
                                 @auth
-                                    <a href="{{route('cart.index')}}"><i class="fa fa-shopping-bag"></i> <span>{{ Auth::check() && Auth::user()->cart ? Auth::user()->cart->cartItems->count() : 0 }}</span></a>
+                                    <a href="{{ route('favorites.index') }}"><i class="fa fa-heart"></i> <span id="favorite-count">{{ Auth::user()->favoriteProducts ? Auth::user()->favoriteProducts->count() : 0 }}</span></a>
+                                @else
+                                    <a href="#" onclick="openModal('/favorites')"><i class="fa fa-heart"></i> <span>0</span></a>
+                                @endauth
+                            </li>
+                            <li>
+                                @auth
+                                    <a href="{{route('cart.index')}}"><i class="fa fa-shopping-bag"></i> <span id="cart-count">{{ Auth::check() && Auth::user()->cart ? Auth::user()->cart->cartItems->count() : 0 }}</span></a>
                                 @else
                                     <a href="#" onclick="openModal('/cart')"><i class="fa fa-shopping-bag"></i> <span>0</span></a>
                                 @endauth
+                            </li>
                         </ul>
                         <div class="header__top__right__language">
-                            <div class="header__cart__price">Giỏ hàng: <span>150.000đ</span></div>
+                            <div class="header__cart__price">Giỏ hàng: <span id="cart-total">{{ Auth::check() && Auth::user()->cart ? number_format(Auth::user()->cart->cartItems->sum(function($item) { return $item->soluong * $item->product->gia_khuyen_mai ?? $item->product->gia; }), 0, ',', '.') : 0 }}đ</span></div>
                         </div>
                         <div class="header__top__right__auth">
                             @auth

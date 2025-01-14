@@ -33,12 +33,8 @@
         <div class="col-lg-4 col-md-6 col-sm-6">
             <div class="product__item">
                 <div class="product__item__pic set-bg"
-                    data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/F60z2Ytjqo1SfLm8GSjV1T8Ucjzv8jV6SsN4DC8S.jpg')) }}">
-                    <ul class="product__item__pic__hover">
-                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                        <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                        <li><a href="javascript:void(0)" onclick="quickAddToCart({{ $product->id_sanpham }})"><i class="fa fa-shopping-cart"></i></a></li>
-                    </ul>
+                    data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/default.jpg')) }}">
+                    @include('users.partials.pic-hover', ['product' => $product])
                 </div>
                 <div class="product__item__text">
                     <h6><a href="{{ route('users.shop_details', $product->slug) }}">{{ $product->tensanpham }}</a></h6>

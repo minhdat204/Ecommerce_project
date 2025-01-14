@@ -2,14 +2,15 @@
 @section('namepage', 'Quản lý Liên Hệ')
 @section('content')
     <div class="container">
-        <div class="table-wrapper">@if(session('success'))
+        <div class="table-wrapper">
+            @if (session('success'))
                 <div class="alert alert
             -success">
                     {{ session('success') }}
                 </div>
             @endif
 
-            @if(session('error'))
+            @if (session('error'))
                 <div class="alert alert-danger">
                     {{ session('error') }}
                 </div>
@@ -26,7 +27,7 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>ID Liên hệ </th>
+                        <th>STT</th>
                         <th>Tên Liên Hệ </th>
                         <th>Email</th>
                         <th>Số Điện Thoại</th>
@@ -36,39 +37,43 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($contacts as $contact)
+                    @foreach ($contacts as $index => $contact)
                         <tr>
-                            <td>{{ $contact->id_lienhe }}</td>
+                            <td>{{ $index + 1 }}</td>
                             <td>{{ $contact->ten ?? 'Không xác định' }}</td>
                             <td>{{ $contact->email }}</td>
                             <td>{{ $contact->sodienthoai }}</td>
                             <td>{{ $contact->noidung }}</td>
                             <td>
-                                        @if($contact->trangthai == 'new')
-                                            Chưa phản hồi
-                                        @elseif($contact->trangthai == 'processing')
-                                            Chưa phản hồi
-                                        @elseif($contact->trangthai == 'resolved')
-                                            Đã phản hồi
-                                        @endif
+                                @if ($contact->trangthai == 'new')
+                                    <p style="color:Tomato;">Chưa phản hồi</p>
+                                @elseif($contact->trangthai == 'processing')
+                                    <p style="color:Tomato;">Chưa phản hồi</p>
+                                @elseif($contact->trangthai == 'resolved')
+                                    <p style="color:green;">Đã phản hồi</p>
+                                @endif
 
                             </td>
                             <td>
                                 <!-- Nút Xóa -->
-                                <a href="#" class="delete" data-toggle="modal" data-target="#deleteContactModal{{ $contact->id_lienhe }}">
+                                <a href="#" class="delete" data-toggle="modal"
+                                    data-target="#deleteContactModal{{ $contact->id_lienhe }}">
                                     <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
                                 </a>
-                                    <a href="" class="edit" data-toggle="modal" data-target="#editContactModal{{ $contact->id_lienhe }}">
+                                <a href="" class="edit" data-toggle="modal"
+                                    data-target="#editContactModal{{ $contact->id_lienhe }}">
                                     <i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa">&#xE254;</i>
                                 </a>
                             </td>
                         </tr>
 
                         <!-- Modal Xóa Liên Hệ -->
-                        <div id="deleteContactModal{{ $contact->id_lienhe }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteContactModalLabel" aria-hidden="true">
+                        <div id="deleteContactModal{{ $contact->id_lienhe }}" class="modal fade" tabindex="-1"
+                            role="dialog" aria-labelledby="deleteContactModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
-                                    <form id="deleteContactForm{{ $contact->id_lienhe }}" action="{{ route('admin.contact.destroy', $contact->id_lienhe) }}" method="POST">
+                                    <form id="deleteContactForm{{ $contact->id_lienhe }}"
+                                        action="{{ route('admin.contact.destroy', $contact->id_lienhe) }}" method="POST">
                                         @csrf
                                         @method('DELETE') <!-- Phương thức DELETE -->
                                         <div class="modal-header">
@@ -82,7 +87,8 @@
                                             <p class="text-warning"><small>Hành động này không thể hoàn tác.</small></p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Hủy</button>
                                             <button type="submit" class="btn btn-danger">Xóa</button>
                                         </div>
                                     </form>
@@ -90,11 +96,12 @@
                             </div>
                         </div>
                         <!-- Modal Chỉnh Sửa Trạng Thái -->
-                                                <!-- Modal Chỉnh Sửa Trạng Thái -->
-                        <div id="editContactModal{{ $contact->id_lienhe }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editContactModalLabel" aria-hidden="true">
+                        <div id="editContactModal{{ $contact->id_lienhe }}" class="modal fade" tabindex="-1"
+                            role="dialog" aria-labelledby="editContactModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
-                                    <form id="editContactForm{{ $contact->id_lienhe }}" action="{{ route('admin.contact.update', $contact->id_lienhe) }}" method="POST">
+                                    <form id="editContactForm{{ $contact->id_lienhe }}"
+                                        action="{{ route('admin.contact.update', $contact->id_lienhe) }}" method="POST">
                                         @csrf
                                         @method('PUT') <!-- Phương thức PUT -->
                                         <div class="modal-header">
@@ -108,21 +115,24 @@
                                             <div class="form-group">
                                                 <label for="trangthai">Trạng thái:</label>
                                                 <select name="trangthai" id="trangthai" class="form-control">
-                                                    <option value="processing" {{ $contact->trangthai == 'processing' ? 'selected' : '' }}>Chưa phản hồi</option>
-                                                    <option value="resolved" {{ $contact->trangthai == 'resolved' ? 'selected' : '' }}>Đã phản hồi</option>
+                                                    <option value="processing"
+                                                        {{ $contact->trangthai == 'processing' ? 'selected' : '' }}>Chưa
+                                                        phản hồi</option>
+                                                    <option value="resolved"
+                                                        {{ $contact->trangthai == 'resolved' ? 'selected' : '' }}>Đã phản
+                                                        hồi</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Hủy</button>
                                             <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
-
-
                     @endforeach
                 </tbody>
             </table>

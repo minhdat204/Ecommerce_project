@@ -101,14 +101,15 @@
                                         data-toggle="tooltip" title="Sửa">
                                         <i class="material-icons">&#xE254;</i>
                                     </a>
-                                   <!-- Nút ẩn sản phẩm -->
-                                <form action="{{ route('admin.product.destroy', $product->id_sanpham) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn ẩn sản phẩm này?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" title="Ẩn sản phẩm">
-                                        <i class="material-icons">&#xE872;</i>
-                                    </button>
-                                </form>
+                                    <!-- Nút ẩn sản phẩm -->
+                                    <form action="{{ route('admin.product.destroy', $product->id_sanpham) }}"
+                                        method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn ẩn sản phẩm này?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" title="Ẩn sản phẩm">
+                                            <i class="material-icons">&#xE872;</i>
+                                        </button>
+                                    </form>
 
                                 </td>
                             </tr>

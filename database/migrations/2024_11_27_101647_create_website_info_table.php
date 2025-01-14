@@ -10,7 +10,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('website_info', function (Blueprint $table) {
             $table->id();
@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('phone', 20)->nullable();
             $table->string('email')->nullable();
             $table->text('content')->nullable();
+            $table->string('facebook_link')->nullable(); 
+            $table->string('logo_image')->nullable();
             $table->timestamps();
         });
 
@@ -27,8 +29,10 @@ return new class extends Migration
             'phone' => '0123456789',
             'email' => 'info@example.com',
             'content' => 'Website content goes here',
+            'facebook_link' => 'https://facebook.com',
+            'logo_image' => '/images/logo.png',
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
     }
 

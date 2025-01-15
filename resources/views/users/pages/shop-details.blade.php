@@ -9,16 +9,18 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__pic">
-                        <div class="product__details__pic__item">
+                        <div class="product__details__pic__item image-remove-bg">
                             <img class="product__details__pic__item--large"
                                 src="{{ asset('storage/' . ($Product->images->isNotEmpty() ? $Product->images->first()->duongdan : 'img/products/default.jpg')) }}"
                                 alt="{{ $Product->tensanpham }}">
                         </div>
                         <div class="product__details__pic__slider owl-carousel">
                             @foreach($Product->images as $image)
+                            <div class="image-remove-bg">
                                 <img data-imgbigurl="{{ asset('storage/' . $image->duongdan) }}"
                                     src="{{ asset('storage/' . $image->duongdan) }}"
                                     alt="{{ $Product->tensanpham }}">
+                            </div>
                             @endforeach
                         </div>
                     </div>
@@ -37,11 +39,11 @@
                         </div>
                         <!-- phần giá -->
                         <div class="product__details__price">
-                            @if ($Product->gia_khuyen_mai >= 0)
-                                ${{ $Product->gia_khuyen_mai }}
-                                <span>${{ $Product->gia }}</span>
+                            @if ($Product->gia_khuyen_mai !== null && $Product->gia_khuyen_mai >= 0)
+                                {{ number_format($Product->gia_khuyen_mai, 0, ',', '.') }}đ
+                                <span>{{ number_format($Product->gia, 0, ',', '.') }}đ</span>
                             @else
-                                ${{ $Product->gia }}
+                                {{ number_format($Product->gia, 0, ',', '.') }}đ
                             @endif
                         </div>
                         <!-- phần mô tả -->
@@ -235,17 +237,27 @@
                 @foreach ($relatedProducts as $product)
                     <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="product__item">
-                            <div class="product__item__pic set-bg"
+                            <div class="product__item__pic set-bg bg-blend"
                                 data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/default.jpg')) }}">
+                                @if ($product->gia_khuyen_mai !== null && $product->gia_khuyen_mai >= 0)
+                                    <div class="product__discount__percent">-{{floor(($product->gia - $product->gia_khuyen_mai) / $product->gia * 100)}}%</div>
+                                @endif
                                 <ul class="product__item__pic__hover">
                                     @include('users.partials.pic-hover', ['product' => $product])
                                 </ul>
                             </div>
                             <div class="product__item__text">
-                                <h6><a
-                                        href="{{ route('users.shop_details', $product->slug) }}">{{ $product->tensanpham }}</a>
-                                </h6>
-                                <h5>${{ $product->gia }}</h5>
+                                <h6><a href="{{ route('users.shop_details', $product->slug) }}">{{ $product->tensanpham }}</a></h6>
+                                <h5>
+                                    <div class="product__item__price">
+                                        @if ($product->gia_khuyen_mai !== null && $product->gia_khuyen_mai >= 0)
+                                            {{ number_format($product->gia_khuyen_mai, 0, ',', '.') }}đ
+                                            <span>{{ number_format($product->gia, 0, ',', '.') }}đ</span>
+                                        @else
+                                            {{ number_format($product->gia, 0, ',', '.') }}đ
+                                        @endif
+                                    </div>
+                                </h5>
                             </div>
                         </div>
                     </div>

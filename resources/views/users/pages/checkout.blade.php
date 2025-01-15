@@ -299,6 +299,23 @@
 
                     <!-- Nút đặt hàng -->
                     <button type="button" class="btn btn-primary" onclick="submitCheckoutForm()">Hoàn Tất Đặt Hàng</button>
+                    <!-- filepath: /resources/views/users/pages/checkout.blade.php -->
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Đơn hàng -->

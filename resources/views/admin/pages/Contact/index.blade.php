@@ -1,7 +1,7 @@
 @extends('Admin.Layout.Layout')
 @section('namepage', 'Quản lý Liên Hệ')
 @section('content')
-    <div class="container">
+    <div >
         <div class="table-wrapper">
             @if (session('success'))
                 <div class="alert alert

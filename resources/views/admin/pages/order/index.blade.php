@@ -238,7 +238,7 @@
             'cancelled' => 5,
         ];
     @endphp
-    <div class="container">
+    <div >
         <div class="table-wrapper">
             <!-- Tiêu đề bảng -->
             <div class="table-title">

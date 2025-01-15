@@ -7,7 +7,7 @@
             color: red;
         }
     </style>
-    <div class="container">
+    <div >
         <div class="table-wrapper">
             @if (session('success'))
                 <div class="alert alert-success">

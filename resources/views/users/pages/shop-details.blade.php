@@ -1,4 +1,6 @@
 @extends('users.layouts.layout')
+
+@section('title', $Product->tensanpham)
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/comment.css') }}" type="text/css">
 @endpush

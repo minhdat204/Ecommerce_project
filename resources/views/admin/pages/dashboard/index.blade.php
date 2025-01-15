@@ -1,4 +1,5 @@
 @extends('Admin.Layout.Layout')
+@section('title', 'Dashboard')
 @section('namepage', 'Dashboard')
 @section('css_custom')
 <link href="{{ asset('Admin/css/website-info.css') }}" rel="stylesheet">

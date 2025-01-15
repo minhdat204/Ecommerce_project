@@ -1,4 +1,5 @@
 @extends('users.layouts.layout')
+@section('title', 'Liên hệ')
 @section('content')
 
 @include('users.partials.contact.contact-section')

@@ -1,4 +1,7 @@
 @extends('users.layouts.layout')
+
+@section('title', 'Giỏ hàng')
+
 @section('content')
     <!-- Shopping Cart Section Begin -->
     <section class="shoping-cart spad">

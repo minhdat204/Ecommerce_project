@@ -1,4 +1,6 @@
 @extends('Admin.Layout.Layout')
+
+@section('title', 'Quản lý Danh Mục')
 @section('namepage', 'Dashboard')
 
 @section('content')

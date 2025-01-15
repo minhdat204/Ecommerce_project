@@ -1,5 +1,7 @@
 @extends('Admin.Layout.Layout')
 
+@section('title', 'Chỉnh sửa sản phẩm')
+
 @section('namepage', 'Chỉnh sửa sản phẩm')
 
 @section('content')
@@ -28,14 +30,14 @@
                         <!-- Tên sản phẩm -->
                         <div class="form-group">
                             <label for="tensanpham">Tên sản phẩm</label>
-                            <input type="text" name="tensanpham" id="tensanpham" class="form-control" 
+                            <input type="text" name="tensanpham" id="tensanpham" class="form-control"
                                    value="{{ old('tensanpham', $product->tensanpham) }}" required>
                         </div>
 
                         <!-- Slug -->
                         <div class="form-group">
                             <label for="slug">Slug</label>
-                            <input type="text" name="slug" id="slug" class="form-control" 
+                            <input type="text" name="slug" id="slug" class="form-control"
                                    value="{{ old('slug', $product->slug) }}" required>
                         </div>
 
@@ -54,35 +56,35 @@
                         <!-- Giá -->
                         <div class="form-group">
                             <label for="gia">Giá</label>
-                            <input type="number" name="gia" id="gia" class="form-control" 
+                            <input type="number" name="gia" id="gia" class="form-control"
                                    value="{{ old('gia', $product->gia) }}" required>
                         </div>
 
                         <!-- Giá khuyến mãi -->
                         <div class="form-group">
                             <label for="gia_khuyen_mai">Giá khuyến mãi</label>
-                            <input type="number" name="gia_khuyen_mai" id="gia_khuyen_mai" class="form-control" 
+                            <input type="number" name="gia_khuyen_mai" id="gia_khuyen_mai" class="form-control"
                                    value="{{ old('gia_khuyen_mai', $product->gia_khuyen_mai) }}">
                         </div>
 
                         <!-- Đơn vị tính -->
                         <div class="form-group">
                             <label for="donvitinh">Đơn vị tính</label>
-                            <input type="text" name="donvitinh" id="donvitinh" class="form-control" 
+                            <input type="text" name="donvitinh" id="donvitinh" class="form-control"
                                    value="{{ old('donvitinh', $product->donvitinh) }}">
                         </div>
 
                         <!-- Xuất xứ -->
                         <div class="form-group">
                             <label for="xuatxu">Xuất xứ</label>
-                            <input type="text" name="xuatxu" id="xuatxu" class="form-control" 
+                            <input type="text" name="xuatxu" id="xuatxu" class="form-control"
                                    value="{{ old('xuatxu', $product->xuatxu) }}">
                         </div>
 
                         <!-- Số lượng -->
                         <div class="form-group">
                             <label for="soluong">Số lượng</label>
-                            <input type="number" name="soluong" id="soluong" class="form-control" 
+                            <input type="number" name="soluong" id="soluong" class="form-control"
                                    value="{{ old('soluong', $product->soluong) }}" required>
                         </div>
 
@@ -101,7 +103,7 @@
                             <select name="id_danhmuc" id="id_danhmuc" class="form-control">
                                 <option value="">-- Chọn danh mục --</option>
                                 @foreach ($categories as $category)
-                                    <option value="{{ $category->id_danhmuc }}" 
+                                    <option value="{{ $category->id_danhmuc }}"
                                             {{ old('id_danhmuc', $product->id_danhmuc) == $category->id_danhmuc ? 'selected' : '' }}>
                                         {{ $category->tendanhmuc }}
                                     </option>

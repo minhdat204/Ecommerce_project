@@ -1,4 +1,5 @@
 @extends('Admin.Layout.Layout')
+@section('title', 'Quản lý Liên Hệ')
 @section('namepage', 'Quản lý Liên Hệ')
 @section('content')
     <div >

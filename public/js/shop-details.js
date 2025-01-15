@@ -139,3 +139,40 @@ function toggleFavorite(productId) {
         btn.innerHTML = originalContent;
     });
 }
+
+
+// xử lý mô tả sản phẩm
+function toggleDescription(button) {
+    const container = button.previousElementSibling;
+    const shortDesc = container.querySelector('.description-short');
+    const fullDesc = container.querySelector('.description-full');
+    const buttonText = button.querySelector('.text');
+
+    button.classList.toggle('active');
+    container.classList.toggle('expanded');
+
+    if (button.classList.contains('active')) {
+        shortDesc.style.display = 'none';
+        fullDesc.style.display = 'block';
+        buttonText.textContent = 'Thu gọn';
+
+        // Animate height
+        container.style.maxHeight = fullDesc.offsetHeight + 'px';
+    } else {
+        shortDesc.style.display = 'block';
+        fullDesc.style.display = 'none';
+        buttonText.textContent = 'Xem thêm';
+
+        // Animate height
+        container.style.maxHeight = shortDesc.offsetHeight + 'px';
+    }
+}
+
+// Initialize description heights
+document.addEventListener('DOMContentLoaded', function() {
+    const containers = document.querySelectorAll('.description-container');
+    containers.forEach(container => {
+        const shortDesc = container.querySelector('.description-short');
+        container.style.maxHeight = shortDesc.offsetHeight + 'px';
+    });
+});

@@ -2039,6 +2039,9 @@ ol {
 	margin-left: 10px;
 }
 .product__details__text p {
+    color: #6f6f6f;
+    font-size: 16px;
+    line-height: 1.6;
 	margin-bottom: 45px;
 }
 
@@ -2239,6 +2242,83 @@ ol {
 	color: #666666;
 }
 
+
+.product-description {
+    position: relative;
+    margin: 20px 0;
+}
+
+.description-container {
+    position: relative;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.description-short {
+    margin-bottom: 10px;
+}
+
+.description-full {
+    display: none;
+    margin-bottom: 10px;
+}
+
+.read-more-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    color: #7fad39;
+    cursor: pointer;
+    padding: 5px 20px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.read-more-btn .text {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.read-more-btn:hover {
+    color: #5a8027;
+}
+
+.read-more-btn .icon {
+    transition: transform 0.3s;
+}
+
+.read-more-btn.active .icon {
+    transform: rotate(180deg);
+}
+
+.description-text {
+    line-height: 1.6;
+    color: #6f6f6f;
+}
+
+/* Add fade effect */
+.description-container:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(transparent, #ffffff);
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+.description-container.expanded:after {
+    opacity: 0;
+}
 /*---------------------
   Shop Details
 -----------------------*/
@@ -4468,3 +4548,4 @@ ol {
     mix-blend-mode: multiply;
     filter: contrast(1.1) brightness(1.1);
 }
+

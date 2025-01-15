@@ -6,6 +6,9 @@
                class="{{ request()->is('shop') ? 'active' : '' }}">All</a>
         </li>
         @foreach($categories as $category)
+            @if($category->id_danhmuc_cha != null)
+                @continue
+            @endif
             <li>
                 <a href="{{ route('shop.category', $category->slug) }}"
                    class="{{ request()->is('shop/category/'.$category->slug) ? 'active' : '' }}">

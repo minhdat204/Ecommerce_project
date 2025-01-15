@@ -14,10 +14,7 @@
                         <a href="{{ route('admin.product.create') }}" class="btn btn-success">
                             <i class="material-icons">&#xE147;</i> <span>Thêm Sản Phẩm Mới</span>
                         </a>
-                        <a onclick="confirmDeleteSelected()" href="javascript:void(0)" id="deleteSelected"
-                            class="btn btn-danger">
-                            <i class="material-icons">&#xE15C;</i> <span>Xóa đã chọn</span>
-                        </a>
+
                     </div>
                 </div>
             </div>
@@ -105,10 +102,15 @@
                                         <i class="material-icons">&#xE254;</i>
                                     </a>
                                     <!-- Nút ẩn sản phẩm -->
-                                    <a href="#deleteProductModal" class="delete" data-toggle="modal" title="Ẩn sản phẩm"
-                                        data-id="{{ $product->id_sanpham }}" onclick="setProductId(this)">
-                                        <i class="material-icons">&#xE872;</i>
-                                    </a>
+                                    <form action="{{ route('admin.product.destroy', $product->id_sanpham) }}"
+                                        method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn ẩn sản phẩm này?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" title="Ẩn sản phẩm">
+                                            <i class="material-icons">&#xE872;</i>
+                                        </button>
+                                    </form>
+
                                 </td>
                             </tr>
                         @endforeach
@@ -127,7 +129,7 @@
     </div>
 
     <!-- Form ẩn -->
-    <form action="{{ route('admin.product.hide', ':product') }}" method="POST" id="deleteProductForm">
+    <form action="{{ route('admin.product.destroy', ':product') }}" method="POST" id="deleteProductForm">
         @csrf
         @method('PATCH') <!-- Sử dụng PATCH thay vì POST -->
         <input type="hidden" name="product_id" id="product_id">

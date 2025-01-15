@@ -11,6 +11,8 @@ class FavoriteProduct extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = null;
 
+    protected $primaryKey = 'id_sanpham';
+
     protected $fillable = [
         'id_nguoidung',
         'id_sanpham',

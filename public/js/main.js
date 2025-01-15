@@ -9,6 +9,7 @@
 
 'use strict';
 
+
 (function ($) {
 
     /*------------------
@@ -167,18 +168,23 @@
         maxamount = $("#maxamount"),
         minPrice = rangeSlider.data('min'),
         maxPrice = rangeSlider.data('max');
+
     rangeSlider.slider({
         range: true,
         min: minPrice,
         max: maxPrice,
         values: [minPrice, maxPrice],
         slide: function (event, ui) {
-            minamount.val('$' + ui.values[0]);
-            maxamount.val('$' + ui.values[1]);
+            minamount.val(ui.values[0].toLocaleString('vi-VN') + 'đ');
+            maxamount.val(ui.values[1].toLocaleString('vi-VN') + 'đ');
+        },
+        stop: function(event, ui) {
+            handlePriceChange(event, ui);
         }
     });
-    minamount.val('$' + rangeSlider.slider("values", 0));
-    maxamount.val('$' + rangeSlider.slider("values", 1));
+    minamount.val(rangeSlider.slider("values", 0).toLocaleString('vi-VN') + 'đ');
+    maxamount.val(rangeSlider.slider("values", 1).toLocaleString('vi-VN') + 'đ');
+
 
     /*--------------------------
         Select
@@ -325,29 +331,74 @@ function notification(message, type = 'error', duration = 3000, onClick = null) 
     }).showToast();
 }
 
+// Dat: hàm show thông báo điều hướng
+let isRedirectNotificationActive = false;
+function showRedirectNotification(message, duration = 6000, url) {
+    if (isRedirectNotificationActive) return;
+
+    isRedirectNotificationActive = true;
+
+    Toastify({
+        text: message,
+        duration: duration,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: "#3c3c3c",
+            color: "#fff"
+        },
+        onClick: function() {
+            window.location.href = url;
+        },
+        callback: function() {
+            isRedirectNotificationActive = false;
+        }
+    }).showToast();
+}
+
+// Dat: hàm hiển thị thông báo xác nhận
+function showConfirm(message, callback) {
+    Swal.fire({
+        title: 'Xác nhận',
+        text: message,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#7fad39',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+    });
+}
+
 // Dat: lắng nghe sự kiện pageshow để reload trang khi dùng nút back/forward
 window.addEventListener('pageshow', function(event) {
     // Define paths that need reload
     const pathsNeedReload = [
         '/cart',
-        // Add more paths as needed
+        '/favorites',
+        // thêm các path khác cần reload ở đây
     ];
 
-    // Get current path
+    // lấy đường dẫn hiện tại
     const currentPath = window.location.pathname;
 
-    // Check if current path needs reload
+    // Check nếu đường dẫn hiện tại không nằm trong danh sách cần reload
     if (!pathsNeedReload.includes(currentPath)) {
         return; // Exit if not a path that needs reload
     }
 
-    // Check back-forward cache
+    // Check back/forward cache
     if (event.persisted) {
         window.location.reload();
         return;
     }
 
-    // Check navigation type
+    // Check loại navigation
     if (window.performance && window.performance.getEntriesByType) {
         const navigationEntries = window.performance.getEntriesByType('navigation');
         if (navigationEntries.length > 0) {
@@ -358,3 +409,58 @@ window.addEventListener('pageshow', function(event) {
         }
     }
 });
+
+
+// Dat: Hàm chọn danh mục cho tìm kiếm
+function selectCategory(element, id_category = null) {
+    const categoryText = element.textContent.trim();
+    const categoriesDiv = document.querySelector('.hero__search__form');
+    const categoryDisplay = categoriesDiv.querySelector('.category-display');
+    const categoryInput = categoriesDiv.querySelector('input[name="id_category"]');
+
+    categoryDisplay.textContent = categoryText;
+    (id_category != null) ? categoryInput.value = id_category : categoryInput.value = '';
+}
+
+// Dat: mở modal đăng nhập nếu chưa đăng nhập khi truy cập 1 số trang cần đăng nhập
+document.addEventListener('DOMContentLoaded', function() {
+    // Kiểm tra xem có tham số truy cập openLogin không
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('openLogin')) {
+        openModal();
+        // Xóa tham số truy cập openLogin
+        window.history.replaceState({}, '', window.location.pathname);
+    }
+});
+
+// Dat: Hiển thị thông báo khi có trong sessionStorage
+window.onload = function() {
+    // Kiểm tra xem có thông báo nào trong sessionStorage không
+    const message = sessionStorage.getItem('message');
+    if (message) {
+        // Hiển thị thông báo nếu có
+        notification(message, 'success', 3000);
+
+        // Xóa thông báo trong sessionStorage sau khi đã hiển thị
+        sessionStorage.removeItem('message');
+    }
+};
+
+// Dat: hàm cập nhật số lượng sản phẩm giỏ hàng và tổng tiền
+function updateCartCountAndTotal(cartTotal, cartCount) {
+    // lấy phần tử để Cập nhật số lượng sp giỏ hàng trên header
+    const cartCountElement = document.getElementById('cart-count');
+    // lấy phần tử để cập nhật tổng tiền ở header
+    const headerCartTotalElement = document.getElementById('cart-total');
+
+    // cập nhật số lượng sp giỏ hàng trên header
+    const currentCount = parseInt(cartCountElement.textContent);
+    cartCountElement.textContent = cartCount ?? 0;
+    // cập nhật tổng tiền ở header
+    headerCartTotalElement.textContent = cartTotal ?? '0đ';
+}
+// Dat: hàm cập nhật số lượng sản phẩm yêu thích
+function updateFavoriteCount(count) {
+    const favoriteCountElement = document.getElementById('favorite-count');
+    favoriteCountElement.textContent = count ?? 0;
+}

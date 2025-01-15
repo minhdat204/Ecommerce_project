@@ -2,7 +2,7 @@
     <div class="col-lg-6 col-md-6">
         <div class="blog__item">
             <div class="blog__item__pic">
-                <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->tieude }}">
+                <img src="{{ asset('img/blog/blog-2.jpg') }}" alt="{{ $post->tieude }}">
             </div>
             <div class="blog__item__text">
             <ul>

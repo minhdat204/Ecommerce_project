@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,7 @@ class CartController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('check.guest');
     }
     private function getOrCreateCart()
     {
@@ -30,17 +31,28 @@ class CartController extends Controller
             return $price * $item->soluong;
         });
     }
+    private function calculateSubTotal($cartItems)
+    {
+        return $cartItems->sum(function ($item) {
+            $price = $item->product->gia;
+            return $price * $item->soluong;
+        });
+    }
     public function index()
     {
         $cart = $this->getOrCreateCart();
         $cartItems = CartItem::with('product')
             ->where('id_giohang', $cart->id_giohang)
             ->get();
-        $total = $cartItems->sum(function ($item) {
-            $price = $item->product->gia_khuyen_mai ?? $item->product->gia;
-            return $price * $item->soluong;
-        });
-        return view('users.pages.shoping-cart', compact('cartItems', 'total'));
+
+        $cartItems->load('product.images');
+
+        $subTotal = $this->calculateSubTotal($cartItems);
+
+        $total = $this->calculateTotal($cartItems);
+
+        $discount = $subTotal > 0 ? ($subTotal - $total) / $subTotal * 100 : 0;
+        return view('users.pages.shoping-cart', compact('cartItems', 'subTotal','total', 'discount'));
     }
     public function addToCart(Request $request)
     {
@@ -74,7 +86,7 @@ class CartController extends Controller
                 $availableQuantity = $product->soluong - $productIsExist->soluong;
                 return response()->json([
                     'success' => false,
-                    'message' =>  "Chỉ còn {$availableQuantity} sản phẩm có sẵn. Vui lòng giảm số lượng."
+                    'message' =>  "Số lượng còn lại trong kho là {$availableQuantity} sản phẩm."
                 ]);
             }
             //cập nhật số lượng sản phẩm trong giỏ hàng
@@ -88,19 +100,38 @@ class CartController extends Controller
                 'soluong' => $request->soluong
             ]);
         }
+        //tính tổng tiền không giảm giá
+        $cartTotal = $this->calculateTotal($cart->fresh()->cartItems);
+        // số lượng sản phẩm trong giỏ hàng
+        $cartCount = $cart->cartItems->count();
         return response()->json([
             'success' => true,
-            'redirect_url' => route('cart.index')
+            'redirect_url' => route('cart.index'),
+            'cartTotal' => number_format($cartTotal, 0, ',', '.') . 'đ',
+            'cartCount' => $cartCount
         ]);
     }
     public function removeItem($id)
     {
         $cart = $this->getOrCreateCart();
         CartItem::destroy($id);
+        //tính tổng tiền không giảm giá
+        $subTotal = $this->calculateSubTotal($cart->fresh()->cartItems);
+
+        //tính tổng tiền
         $total = $this->calculateTotal($cart->fresh()->cartItems);
+
+        //tính phần trăm giảm giá
+        $discount = $subTotal > 0 ? ($subTotal - $total) / $subTotal * 100 : 0;
+
+        // số lượng sản phẩm trong giỏ hàng
+        $cartCount = $cart->cartItems->count();
         return response()->json([
             'success' => true,
-            'cartTotal' => number_format($total, 2) . ' VNĐ'
+            'cartTotal' => number_format($total, 0, ',', '.') . 'đ',
+            'subTotal' => number_format($subTotal, 0, ',', '.') . 'đ',
+            'discount' => floor($discount),
+            'cartCount' => $cartCount
         ]);
     }
     public function clearCart()
@@ -137,12 +168,16 @@ class CartController extends Controller
         ]);
         $cart = $cartItem->cart;
         $cartTotal = $this->calculateTotal($cart->cartItems);
+        $subTotal = $this->calculateSubTotal($cart->cartItems);
+        $discount = $subTotal > 0 ? ($subTotal - $cartTotal) / $subTotal * 100 : 0;
         $itemTotal = ($cartItem->product->gia_khuyen_mai ?? $cartItem->product->gia) * $cartItem->soluong;
 
         return response()->json([
             'success' => true,
-            'cartTotal' => number_format($cartTotal, 2) . ' VNĐ',
-            'itemTotal' => number_format($itemTotal, 2) . ' VNĐ'
+            'cartTotal' => number_format($cartTotal, 0, ',', '.') . 'đ',
+            'itemTotal' => number_format($itemTotal, 0, ',', '.') . 'đ',
+            'subTotal' => number_format($subTotal, 0, ',', '.') . 'đ',
+            'discount' => floor($discount)
         ]);
     }
 }

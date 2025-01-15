@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Client;
 
 use App\Models\Contact;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ContactController
 {
@@ -32,18 +32,18 @@ class ContactController
         $request->validate([
             'ten' => 'required|string|max:100',
             'email' => 'required|email|max:100',
-            'sodienthoai' => 'nullable|string|max:20', 
+            'sodienthoai' => 'nullable|string|max:20',
             'noidung' => 'required|string',
         ]);
 
         Contact::create([
-            'id_nguoidung'=>NULL,
+            'id_nguoidung'=> Auth::id() ?? NULL,
             'ten'=>$request->input('ten'),
             'email'=>$request-> input('email'),
-            'sodienthoai'=>$request->input('sodienthoai', '000000000'),
+            'sodienthoai'=>$request->input('sodienthoai', request('sodienthoai')),
             'noidung'=>$request->input('noidung'),
             'trangthai'=>'new',
-        ]); 
+        ]);
         return view('users.pages.contact');
     }
 

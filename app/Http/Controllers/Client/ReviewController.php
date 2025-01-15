@@ -12,36 +12,32 @@ use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
-    public function checkCanReview($productId)
+public function checkCanReview($productId)
     {
         $userId = Auth::id();
 
-        // Ensure case-insensitive comparison for status
-        $hasPurchased = Order::from('don_hang')
+        // Đếm số lần mua sản phẩm đã hoàn thành
+        $purchaseCount = Order::from('don_hang')
             ->join('chi_tiet_don_hang', 'don_hang.id_donhang', '=', 'chi_tiet_don_hang.id_donhang')
             ->where('don_hang.id_nguoidung', $userId)
             ->where('chi_tiet_don_hang.id_sanpham', $productId)
             ->where('don_hang.trangthai', 'completed')
-            ->exists();
+            ->count();
 
-        $hasReviewed = Comment::where('id_sanpham', $productId)
+        // Đếm số lần đã đánh giá
+        $reviewCount = Comment::where('id_sanpham', $productId)
             ->where('id_nguoidung', $userId)
-            ->exists();
+            ->count();
 
-        // Debug output
-        \Log::info('Review Check:', [
-            'userId' => $userId,
-            'productId' => $productId,
-            'hasPurchased' => $hasPurchased,
-            'hasReviewed' => $hasReviewed,
-        ]);
+        // Kiểm tra xem còn lượt đánh giá không
+        $canReview = $purchaseCount > $reviewCount;
 
         return [
-            'canReview' => $hasPurchased && !$hasReviewed,
-            'message' => !$hasPurchased ? 'Bạn cần mua sản phẩm trước khi đánh giá' : ($hasReviewed ? 'Bạn đã đánh giá sản phẩm này rồi' : null)
+            'canReview' => $canReview,
+            'message' => $purchaseCount == 0 ?
+                'Bạn cần mua sản phẩm trước khi đánh giá' : ($canReview ? null : 'Bạn đã đánh giá ')
         ];
-    }
-    public function store(Request $request)
+    }    public function store(Request $request)
     {
         // Validate dữ liệu từ form
         $validatedData = $request->validate([

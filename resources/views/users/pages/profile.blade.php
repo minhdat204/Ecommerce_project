@@ -8,6 +8,7 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/favorite.js') }}"></script>
+    <script src="{{ asset('js/quickAddToCart') }}"></script>
 @endpush
 
 @section('content')
@@ -25,8 +26,9 @@
         <div class="profile-content mt-4">
             <!-- Personal Tab -->
             <div class="profile-tab-pane" style="display: block;">
-                <form method="POST" action="{{ route('profile.update', $user) }}">
+                <form method="POST" action="{{ route('profile.update', Auth::id()) }}">
                     @csrf
+                    @method('PUT')
                     <div class="row justify-content-center">
                         <div class="col-md-8">
                             <div class="row">
@@ -41,8 +43,8 @@
                                         <div class="col-md-6">
                                             <label for="user-fullname" class="form-label">Full Name</label>
                                             <input type="text" class="form-control" id="user-fullname" name="hoten"
-                                                value="{{ Auth::user()->hoten }}">
-                                        </div>
+                                                value="{{ Auth::user()->hoten }}">                                        
+                                            </div>
                                         <div class="col-md-6">
                                             <label for="user-id" class="form-label">User ID</label>
                                             <input type="text" class="form-control" id="user-id" name="id_nguoidung"
@@ -73,12 +75,12 @@
                                         <div class="col-md-6">
                                             <label for="user-address" class="form-label">Address</label>
                                             <input type="text" class="form-control" id="user-address" name="diachi"
-                                                value="{{ Auth::user()->diachi }}">
+                                            value="{{ Auth::user()->diachi }}">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="user-phone" class="form-label">Phone</label>
                                             <input type="text" class="form-control" id="user-phone" name="sodienthoai"
-                                                value="{{ Auth::user()->sodienthoai }}">
+                                                value="{{ old('sodienthoai', Auth::user()->sodienthoai) }}">
                                         </div>
                                     </div>
                                     <div class="email-address-section border p-3 rounded">
@@ -99,12 +101,11 @@
                     </div>
                 </form>
             </div>
-
             <!-- Favorites List Tab -->
             <div class="profile-tab-pane" style="display: none;">
                 <div class="favorite-page-container">
                     <div class="row">
-                        @forelse ($favorites as $favorite)
+                        @forelse ($favorites as $favorite )
                             <div class="col-md-4 mb-4">
                                 <div class="card">
                                     <img src="{{ asset('img/product/' . $favorite->image) }}" class="card-img-top"
@@ -113,9 +114,8 @@
                                         <h5 class="card-title">{{ $favorite->tensanpham }}</h5>
                                         <p class="card-text text-muted">{{ number_format($favorite->gia, 0, ',', '.') }}đ
                                         </p>
-                                        <div class="d-flex justify-content-between">
-                                            <button class="btn btn-sm btn-primary">Redeem Again</button>
-                                            <button class="btn btn-sm btn-secondary">Contact Seller</button>
+                                        <div class="d-flex justify-content-end">
+                                            <button class="btn btn-sm btn-success" onclick="quickAddToCart('{{ $favorite->id_sanpham }}')">Thêm sản phẩm vào giỏ</button>
                                         </div>
                                     </div>
                                 </div>
@@ -147,10 +147,8 @@
                                             {{ number_format($score->product->gia, 0, ',', '.') }}đ</p>
                                         <p><strong>Điểm đánh giá:</strong> {{ $score->danhgia }}</p>
                                         <p><strong>Nội dung:</strong> {{ $score->noidung }}</p>
-                                        <div class="d-flex justify-content-between">
-                                            <button class="btn btn-sm btn-primary">Redeem Again</button>
-                                            <button class="btn btn-sm btn-secondary">Contact Seller</button>
-                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <a href="{{ route('users.shop_details', ['slug' => $score->product->slug]) }}" class="btn btn-sm btn-primary">Chi tiết sản phẩm</a>                                        </div>
                                     </div>
                                 </div>
                             </div>

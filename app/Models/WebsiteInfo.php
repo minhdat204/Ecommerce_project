@@ -15,7 +15,9 @@ class WebsiteInfo extends Model
         'address',
         'phone',
         'email',
-        'content'
+        'content',
+        'facebook_link',
+        'logo_image'
     ];
 
     //hàm lấy info nếu cần

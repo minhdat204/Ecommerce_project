@@ -38,13 +38,19 @@ function showSignup() {
     signupContainer.style.display = 'flex';
 }
 
+//biến lưu url cần chuyển hướng sau khi đăng nhập
 let redirect_url;
-// hàm mở modal đăng nhập với tham số là url cần chuyển hướng sau khi đăng nhập
+/*
+hàm mở modal đăng nhập với tham số là url cần chuyển hướng sau khi đăng nhập
+(vấn đề : mặc định tham số đầu tiên là event)
+*/
 function openModal(url) {
     modal.style.display = "block";
     document.body.classList.add('modal-open');
     showLogin();//măc định hiển thị form login
-    if(url && url === 'string'){
+
+    //nếu có url thì gán vào biến redirect_url
+    if(url && typeof url === 'string'){
         redirect_url = url;
     }
 }
@@ -129,7 +135,7 @@ document.querySelector('.form-grid').addEventListener('submit', function (e) {
         if (data.success) {
             // Lưu thông báo vào sessionStorage trước khi chuyển hướng
             sessionStorage.setItem('message', data.message);
-            window.location.href = data.redirect_url;
+            window.location.href = redirect_url ?? data.redirect_url;
             //window.location.href = data.redirect_url;
         } else {
             notification(data.message || "Có lỗi xảy ra", 'error');

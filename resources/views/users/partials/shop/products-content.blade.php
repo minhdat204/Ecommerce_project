@@ -42,7 +42,7 @@
                     <h6><a href="{{ route('users.shop_details', $product->slug) }}">{{ $product->tensanpham }}</a></h6>
                     <h5>
                         <div class="product__item__price">
-                            @if ($product->gia_khuyen_mai != 0)
+                            @if ($product->gia_khuyen_mai >= 0)
                                 {{ number_format($product->gia_khuyen_mai, 0, ',', '.') }}đ
                                 <span>{{ number_format($product->gia, 0, ',', '.') }}đ</span>
                             @else

@@ -15,7 +15,7 @@
                         <div class="featured__item">
                             <div class="featured__item__pic set-bg"
                             data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/default.jpg')) }}">
-                            @if ($product->gia_khuyen_mai != 0)
+                            @if ($product->gia_khuyen_mai >= 0)
                                 <div class="product__discount__percent">-{{floor(($product->gia - $product->gia_khuyen_mai) / $product->gia * 100)}}%</div>
                             @endif
                             <ul class="featured__item__pic__hover">
@@ -25,7 +25,7 @@
                             <div class="featured__item__text">
                                 <span>{{$product->category->tendanhmuc}}</span>
                                 <h6><a href="{{ route('users.shop_details', $product->slug) }}">{{ $product->tensanpham }}</a></h6>
-                                @if ($product->gia_khuyen_mai != 0)
+                                @if ($product->gia_khuyen_mai >= 0)
                                     <h5>{{ number_format($product->gia_khuyen_mai, 0, ',', '.') }}đ</h5>
                                     <div class="discount">Giảm đến {{floor(($product->gia - $product->gia_khuyen_mai) / $product->gia * 100)}}%</div>
                                 @else

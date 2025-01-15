@@ -17,7 +17,7 @@
                     <h5>{{ $item->product->tensanpham }}</h5>
                 </td>
                 <td class="shoping__cart__price">
-                    @if ($item->product->gia_khuyen_mai != 0)
+                    @if ($item->product->gia_khuyen_mai >= 0)
                         {{ number_format($item->product->gia_khuyen_mai, 0, ',', '.') }}đ
                         <span class="text-decoration-line-through text-muted">{{ number_format($item->product->gia, 0, ',', '.') }}đ</span>
                     @else
@@ -42,7 +42,7 @@
                     </div>
                 </td>
                 <td class="shoping__cart__total">
-                    @if ($item->product->gia_khuyen_mai != 0)
+                    @if ($item->product->gia_khuyen_mai >= 0)
                         {{ number_format($item->product->gia_khuyen_mai * $item->soluong, 0, ',', '.') }}đ
                     @else
                         {{ number_format($item->product->gia * $item->soluong, 0, ',', '.') }}đ

@@ -37,7 +37,7 @@
                         </div>
                         <!-- phần giá -->
                         <div class="product__details__price">
-                            @if ($Product->gia_khuyen_mai)
+                            @if ($Product->gia_khuyen_mai >= 0)
                                 ${{ $Product->gia_khuyen_mai }}
                                 <span>${{ $Product->gia }}</span>
                             @else

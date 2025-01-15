@@ -133,7 +133,9 @@ class ProductController
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');
-        $id_category = $request->input('slug') ? Category::where('slug', $request->input('slug'))->first()->id_danhmuc : $request->input('id_category');
+        $id_category = $request->input('slug')
+            ? (Category::where('slug', $request->input('slug'))->first()?->id_danhmuc ?? $request->input('id_category'))
+            : $request->input('id_category');
         $minPrice = $request->input('minPrice') ?? 0;
         $maxPrice = $request->input('maxPrice') ??  Product::max('gia');
 

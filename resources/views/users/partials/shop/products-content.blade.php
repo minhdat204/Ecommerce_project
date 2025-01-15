@@ -32,8 +32,11 @@
     @foreach ($products as $product)
         <div class="col-lg-4 col-md-6 col-sm-6">
             <div class="product__item">
-                <div class="product__item__pic set-bg"
+                <div class="product__item__pic set-bg bg-blend"
                     data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/default.jpg')) }}">
+                    @if ($product->gia_khuyen_mai !== null && $product->gia_khuyen_mai >= 0)
+                                    <div class="product__discount__percent">-{{floor(($product->gia - $product->gia_khuyen_mai) / $product->gia * 100)}}%</div>
+                    @endif
                     <ul class="product__item__pic__hover">
                     @include('users.partials.pic-hover', ['product' => $product])
                     </ul>
@@ -42,7 +45,7 @@
                     <h6><a href="{{ route('users.shop_details', $product->slug) }}">{{ $product->tensanpham }}</a></h6>
                     <h5>
                         <div class="product__item__price">
-                            @if ($product->gia_khuyen_mai >= 0)
+                            @if ($product->gia_khuyen_mai !== null && $product->gia_khuyen_mai >= 0)
                                 {{ number_format($product->gia_khuyen_mai, 0, ',', '.') }}đ
                                 <span>{{ number_format($product->gia, 0, ',', '.') }}đ</span>
                             @else

@@ -13,9 +13,11 @@
             <div class="categories__slider owl-carousel">
                 @foreach ($categories as $category)
                 <div class="col-lg-3">
-                    <div class="categories__item set-bg" data-setbg="{{ $category->image ? asset('storage/categories/' . $category->image) : asset('img/categories/cat-1.jpg') }}">
-                        <h5><a href="{{ route('shop.category', $category->slug) }}">{{$category->tendanhmuc}}</a></h5>
-                    </div>
+                    <a href="{{ route('shop.category', $category->slug) }}">
+                        <div class="categories__item set-bg catebg-blend" data-setbg="{{ asset('storage/' . ($category->thumbnail ? $category->thumbnail : 'img/categories/default.jpg')) }}">
+                            <h5><span>{{$category->tendanhmuc}}</span></h5>
+                        </div>
+                    </a>
                 </div>
                 @endforeach
             </div>

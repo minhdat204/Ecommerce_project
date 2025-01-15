@@ -14,7 +14,9 @@
             @forelse($favorites as $favorite)
             <tr id="favorite-item-{{ $favorite->id_yeuthich }}">
                 <td class="favorite__item" onclick="window.location='{{ route('users.shop_details', $favorite->product->slug) }}'" style="cursor: pointer;">
-                    <img src="{{ asset('storage/' . ($favorite->product->images->isNotEmpty() ? $favorite->product->images->first()->duongdan : 'img/products/default.jpg')) }}" alt="{{ $favorite->product->tensanpham }}" width="100">
+                    <div class="img-cart-favorites">
+                        <img src="{{ asset('storage/' . ($favorite->product->images->isNotEmpty() ? $favorite->product->images->first()->duongdan : 'img/products/default.jpg')) }}" alt="{{ $favorite->product->tensanpham }}" width="100">
+                    </div>
                     <h5>{{ $favorite->product->tensanpham }}</h5>
                 </td>
                 <td class="favorite__price">

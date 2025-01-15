@@ -24,7 +24,7 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Client\CheckoutMomoController;
-
+Route::delete('/favorites/{id}', [ProfileController::class, 'destroy'])->name('favorites.destroy');
 Route::middleware('check.user')->group(function () {
     //review
     Route::post('/reviews/store', [ReviewController::class, 'store'])->name('reviews.store');

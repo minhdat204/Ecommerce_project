@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class FavoriteProduct extends Model
 {
     protected $table = 'san_pham_yeu_thich';
+    protected $primaryKey = 'id_yeuthich'; 
+
     public $timestamps = false;
     const CREATED_AT = 'created_at';
     const UPDATED_AT = null;

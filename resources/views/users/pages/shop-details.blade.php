@@ -37,7 +37,7 @@
                         </div>
                         <!-- phần giá -->
                         <div class="product__details__price">
-                            @if ($Product->gia_khuyen_mai)
+                            @if ($Product->gia_khuyen_mai >= 0)
                                 ${{ $Product->gia_khuyen_mai }}
                                 <span>${{ $Product->gia }}</span>
                             @else
@@ -50,14 +50,27 @@
                             <div class="quantity">
                                 <div class="pro-qty">
                                     <span class="dec qtybtn">-</span>
+                                    @if ($Product->soluong > 0)
                                     <input id="quantity" value="1" min="1"
                                         max="{{ $Product->soluong }}">
+                                    @else
+                                    <input value="0" min="0"
+                                        max="{{ $Product->soluong }}">
+                                    @endif
                                     <span class="inc qtybtn">+</span>
                                 </div>
                             </div>
                         </div>
-                        <button id="addToCartButton" onclick="addToCart({{ $Product->id_sanpham }})" class="primary-btn no-border">ADD TO CART</button>
-                        <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+                        <button id="addToCartButton" {{ $Product->soluong > 0 ? '' : 'disabled' }} onclick="addToCart({{ $Product->id_sanpham }})" class="primary-btn no-border">ADD TO CART</button>
+                        <div class="favorite-btn-wrapper" onclick="toggleFavorite({{ $Product->id_sanpham }})">
+                            <button type="button"
+                                    class="favorite-btn {{ $isFavorited ? 'active' : '' }}"
+                                    data-id="{{ $Product->id_sanpham }}"
+                                    >
+                                <i class="fa fa-heart-o heart-empty"></i>
+                                <i class="fa fa-heart heart-filled"></i>
+                            </button>
+                        </div>
                         <ul>
                             <li><b>Availability</b>
                                 <span>
@@ -225,9 +238,7 @@
                             <div class="product__item__pic set-bg"
                                 data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/default.jpg')) }}">
                                 <ul class="product__item__pic__hover">
-                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    <li><a href="javascript:void(0)" onclick="quickAddToCart({{ $product->id_sanpham }})"><i class="fa fa-shopping-cart"></i></a></li>
+                                    @include('users.partials.pic-hover', ['product' => $product])
                                 </ul>
                             </div>
                             <div class="product__item__text">

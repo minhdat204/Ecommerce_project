@@ -32,9 +32,14 @@ class User extends Authenticatable
         'avatar',
         'loai_nguoidung',
         'trangthai',
-        'email_verified_at'
+        'email_verified_at',
+        'so_lan_khoa',
+        'thoi_gian_khoa'
     ];
 
+    protected $dates = [
+        'thoi_gian_khoa'
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *

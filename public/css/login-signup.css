@@ -206,3 +206,27 @@ textarea.form-input {
     padding-top: 20px;
     border-top: 1px solid #f5f5f5;
 }
+
+/* hiển thị lỗi validate*/
+.error-message {
+    color: #ff4444;
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+}
+
+.form-input.error {
+    border-color: #ff4444;
+}
+
+.form-input.error:focus {
+    border-color: #ff4444;
+    box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2);
+}
+
+
+/* disable btn nếu cần*/
+.login-button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}

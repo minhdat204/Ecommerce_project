@@ -159,11 +159,12 @@
                                 <p class="card-text text-muted">
                                     {{ number_format($score->product->gia, 0, ',', '.') }}đ
                                 </p>
-                                <p><strong>Điểm đánh giá:</strong> {{ $score->danhgia }}</p>
+                                <p><strong>Thời gian đánh giá</strong> {{ $score->created_at }}</p>
+                                <p><strong>Điểm đánh giá:</strong> {{ $score->danhgia }}/5</p>
                                 <p><strong>Nội dung:</strong> {{ $score->noidung }}</p>
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('users.shop_details', ['slug' => $score->product->slug]) }}"
-                                        class="btn btn-sm btn-primary">Chi tiết sản phẩm</a>
+                                        class="btn btn-sm btn-primary">Detail</a>
                                 </div>
                             </div>
                         </div>
@@ -174,8 +175,12 @@
                     </div>
                 @endforelse
             </div>
+            
         </div>
     </div>
+    <div class="pagination-container mt-4">
+            {{ $scores->links() }}
+        </div>
     <!-- orders-list.blade.php -->
     <div class="profile-tab-pane">
         <div class="orders-page-container">

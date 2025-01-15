@@ -25,11 +25,13 @@ class ProfileController extends Controller
         $favorites = FavoriteProduct::where('id_nguoidung', $user)
             ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
             ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia')
+            ->orderBy('san_pham_yeu_thich.created_at', 'desc')
             ->paginate(12);
         $scores = Comment::with('product')
             ->where('id_nguoidung', $user)
-            ->select('noidung', 'id_sanpham', 'danhgia')
-            ->paginate(12);
+            ->select('noidung', 'id_sanpham', 'danhgia','created_at')
+            ->orderBy('created_at', 'desc')
+            ->simplePaginate(12);
         // Lấy danh sách đơn hàng
         $orders = Order::with(['orderDetails.product'])
             ->where('id_nguoidung', $user)

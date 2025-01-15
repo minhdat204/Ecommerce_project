@@ -27,7 +27,9 @@ class CartController extends Controller
     private function calculateTotal($cartItems)
     {
         return $cartItems->sum(function ($item) {
-            $price = $item->product->gia_khuyen_mai ?? $item->product->gia;
+            $price = ($item->product->gia_khuyen_mai !== null && $item->product->gia_khuyen_mai >= 0)
+                ? $item->product->gia_khuyen_mai
+                : $item->product->gia;
             return $price * $item->soluong;
         });
     }

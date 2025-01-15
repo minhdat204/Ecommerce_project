@@ -24,83 +24,79 @@
 
         <!-- Tab Content -->
         <div class="profile-content mt-4">
+        @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
             <!-- Personal Tab -->
-            <div class="profile-tab-pane" style="display: block;">
-                <form method="POST" action="{{ route('profile.update', Auth::id()) }}">
-                    @csrf
-                    @method('PUT')
-                    <div class="row justify-content-center">
-                        <div class="col-md-8">
-                            <div class="row">
-                                <div class="col-md-4 text-center">
-                                    <div class="profile-avatar">
-                                        <img src="{{ asset('img/avatar.jpg') }}" alt="User Avatar"
-                                            class="img-fluid rounded-circle" width="150">
+                <div class="profile-tab-pane" style="display: block;">
+                    <form method="POST" action="{{ route('profile.update', Auth::id()) }}">
+                        @csrf
+                        @method('PUT')
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="user-fullname" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="user-fullname" name="hoten"
+                                        value="{{ old('hoten', Auth::user()->hoten) }}" maxlength="50">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="user-id" class="form-label">User ID</label>
+                                        <input type="text" class="form-control" id="user-id" name="id_nguoidung"
+                                            value="{{ Auth::user()->id_nguoidung }}" readonly>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label for="user-fullname" class="form-label">Full Name</label>
-                                            <input type="text" class="form-control" id="user-fullname" name="hoten"
-                                                value="{{ Auth::user()->hoten }}">                                        
-                                            </div>
-                                        <div class="col-md-6">
-                                            <label for="user-id" class="form-label">User ID</label>
-                                            <input type="text" class="form-control" id="user-id" name="id_nguoidung"
-                                                value="{{ Auth::user()->id_nguoidung }}" readonly>
-                                        </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="user-gender" class="form-label">Gender</label>
+                                        <select class="form-select" id="user-gender" name="gioitinh">
+                                            <option value="male" {{ Auth::user()->gioitinh == 'male' ? 'selected' : '' }}>Male</option>
+                                            <option value="female" {{ Auth::user()->gioitinh == 'female' ? 'selected' : '' }}>Female</option>
+                                        </select>
                                     </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label for="user-gender" class="form-label">Gender</label>
-                                            <select class="form-select no-arrow" id="user-gender" name="gioitinh">
-                                                <option value="male"
-                                                    {{ Auth::user()->gioitinh == 'male' ? 'selected' : '' }}>
-                                                    Male</option>
-                                                <option value="female"
-                                                    {{ Auth::user()->gioitinh == 'female' ? 'selected' : '' }}>
-                                                    Female</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="user-language" class="form-label">Language</label>
-                                            <select class="form-select no-arrow" id="user-language">
-                                                <option selected>Vietnamese</option>
-                                                <option value="english">English</option>
-                                            </select>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label for="user-nationality" class="form-label">Nationality</label>
+                                        <input type="text" class="form-control" id="user-nationality" name="quoctich" value="Việt Nam" readonly>
                                     </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label for="user-address" class="form-label">Address</label>
-                                            <input type="text" class="form-control" id="user-address" name="diachi"
-                                            value="{{ Auth::user()->diachi }}">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="user-phone" class="form-label">Phone</label>
-                                            <input type="text" class="form-control" id="user-phone" name="sodienthoai"
-                                                value="{{ old('sodienthoai', Auth::user()->sodienthoai) }}">
-                                        </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="user-address" class="form-label">Address</label>
+                                        <input type="text" class="form-control" id="user-address" name="diachi"
+                                            value="{{ Auth::user()->diachi }}"maxlength="50">
                                     </div>
-                                    <div class="email-address-section border p-3 rounded">
-                                        <h5>Email Address</h5>
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-envelope me-2 text-primary" style="font-size: 1.5rem;"></i>
-                                            <div>
-                                                <p class="mb-0">{{ Auth::user()->email }}</p>
-                                            </div>
+                                    <div class="col-md-6">
+                                        <label for="user-phone" class="form-label">Phone</label>
+                                        <input type="text" class="form-control" id="user-phone" name="sodienthoai"
+                                            value="{{ old('sodienthoai', Auth::user()->sodienthoai) }}"maxlength="10">
+                                        @if ($errors->has('sodienthoai'))
+                                            <div class="text-danger mt-1">The phone number must be 10 digits</div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="email-address-section border p-3 rounded mb-3">
+                                    <h5>Email Address</h5>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-envelope me-2 text-primary" style="font-size: 1.5rem;"></i>
+                                        <div>
+                                            <p class="mb-0">{{ Auth::user()->email }}</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row-edit">
+
+                                <div class="text-end">
                                     <button class="btn btn-sm btn-primary">Edit</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
+
             <!-- Favorites List Tab -->
             <div class="profile-tab-pane" style="display: none;">
                 <div class="favorite-page-container">

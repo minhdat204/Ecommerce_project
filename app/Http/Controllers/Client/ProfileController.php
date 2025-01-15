@@ -46,18 +46,16 @@ class ProfileController extends Controller
     }
     public function update(Request $request, $id) {
         $request->validate([
-            'hoten' => 'required|string|max:255',
+            'hoten' => 'required|string|max:50', 
             'gioitinh' => 'required|in:male,female',
-            'diachi' => 'nullable|string|max:255',
-            'sodienthoai' => 'nullable|string|max:15',
+            'diachi' => 'nullable|string|max:50',
+            'sodienthoai' => 'nullable|digits:10|numeric', 
+        ], [
         ]);
-            $user = User::findOrFail($id);
-        $user->hoten = $request->input('hoten');
-        $user->gioitinh = $request->input('gioitinh');
-        $user->diachi = $request->input('diachi');
-        $user->sodienthoai = $request->input('sodienthoai');
-        $user->save();
-            return redirect()->route('profile.index');
+        $user = Auth::user();
+        $user->update($request->only(['hoten', 'gioitinh', 'diachi', 'sodienthoai']));
+    
+        return back()->with('success', 'Information updated successfully!');
     }
     public function destroy(string $id)
     {

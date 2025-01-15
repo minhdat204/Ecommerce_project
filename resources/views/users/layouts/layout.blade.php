@@ -59,6 +59,10 @@
     <script src="{{asset('js/main.js')}}"></script>
     <script src="{{asset('js/chat-widget.js')}}"></script>
     <script src="{{asset('js/login-signup.js')}}"></script>
+    <script>
+        var authCheck = @json(auth()->check());
+    </script>
+    <script src="{{asset('js/quickAddToCart.js')}}"></script>
     @stack('scripts')
 </body>
 

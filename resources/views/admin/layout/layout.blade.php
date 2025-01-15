@@ -78,13 +78,18 @@
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-user fa-fw"></i> secondtruth <b class="caret"></b>
+                            <i class="fa fa-user fa-fw"></i> {{ Auth::user()->hoten }} <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
                             <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
                             <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
                             <li class="divider"></li>
-                            <li><a href=""><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            <li>
+                                <form action="{{route('admin.logout')}}" method="post">
+                                    @csrf
+                                    <button type="submit"><i class="fa fa-sign-out fa-fw"></i> Logout</button>
+                                </form>
+
                             </li>
                         </ul>
                     </li>
@@ -130,6 +135,11 @@
                             <a href="{{ Route('admin.statistics.index') }}"><i class="fa fa-dashboard fa-fw"></i>
                                 Statistical</a>
                         </li>
+                        <li>
+                            <a href="{{ Route('admin.statistics.index2') }}"><i class="fa fa-dashboard fa-fw"></i>
+                                Statistical 2</a>
+                        </li>
+
                         <li>
                             <a href="{{ Route('admin.comment.index') }}"><i class="fa fa-dashboard fa-fw"></i>
                                 Comments</a>

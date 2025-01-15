@@ -8,6 +8,7 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/favorite.js') }}"></script>
+    <script src="{{ asset('js/quickAddToCart') }}"></script>
 @endpush
 
 @section('content')
@@ -104,7 +105,7 @@
             <div class="profile-tab-pane" style="display: none;">
                 <div class="favorite-page-container">
                     <div class="row">
-                        @forelse ($favorites as $favorite)
+                        @forelse ($favorites as $favorite )
                             <div class="col-md-4 mb-4">
                                 <div class="card">
                                     <img src="{{ asset('img/product/' . $favorite->image) }}" class="card-img-top"
@@ -114,7 +115,7 @@
                                         <p class="card-text text-muted">{{ number_format($favorite->gia, 0, ',', '.') }}đ
                                         </p>
                                         <div class="d-flex justify-content-end">
-                                            <button class="btn btn-sm btn-success">Thêm sản phẩm vào giỏ</button>
+                                            <button class="btn btn-sm btn-success" onclick="quickAddToCart('{{ $favorite->id_sanpham }}')">Thêm sản phẩm vào giỏ</button>
                                         </div>
                                     </div>
                                 </div>
@@ -147,8 +148,7 @@
                                         <p><strong>Điểm đánh giá:</strong> {{ $score->danhgia }}</p>
                                         <p><strong>Nội dung:</strong> {{ $score->noidung }}</p>
                                         <div class="d-flex justify-content-end">
-                                            <button class="btn btn-sm btn-primary">Chi tiết sản phẩm</button>
-                                        </div>
+                                            <a href="{{ route('users.shop_details', ['slug' => $score->product->slug]) }}" class="btn btn-sm btn-primary">Chi tiết sản phẩm</a>                                        </div>
                                     </div>
                                 </div>
                             </div>

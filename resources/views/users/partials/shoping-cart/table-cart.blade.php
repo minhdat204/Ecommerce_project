@@ -13,7 +13,7 @@
             @forelse($cartItems as $item)
             <tr data-id="{{ $item->id_sp_giohang }}" id="cart-item-{{ $item->id_sp_giohang }}">
                 <td class="shoping__cart__item" onclick="window.location='{{ route('users.shop_details', $item->product->slug) }}'" style="cursor: pointer;">
-                    <img src="{{ asset($item->product->thumbnail) }}" alt="{{ $item->product->tensanpham }}" width="100">
+                    <img src="{{ asset('storage/' . ($item->product->images->isNotEmpty() ? $item->product->images->first()->duongdan : 'img/products/default.jpg')) }}" alt="{{ $item->product->tensanpham }}" width="100">
                     <h5>{{ $item->product->tensanpham }}</h5>
                 </td>
                 <td class="shoping__cart__price">

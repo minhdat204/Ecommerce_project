@@ -282,6 +282,11 @@
                                 </div>
                             </div>
                         </div>
+                        <button type="button" onclick="submitCheckoutForm()"
+                            class="btn btn-primary w-100 mt-4 py-3 fw-bold">
+                            Hoàn Tất Đặt Hàng
+                        </button>
+
                     </div>
                 </div>
 
@@ -294,6 +299,20 @@
                             <!-- Cart Items -->
                             <div class="cart-items mb-4" style="max-height: 400px; overflow-y: auto;">
                                 @forelse($cartItems as $item)
+                                    @php
+                                        $price = $item->product->gia_khuyen_mai ?? $item->product->gia;
+                                        $quantity = $item->soluong;
+
+                                    @endphp
+
+                                    <input type="hidden" name="cartItems[{{ $loop->index }}][product_id]"
+                                        value="{{ $item->id_sanpham }}">
+                                    <input type="hidden" name="cartItems[{{ $loop->index }}][price]"
+                                        value="{{ $price }}">
+                                    <input type="hidden" name="cartItems[{{ $loop->index }}][quantity]"
+                                        value="{{ $quantity }}">
+
+
                                     <div class="cart-item mb-3">
                                         <div class="d-flex align-items-center">
                                             <img src="{{ $item->product->image }}" alt="{{ $item->product->tensanpham }}"
@@ -344,11 +363,6 @@
                                 <input type="hidden" name="totalShip" value="{{ $totalShip }}">
                                 <input type="hidden" name="totalPayment"
                                     value="{{ $cartItems->sum(fn($item) => ($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong) + $totalShip }}">
-
-                                <button type="button" onclick="submitCheckoutForm()"
-                                    class="btn btn-primary w-100 mt-4 py-3 fw-bold">
-                                    Hoàn Tất Đặt Hàng
-                                </button>
                             @endif
                         </div>
                     </div>

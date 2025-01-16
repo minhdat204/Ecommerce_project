@@ -30,28 +30,49 @@ class CheckoutMomoController extends Controller
         try {
             $userId = Auth::id();
             $cartItems = $request->input('cartItems', []);
+            $priceErrors = [];
+            $quantityErrors = [];
 
             // Validate cart items
             foreach ($cartItems as $item) {
-                // Get current product from database
-                $currentProduct = Product::where('id_sanpham', $item['product_id'])
-                    ->first();
+                $currentProduct = Product::where('id_sanpham', $item['product_id'])->first();
 
-                // kiểm tra giá
-                if ($currentProduct->gia_khuyen_mai == 0) {
-                    if ($currentProduct->gia != $item['price']) {
-                        return redirect()->back()->with('error', 'Giá sản phẩm đã thay đổi. Vui lòng kiểm tra lại.');
-                    }
-                } else {
-                    if ($currentProduct->gia_khuyen_mai != $item['price']) {
-                        return redirect()->back()->with('error', 'Giá sản phẩm đã thay đổi. Vui lòng kiểm tra lại.');
-                    }
+                // Kiểm tra giá
+                $currentPrice = $currentProduct->gia_khuyen_mai > 0
+                    ? $currentProduct->gia_khuyen_mai
+                    : $currentProduct->gia;
+
+                if ($currentPrice != $item['price']) {
+                    $priceErrors[] = sprintf(
+                        "Sản phẩm '%s' có giá đã thay đổi từ %s₫ thành %s₫",
+                        $currentProduct->tensanpham,
+                        number_format($item['price']),
+                        number_format($currentPrice)
+                    );
                 }
 
-                // kiểm tra số lượng
+                // Kiểm tra số lượng
                 if ($currentProduct->soluong < $item['quantity']) {
-                    return redirect()->back()->with('error', 'Số lượng sản phẩm không đủ.');
+                    $quantityErrors[] = sprintf(
+                        "Sản phẩm '%s' chỉ còn %d sản phẩm (bạn đặt %d)",
+                        $currentProduct->tensanpham,
+                        $currentProduct->soluong,
+                        $item['quantity']
+                    );
                 }
+            }
+            if (!empty($priceErrors)) {
+                return redirect()->back()->with(
+                    'error',
+                    "Giá sản phẩm đã thay đổi:\n" . implode("\n", $priceErrors)
+                );
+            }
+
+            if (!empty($quantityErrors)) {
+                return redirect()->back()->with(
+                    'error',
+                    "Số lượng sản phẩm không đủ:\n" . implode("\n", $quantityErrors)
+                );
             }
 
             $maDonHang = $this->generateOrderCode();
@@ -110,13 +131,18 @@ class CheckoutMomoController extends Controller
 
     public function momoReturn(Request $request)
     {
+
         if ($request->resultCode == 0 || $request->resultCode == 7002) {
             try {
                 Order::where('ma_don_hang', $request->orderId)
                     ->update([
                         'trangthai_thanhtoan' => 'paid',
                     ]);
-                $this->deleteCartItem($request->orderId);
+
+                // xóa giỏ hàng
+                CartItem::join('gio_hang', 'gio_hang.id_giohang', '=', 'san_pham_gio_hang.id_giohang')
+                    ->where('gio_hang.id_nguoidung', Auth::id())
+                    ->delete();
             } catch (\Exception $e) {
                 return redirect()->route('checkout.index')
                     ->with('error', 'Thanh toán thất bại. Vui lòng thử lại sau.');
@@ -188,23 +214,33 @@ class CheckoutMomoController extends Controller
             Order::where('id_donhang', $orderId)->delete();
         });
     }
-    public function deleteCartItem($orderId)
-    {
-        DB::transaction(function () use ($orderId) {
-            // Lấy chi tiết đơn hàng liên quan đến đơn hàng cần xóa
-            $orderDetails = OrderDetail::where('id_donhang', $orderId)->get();
+    // public function deleteCartItem($cartItemId)
+    // {
+    //     try {
+    //         DB::transaction(function () use ($cartItemId) {
+    //             // Delete the specific cart item using san_pham_gio_hang table
+    //             DB::table('san_pham_gio_hang')
+    //                 ->where('id_giohang', function ($query) {
+    //                     $query->select('id_giohang')
+    //                         ->from('gio_hang')
+    //                         ->where('id_nguoidung', Auth::id())
+    //                         ->first();
+    //                 })
+    //                 ->where('id_sanpham', $cartItemId)
+    //                 ->delete();
+    //         });
 
-            // Duyệt qua từng chi tiết đơn hàng
-            foreach ($orderDetails as $detail) {
-                // Xóa sản phẩm khỏi giỏ hàng
-                Cart::join('CartItem', 'Cart.id_giohang', '=', 'CartItem.id_giohang')
-                    ->where('id_nguoidung', Auth::id())
-                    ->where('id_sanpham', $detail->id_sanpham)
-                    ->delete();
-            }
-        });
-    }
-
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Sản phẩm đã được xóa khỏi giỏ hàng'
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Có lỗi xảy ra khi xóa sản phẩm: ' . $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
     private function generateOrderCode()
     {
         $timestamp = time();

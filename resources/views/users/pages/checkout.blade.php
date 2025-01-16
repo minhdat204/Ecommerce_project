@@ -218,6 +218,16 @@
         }
     </style>
     <div class="container mt-5 mb-5">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="row">
             <form id="checkoutForm" method="POST">
                 @csrf
@@ -301,15 +311,6 @@
                     <button type="button" class="btn btn-primary" onclick="submitCheckoutForm()">Hoàn Tất Đặt Hàng</button>
                     <!-- filepath: /resources/views/users/pages/checkout.blade.php -->
 
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
 
                     @if (session('error'))
                         <div class="alert alert-danger">

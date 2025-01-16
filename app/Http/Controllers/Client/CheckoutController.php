@@ -21,45 +21,54 @@ class CheckoutController
     }
     public function checkoutCOD(Request $request)
     {
-        $userId = Auth::id();
+        try {
+            $userId = Auth::id();
 
-        // Tính  tiền
-        $cartItems = $request->input('cartItems', []);
-        $maDonHang = $this->generateOrderCode();
-        $totalPayment = $request->input('totalPayment');
-        $totalPrice = $request->input('totalPrice');
-        $totalShip = $request->input('totalShip');
-        $totalDiscount = 0;
-        // Lưu thông tin đơn hàng vào database
-        $order = Order::create([
-            'id_nguoidung' => $userId,
-            'ma_don_hang' => $maDonHang,
-            'tong_tien_hang' => $totalPrice,
-            'tong_giam_gia' => $totalDiscount,
-            'phi_van_chuyen' => $totalShip,
-            'tong_thanh_toan' => $totalPayment,
-            'trangthai_thanhtoan' => 'pending',
-            'dia_chi_giao' => $request->input('address'),
-            'ten_nguoi_nhan' => $request->input('name'),
-            'sdt_nhan' => $request->input('phone'),
-            'ghi_chu'   => 'a',
-            'trangthai' => 'pending',
-        ]);
-
-        // Tạo chi tiết đơn hàng
-        foreach ($cartItems as $item) {
-            OrderDetail::create([
-                'id_donhang' => $order->id_donhang,
-                'id_sanpham' => $item['product_id'],
-                'soluong' => $item['quantity'],
-                'gia' => $item['price'],
-                'thanh_tien' => $item['price'] * $item['quantity'],
+            // Tính  tiền
+            $cartItems = $request->input('cartItems', []);
+            $maDonHang = $this->generateOrderCode();
+            $totalPayment = $request->input('totalPayment');
+            $totalPrice = $request->input('totalPrice');
+            $totalShip = $request->input('totalShip');
+            $totalDiscount = 0;
+            // Lưu thông tin đơn hàng vào database
+            $order = Order::create([
+                'id_nguoidung' => $userId,
+                'ma_don_hang' => $maDonHang,
+                'tong_tien_hang' => $totalPrice,
+                'tong_giam_gia' => $totalDiscount,
+                'phi_van_chuyen' => $totalShip,
+                'tong_thanh_toan' => $totalPayment,
+                'trangthai_thanhtoan' => 'pending',
+                'dia_chi_giao' => $request->input('address'),
+                'ten_nguoi_nhan' => $request->input('name'),
+                'sdt_nhan' => $request->input('phone'),
+                'ghi_chu'   => 'a',
+                'trangthai' => 'pending',
             ]);
-        }
 
-        // Chuyển hướng đến trang thanh toán thành công
-        return redirect()->route('checkout.index')
-            ->with('success', 'Đơn hàng của bạn đã được tạo thành công.');
+            // Tạo chi tiết đơn hàng
+            foreach ($cartItems as $item) {
+                OrderDetail::create([
+                    'id_donhang' => $order->id_donhang,
+                    'id_sanpham' => $item['product_id'],
+                    'soluong' => $item['quantity'],
+                    'gia' => $item['price'],
+                    'thanh_tien' => $item['price'] * $item['quantity'],
+                ]);
+            }
+            Order::where('ma_don_hang', $request->orderId)
+                ->update([
+                    'trangthai_thanhtoan' => 'paid',
+                ]);
+
+            // Chuyển hướng đến trang thanh toán thành công
+            return redirect()->route('checkout.index')
+                ->with('success', 'Đơn hàng của bạn đã được tạo thành công.');
+        } catch (\Exception $e) {
+            return redirect()->route('checkout.index')
+                ->with('error', 'Thanh toán thất bại. Vui lòng thử lại sau.');
+        }
     }
 
     private function getOrCreateCart()

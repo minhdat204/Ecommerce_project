@@ -327,7 +327,7 @@
         </div>
     </div>
 
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             // Hiển thị modal nếu có lỗi validation
             @if ($errors->any())
@@ -370,12 +370,54 @@
             }
             setupImagePreview('input[name="CategoryImage"]', '#imagePreview');
         });
-    </script>
+    </script> --}}
 @endsection
 
 @push('scripts')
     <script>
         // validate
+        $(document).ready(function() {
+            // Hiển thị modal nếu có lỗi validation
+            @if ($errors->any())
+                @if (session('showModal') === true)
+                    $('#editCategoryModal').modal('show');
+                @else
+                    $('#addCategoryModal').modal('show');
+                @endif
+            @endif
+
+            // Tự động ẩn alert sau 5 giây
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+
+            // Reset form khi đóng modal
+            function resetModal(modalId) {
+                $(modalId).on('hidden.bs.modal', function() {
+                    $(this).find('form')[0].reset(); // Reset form
+                    $('.is-invalid').removeClass('is-invalid'); // Xóa class lỗi
+                    $('.invalid-feedback').remove(); // Xóa thông báo lỗi
+                    $('.alert').remove(); // Xóa alert
+                });
+            }
+            resetModal('#addCategoryModal');
+            resetModal('#editCategoryModal');
+
+            // Hiển thị preview ảnh khi chọn file
+            function setupImagePreview(inputSelector, previewSelector) {
+                $(inputSelector).change(function() {
+                    if (this.files && this.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            $(previewSelector).html('<img src="' + e.target.result +
+                                '" class="img-thumbnail" style="max-height: 100px;">');
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+            }
+            setupImagePreview('input[name="CategoryImage"]', '#imagePreview');
+        });
 
 
         function deleteCategory(id) {

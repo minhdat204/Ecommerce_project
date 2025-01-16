@@ -24,16 +24,17 @@
                 <div class="footer__widget">
                     <h6>Useful Links</h6>
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Shop</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="{{ route('users.home') }}">Home</a></li>
+                        <li><a href="{{ route('users.shop') }}">Shop</a></li>
+                        <li><a href="{{ route('users.blogs') }}">Blog</a></li>
+                        <li><a href="{{ route('users.contact') }}">Contact</a></li>
                     </ul>
                     <ul>
-                        <li><a href="#">Fresh Meat</a></li>
-                        <li><a href="#">Vegetable</a></li>
-                        <li><a href="#">Fruit & Nut Gifts</a></li>
-                        <li><a href="#">Fresh Berries</a></li>
+                        <li><a href="{{ route('shop.category', 'rau-cu-tuoi') }}">Rau củ tươi</a></li>
+                        <li><a href="{{ route('shop.category', 'trai-cay') }}">Trái cây</a></li>
+                        <li><a href="{{ route('shop.category', 'thit-tuoi') }}">Thịt tươi</a></li>
+                        <li><a href="{{ route('shop.category', 'hai-san') }}">Hải sản</a></li>
+                        <li><a href="{{ route('shop.category', 'do-kho') }}">Đồ khô</a></li>
                     </ul>
                 </div>
             </div>

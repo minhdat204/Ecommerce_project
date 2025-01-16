@@ -1,5 +1,9 @@
 @extends('users.layouts.auth')
 
+@section('title')
+    Create Account
+@endsection
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/register.css')}}">
 @endpush

@@ -2,35 +2,43 @@ const contentHtmlEmptyCart = `<tr>
                                 <td colspan="5" class="text-center range-cart-favorites">Your cart is empty</td>
                             </tr>`;
 
+ // trang hiện tại
+ const pageActive = document.querySelector('.product__pagination a.active')?.textContent?.trim();
+ var currentPage = pageActive || 1;
+
 // hàm xóa sản phẩm khỏi giỏ hàng
-function removeItem(cartItemId){
+function removeItem(cartItemId) {
+    // kiểm tra xem có phải sản phẩm cuối cùng không
+    if ($('tbody tr').length === 1) {
+        currentPage = pageActive > 1 ? pageActive - 1 : 1;
+        // lấy url hiện tại
+        var url = new URL(window.location.href);
+    }
+
     showConfirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?', function() {
         const row = document.querySelector('#cart-item-' + cartItemId);
         const cartTotal = document.getElementById('total');
         const subTotal = document.getElementById('subtotal');
 
-        fetchData('/cart/items/' + cartItemId, 'DELETE', {}, function(data){
+        fetchData('/cart/items/' + cartItemId, 'DELETE', {
+            currentPage: currentPage // Truyền trang hiện tại vào request
+        },
+        function(data) {
             if(data.success) {
-                row.style.transition = 'opacity 0.5s';//OR: all 0.5s ease
+                row.style.transition = 'opacity 0.5s';
                 row.style.opacity = 0;
-                // row.style.transform = 'translateX(20px)';
+                // nếu có url thì cập nhật trang hiện tại
+                if(url){
+                    url.searchParams.set('page', currentPage);
+                    window.history.pushState({}, '', url);
+                }
 
-                setTimeout(function(){
-                    row.remove();
+                setTimeout(() => {
+                    // cập nhật lại view giỏ hàng
+                    $('.shoping__cart__table').html(data.cartView);
+                    // cập nhật tổng tiền và tổng số tiền
                     cartTotal.innerHTML = data.cartTotal + (data.discount ? ' (-' + data.discount + '%)' : '');
                     subTotal.innerHTML = data.subTotal;
-                    //document.querySelectorAll('tbody tr') = $('tbody tr')
-                    // kiểm nếu giỏ hàng rỗng
-                    if($('tbody tr').length === 0) {
-                        $('tbody').html(
-                            contentHtmlEmptyCart
-                        );
-                        // document.querySelector('tbody').innerHTML = `
-                        //     <tr>
-                        //         <td colspan="5" class="text-center">Your cart is empty</td>
-                        //     </tr>
-                        // `;
-                    }
                     // cập nhật số lượng sp giỏ hàng trên header và tổng tiền
                     updateCartCountAndTotal(data.cartTotal, data.cartCount);
                     notification("Đã xóa sản phẩm khỏi giỏ hàng", 'success', 3000);

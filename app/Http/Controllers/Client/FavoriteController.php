@@ -19,7 +19,7 @@ class FavoriteController extends Controller
     {
         $favorites = FavoriteProduct::where('id_nguoidung', Auth::id())
             ->with('product')
-            ->get();
+            ->paginate(3);
         return view('users.pages.favorites', compact('favorites'));
     }
 
@@ -53,7 +53,7 @@ class FavoriteController extends Controller
         ]);
     }
 
-    public function remove($id)
+    public function remove(Request $request, $id)
     {
         $favorite = FavoriteProduct::where('id_yeuthich', $id)
             ->where('id_nguoidung', Auth::id())
@@ -63,10 +63,23 @@ class FavoriteController extends Controller
 
         // số lượng sản phẩm yêu thích
         $favoriteCount = FavoriteProduct::where('id_nguoidung', Auth::id())->count();
+
+       // Lấy trang hiện tại từ request
+       $page = $request->currentPage ?? 1;
+
+       // Lấy danh sách favorites sau khi xóa
+       $favorites = FavoriteProduct::with('product') // Quan hệ với sản phẩm
+           ->where('id_nguoidung', Auth::id())
+           ->paginate(3, ['*'], 'page', $page); // Phân trang ở trang hiện tại
+
+        // Render view partial
+        $favoriteView = view('users.partials.favorites.table-favorites', compact('favorites'))->render();
+
         return response()->json([
             'success' => true,
             'message' => 'Đã xóa sản phẩm khỏi danh sách yêu thích',
-            'favoriteCount' => $favoriteCount
+            'favoriteCount' => $favoriteCount,
+            'favoriteView' => $favoriteView
         ]);
     }
 

@@ -117,10 +117,11 @@ class CartController extends Controller
             'cartCount' => $cartCount
         ]);
     }
-    public function removeItem($id)
+    public function removeItem(Request $request, $id)
     {
         $cart = $this->getOrCreateCart();
         CartItem::destroy($id);
+
         //tính tổng tiền không giảm giá
         $subTotal = $this->calculateSubTotal($cart->fresh()->cartItems);
 
@@ -132,12 +133,26 @@ class CartController extends Controller
 
         // số lượng sản phẩm trong giỏ hàng
         $cartCount = $cart->cartItems->count();
+
+        // Lấy trang hiện tại từ request
+        $page = $request->currentPage ?? 1;
+
+        // Lấy danh sách cart items sau khi xóa
+        $cartItems = CartItem::with(['product.images'])
+            ->where('id_giohang', $cart->id_giohang)
+            ->orderBy('created_at', 'desc')
+            ->paginate(3, ['*'], 'page', $page);
+
+        // Render view partial
+        $cartView = view('users.partials.shoping-cart.table-cart', compact('cartItems', 'subTotal', 'total', 'discount'))->render();
+
         return response()->json([
             'success' => true,
             'cartTotal' => number_format($total, 0, ',', '.') . 'đ',
             'subTotal' => number_format($subTotal, 0, ',', '.') . 'đ',
             'discount' => floor($discount),
-            'cartCount' => $cartCount
+            'cartCount' => $cartCount,
+            'cartView' => $cartView
         ]);
     }
     public function clearCart()

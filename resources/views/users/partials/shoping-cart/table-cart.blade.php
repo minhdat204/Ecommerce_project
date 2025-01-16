@@ -61,5 +61,9 @@
             @endforelse
         </tbody>
     </table>
+    <div style="text-align: center">
+        @include('users.components.pagination', ['paginator' => $cartItems])
+    </div>
 </div>
+
 

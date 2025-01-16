@@ -43,17 +43,21 @@ class CartController extends Controller
     public function index()
     {
         $cart = $this->getOrCreateCart();
-        $cartItems = CartItem::with('product')
+        $cartItemsQuery = CartItem::with(['product.images'])
             ->where('id_giohang', $cart->id_giohang)
-            ->get();
+            ->orderBy('created_at', 'desc');
 
-        $cartItems->load('product.images');
+        // Lấy toàn bộ mục giỏ hàng trước để tính toán
+        $allCartItems = $cartItemsQuery->get();
 
-        $subTotal = $this->calculateSubTotal($cartItems);
+        // Phân trang dữ liệu sau khi đã tải
+        $cartItems = $cartItemsQuery->paginate(3);
 
-        $total = $this->calculateTotal($cartItems);
-
+        // Tính toán tổng và giảm giá
+        $subTotal = $this->calculateSubTotal($allCartItems);
+        $total = $this->calculateTotal($allCartItems);
         $discount = $subTotal > 0 ? ($subTotal - $total) / $subTotal * 100 : 0;
+
         return view('users.pages.shoping-cart', compact('cartItems', 'subTotal','total', 'discount'));
     }
     public function addToCart(Request $request)

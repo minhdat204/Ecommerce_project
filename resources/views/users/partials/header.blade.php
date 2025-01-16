@@ -130,7 +130,7 @@
                             </li>
                         </ul>
                         <div class="header__top__right__language">
-                            <div class="header__cart__price">Giỏ hàng: <span id="cart-total">{{ Auth::check() && Auth::user()->cart ? number_format(Auth::user()->cart->cartItems->sum(function($item) { return $item->soluong * $item->product->gia_khuyen_mai ?? $item->product->gia; }), 0, ',', '.') : 0 }}đ</span></div>
+                            <div class="header__cart__price">Giỏ hàng: <span id="cart-total">{{ Auth::check() && Auth::user()->cart ? number_format(Auth::user()->cart->cartItems->sum(function($item) { return $item->soluong * ($item->product->gia_khuyen_mai !== null && $item->product->gia_khuyen_mai >= 0 ? $item->product->gia_khuyen_mai : $item->product->gia); }), 0, ',', '.') : 0 }}đ</span></div>
                         </div>
                         <div class="header__top__right__auth">
                             @auth

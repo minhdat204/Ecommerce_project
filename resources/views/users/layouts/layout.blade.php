@@ -22,15 +22,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/elegant-icons.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/nice-select.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/jquery-ui.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/login-signup.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/elegant-icons.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/nice-select.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/slicknav.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/login-signup.css') }}" type="text/css">
     {{-- sweetalert2 --}}
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     @stack('styles')
@@ -52,24 +52,25 @@
     <!--Bootstrap Js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Js Plugins -->
-    <script src="{{asset('js/jquery-3.3.1.min.js')}}"></script>
-    <script src="{{asset('js/bootstrap.min.js')}}"></script>
-    <script src="{{asset('js/jquery.nice-select.min.js')}}"></script>
-    <script src="{{asset('js/jquery-ui.min.js')}}"></script>
-    <script src="{{asset('js/jquery.slicknav.js')}}"></script>
-    <script src="{{asset('js/mixitup.min.js')}}"></script>
-    <script src="{{asset('js/owl.carousel.min.js')}}"></script>
-    <script src="{{asset('js/main.js')}}"></script>
-    <script src="{{asset('js/chat-widget.js')}}"></script>
-    <script src="{{asset('js/login-signup.js')}}"></script>
+    <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.nice-select.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.slicknav.js') }}"></script>
+    <script src="{{ asset('js/mixitup.min.js') }}"></script>
+    <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/chat-widget.js') }}"></script>
+    <script src="{{ asset('js/login-signup.js') }}"></script>
     <script>
         var authCheck = @json(auth()->check());
     </script>
-    <script src="{{asset('js/quickAddToCart.js')}}"></script>
-    <script src="{{asset('js/quickToggleFavorite.js')}}"></script>
+    <script src="{{ asset('js/quickAddToCart.js') }}"></script>
+    <script src="{{ asset('js/quickToggleFavorite.js') }}"></script>
     {{-- sweetalert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('scripts')
+
 </body>
 
 </html>

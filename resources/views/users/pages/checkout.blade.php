@@ -1,5 +1,7 @@
 @extends('users.layouts.layout')
 
+@section('title', 'Thanh toán')
+
 @section('content')
     <style>
         .container {

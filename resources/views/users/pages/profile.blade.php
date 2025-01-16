@@ -1,5 +1,7 @@
 @extends('users.layouts.layout')
 
+@section('title', 'Thông tin cá nhân')
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -43,7 +45,7 @@
                                         <div class="col-md-6">
                                             <label for="user-fullname" class="form-label">Full Name</label>
                                             <input type="text" class="form-control" id="user-fullname" name="hoten"
-                                                value="{{ Auth::user()->hoten }}">                                        
+                                                value="{{ Auth::user()->hoten }}">
                                             </div>
                                         <div class="col-md-6">
                                             <label for="user-id" class="form-label">User ID</label>

@@ -1,5 +1,7 @@
 @extends('users.layouts.layout')
 
+@section('title', 'Cửa hàng')
+
 @section('content')
     <!-- Product Section Begin -->
     <section class="product spad">

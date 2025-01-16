@@ -1,4 +1,5 @@
 @extends('Admin.Layout.Layout')
+@section('title', 'Thêm Sản Phẩm')
 
 @section('content')
             <h1 class="my-4">Thêm Sản Phẩm Mới</h1>

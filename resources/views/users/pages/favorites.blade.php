@@ -1,4 +1,7 @@
 @extends('users.layouts.layout')
+
+@section('title', 'Yêu thích')
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/modal-confirm.css') }}">
 @endpush

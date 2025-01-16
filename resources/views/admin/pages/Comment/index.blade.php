@@ -1,4 +1,5 @@
 @extends('Admin.Layout.Layout')
+@section('title', 'Quản lý Bình Luận')
 @section('content')
     <div >
         <div class="table-wrapper">

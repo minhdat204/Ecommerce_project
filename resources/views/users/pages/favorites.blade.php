@@ -2,16 +2,15 @@
 
 @section('title', 'Yêu thích')
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/modal-confirm.css') }}">
-@endpush
 @section('content')
     <!-- Favorites Section Begin -->
     <section class="shoping-cart spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    @include('users.partials.favorites.table-favorites')
+                    <div class="favorites__table">
+                        @include('users.partials.favorites.table-favorites')
+                    </div>
                 </div>
             </div>
             <div class="row">

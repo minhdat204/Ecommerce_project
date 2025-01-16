@@ -58,47 +58,4 @@
         </div>
     @endforeach
 </div>
-<div class="product__pagination">
-    @if ($products->lastPage() > 1)
-        @if ($products->currentPage() > 1)
-            <a href="{{ $products->appends(request()->except('page'))->previousPageUrl() }}">
-                <i class="fa fa-long-arrow-left"></i>
-            </a>
-        @endif
-
-        @php
-            $start = max($products->currentPage() - 2, 1);
-            $end = min($start + 4, $products->lastPage());
-            $start = max(min($start, $products->lastPage() - 4), 1);
-        @endphp
-
-        @if ($start > 1)
-            <a href="{{ $products->appends(request()->except('page'))->url(1) }}">1</a>
-            @if ($start > 2)
-                <span>...</span>
-            @endif
-        @endif
-
-        @for ($i = $start; $i <= $end; $i++)
-            <a href="{{ $products->appends(request()->except('page'))->url($i) }}"
-                class="{{ $products->currentPage() == $i ? 'active' : '' }}">
-                {{ $i }}
-            </a>
-        @endfor
-
-        @if ($end < $products->lastPage())
-            @if ($end < $products->lastPage() - 1)
-                <span>...</span>
-            @endif
-            <a href="{{ $products->appends(request()->except('page'))->url($products->lastPage()) }}">
-                {{ $products->lastPage() }}
-            </a>
-        @endif
-
-        @if ($products->hasMorePages())
-            <a href="{{ $products->appends(request()->except('page'))->nextPageUrl() }}">
-                <i class="fa fa-long-arrow-right"></i>
-            </a>
-        @endif
-    @endif
-</div>
+@include('users.components.pagination', ['paginator' => $products])

@@ -43,17 +43,21 @@ class CartController extends Controller
     public function index()
     {
         $cart = $this->getOrCreateCart();
-        $cartItems = CartItem::with('product')
+        $cartItemsQuery = CartItem::with(['product.images'])
             ->where('id_giohang', $cart->id_giohang)
-            ->get();
+            ->orderBy('created_at', 'desc');
 
-        $cartItems->load('product.images');
+        // Lấy toàn bộ mục giỏ hàng trước để tính toán
+        $allCartItems = $cartItemsQuery->get();
 
-        $subTotal = $this->calculateSubTotal($cartItems);
+        // Phân trang dữ liệu sau khi đã tải
+        $cartItems = $cartItemsQuery->paginate(3);
 
-        $total = $this->calculateTotal($cartItems);
-
+        // Tính toán tổng và giảm giá
+        $subTotal = $this->calculateSubTotal($allCartItems);
+        $total = $this->calculateTotal($allCartItems);
         $discount = $subTotal > 0 ? ($subTotal - $total) / $subTotal * 100 : 0;
+
         return view('users.pages.shoping-cart', compact('cartItems', 'subTotal','total', 'discount'));
     }
     public function addToCart(Request $request)
@@ -113,10 +117,11 @@ class CartController extends Controller
             'cartCount' => $cartCount
         ]);
     }
-    public function removeItem($id)
+    public function removeItem(Request $request, $id)
     {
         $cart = $this->getOrCreateCart();
         CartItem::destroy($id);
+
         //tính tổng tiền không giảm giá
         $subTotal = $this->calculateSubTotal($cart->fresh()->cartItems);
 
@@ -128,12 +133,26 @@ class CartController extends Controller
 
         // số lượng sản phẩm trong giỏ hàng
         $cartCount = $cart->cartItems->count();
+
+        // Lấy trang hiện tại từ request
+        $page = $request->currentPage ?? 1;
+
+        // Lấy danh sách cart items sau khi xóa
+        $cartItems = CartItem::with(['product.images'])
+            ->where('id_giohang', $cart->id_giohang)
+            ->orderBy('created_at', 'desc')
+            ->paginate(3, ['*'], 'page', $page);
+
+        // Render view partial
+        $cartView = view('users.partials.shoping-cart.table-cart', compact('cartItems', 'subTotal', 'total', 'discount'))->render();
+
         return response()->json([
             'success' => true,
             'cartTotal' => number_format($total, 0, ',', '.') . 'đ',
             'subTotal' => number_format($subTotal, 0, ',', '.') . 'đ',
             'discount' => floor($discount),
-            'cartCount' => $cartCount
+            'cartCount' => $cartCount,
+            'cartView' => $cartView
         ]);
     }
     public function clearCart()

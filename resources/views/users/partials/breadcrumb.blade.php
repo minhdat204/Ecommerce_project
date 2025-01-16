@@ -4,10 +4,23 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="breadcrumb__text">
-                    <h2>Organi Shop</h2>
+                    <h2>@yield('title')</h2>
                     <div class="breadcrumb__option">
+                        @php
+                            $segments = request()->segments();
+                            $url = '';
+                        @endphp
                         <a href="{{ url('/') }}">Home</a>
-                        <span>Shop</span>
+                        @foreach($segments as $segment)
+                            @php $url .= '/'.$segment; @endphp
+                            <span>
+                                @if(!$loop->last)
+                                    <a href="{{ url($url) }}">{{ ucfirst($segment) }}</a>
+                                @else
+                                    {{ ucfirst($segment) }}
+                                @endif
+                            </span>
+                        @endforeach
                     </div>
                 </div>
             </div>

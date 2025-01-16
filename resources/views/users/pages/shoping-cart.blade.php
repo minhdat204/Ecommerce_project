@@ -8,7 +8,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    @include('users.partials.shoping-cart.table-cart')
+                    <div class="shoping__cart__table">
+                        @include('users.partials.shoping-cart.table-cart')
+                    </div>
                 </div>
             </div>
             <div class="row">

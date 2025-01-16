@@ -208,8 +208,7 @@
     /*-------------------
         Quantity change
     --------------------- */
-    var proQty = $('.pro-qty');
-    proQty.on('click', '.qtybtn', function () {
+    $(document).on('click', '.qtybtn', function () {
         var $button = $(this);
         var $input = $button.parent().find('input');
         var oldValue = parseInt($input.val());

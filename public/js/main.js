@@ -224,6 +224,11 @@
         }
 
         $input.val(newVal);
+
+        // Disable/enable decrease button based on value
+        var $decBtn = $button.parent().find('.dec');
+        $decBtn.prop('disabled', newVal === 1);
+
         $input.trigger('change'); // Trigger change event
     });
 

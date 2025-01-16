@@ -2530,6 +2530,23 @@ ol {
 	text-align: center;
 }
 
+.item__status {
+    width: 150px;
+}
+
+.item__status .in-stock {
+    color: #7fad39;
+}
+
+.item__status .out-stock {
+    color: #dd2222;
+}
+
+.check {
+    background: #fff3f3;
+}
+
+
 /*---------------------
   Favorites
 -----------------------*/
@@ -2889,6 +2906,11 @@ ol {
 	letter-spacing: 2px;
 	width: 100%;
 	margin-top: 10px;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.6;
 }
 
 /*---------------------

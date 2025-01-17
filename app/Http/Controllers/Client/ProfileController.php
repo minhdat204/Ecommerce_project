@@ -25,11 +25,13 @@ class ProfileController extends Controller
         $favorites = FavoriteProduct::where('id_nguoidung', $user)
             ->join('san_pham', 'san_pham.id_sanpham', '=', 'san_pham_yeu_thich.id_sanpham')
             ->select('san_pham.id_sanpham', 'san_pham.tensanpham', 'san_pham.gia')
-            ->paginate(10);
+            ->orderBy('san_pham_yeu_thich.created_at', 'desc')
+            ->paginate(12);
         $scores = Comment::with('product')
             ->where('id_nguoidung', $user)
-            ->select('noidung', 'id_sanpham', 'danhgia')
-            ->paginate(10);
+            ->select('noidung', 'id_sanpham', 'danhgia','created_at')
+            ->orderBy('created_at', 'desc')
+            ->simplePaginate(12);
         // Lấy danh sách đơn hàng
         $orders = Order::with(['orderDetails.product'])
             ->where('id_nguoidung', $user)
@@ -48,25 +50,25 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'hoten' => 'required|string|max:255',
+            'hoten' => 'required|string|max:50', 
             'gioitinh' => 'required|in:male,female',
-            'diachi' => 'nullable|string|max:255',
-            'sodienthoai' => 'nullable|string|max:15',
+            'diachi' => 'nullable|string|max:50',
+            'sodienthoai' => 'nullable|digits:10|numeric', 
+        ], [
         ]);
-        $user = User::findOrFail($id);
-        $user->hoten = $request->input('hoten');
-        $user->gioitinh = $request->input('gioitinh');
-        $user->diachi = $request->input('diachi');
-        $user->sodienthoai = $request->input('sodienthoai');
-        $user->save();
-        return redirect()->route('profile.index');
+        $user = Auth::user();
+        $user->update($request->only(['hoten', 'gioitinh', 'diachi', 'sodienthoai']));
+    
+        return back()->with('success', 'Information updated successfully!');
     }
     public function destroy(string $id)
-    {
-        // Logic xóa người dùng hoặc các sản phẩm yêu thích, đánh giá, nếu cần
+{
+    $favorite = FavoriteProduct::where('id_nguoidung', Auth::id())
+        ->where('id_sanpham', $id)
+        ->first();
+    if ($favorite) {
+        $favorite->delete();
+        return redirect()->route('profile.index')->with('success', 'Favorited Product has been removed');
     }
-
-    /**
-     * Show the favorite products page.
-     */
+    return redirect()->route('profile.index')->with('error', 'Product not found in favorites');
 }

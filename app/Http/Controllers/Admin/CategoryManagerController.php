@@ -21,7 +21,9 @@ class CategoryManagerController
                 return $query->where('tendanhmuc', 'LIKE', '%' . trim($search) . '%')
                     ->orWhere('mota', 'LIKE', '%' . trim($search) . '%');
             })
-            ->paginate(10); // Hiển thị 6 mục mỗi trang
+            ->orderBy('created_at', 'desc') // Sắp xếp thời gian từ mới đến cũ
+
+            ->paginate(10); // Hiển thị 10 mục mỗi trang
         // Lấy danh mục cha
         $parentCategories = Category::where('trangthai', 'active')->get();
 

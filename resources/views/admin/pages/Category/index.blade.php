@@ -341,13 +341,26 @@
         $(document).ready(function() {
             // Hiển thị modal khi có lỗi validation
             @if ($errors->any())
-                $('#addCategoryModal').modal('show');
+                @if (session('editId'))
+                    // Chỉ hiển thị modal chỉnh sửa khi có session editId
+                    $('#editCategoryModal{{ session('editId') }}').modal('show');
+                @else
+                    // Hiển thị modal thêm mới khi không có session editId
+                    $('#addCategoryModal').modal('show');
+                @endif
             @endif
 
-            // Hiển thị modal chỉnh sửa khi có lỗi trong form edit
-            @if (session('editId'))
-                $('#editCategoryModal{{ session('editId') }}').modal('show');
-            @endif
+            // Tự động ẩn thông báo sau 5 giây
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+
+            // Reset form khi đóng modal
+            $('.modal').on('hidden.bs.modal', function() {
+                $(this).find('form')[0].reset();
+                $('.is-invalid').removeClass('is-invalid');
+                $('.invalid-feedback').remove();
+            });
         });
     </script>
 @endpush

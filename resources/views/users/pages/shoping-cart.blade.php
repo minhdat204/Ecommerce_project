@@ -8,6 +8,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
+                    {{-- input lưu số lượng sản phẩm trong giỏ hàng để kiểm tra khi thay đổi số lượng --}}
+                    <input type="hidden" id="overStockCount" value="{{ $overStockItems->count() }}">
                     <div class="shoping__cart__table">
                         @include('users.partials.shoping-cart.table-cart')
                     </div>

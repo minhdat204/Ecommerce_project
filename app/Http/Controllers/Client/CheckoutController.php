@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\{Order, OrderDetail, CartItem, Cart};
+use App\Models\{Order, OrderDetail, CartItem, Cart, WebsiteInfo, Product};
 use Illuminate\Support\Facades\{Auth};
 
 class CheckoutController
@@ -13,16 +13,100 @@ class CheckoutController
     {
         $cart = $this->getOrCreateCart();
         $totalShip = 0;
-        $cartItems = CartItem::with('product')
+
+        // Lấy tất cả cart items không phân trang để tính tổng
+        $allCartItems = CartItem::with('product')
             ->where('id_giohang', $cart->id_giohang)
             ->get();
 
-        return view('users.pages.checkout', compact('cartItems', 'totalShip'));
+        // Tính tổng giá từ tất cả items
+        $totalPrice = $allCartItems->sum(function ($item) {
+            return ($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong;
+        });
+
+        // Phân trang cart items để hiển thị
+        $cartItems = CartItem::with('product')
+            ->where('id_giohang', $cart->id_giohang)
+            ->paginate(3);
+
+        return view('users.pages.checkout', compact('cartItems', 'totalShip', 'totalPrice'));
     }
     public function checkoutCOD(Request $request)
     {
+        // Validate input fields
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email',
+            'phone' => [
+                'required',
+                'regex:/^(0[3|5|7|8|9])+([0-9]{8})$/'
+            ],
+            'address_detail' => 'required|string|max:255',
+            'payment' => 'required|in:cod,momo',
+        ], [
+            'name.required' => 'Họ và tên không được để trống.',
+            'name.max' => 'Họ và tên không được quá 100 ký tự.',
+            'email.required' => 'Email không được để trống.',
+            'email.email' => 'Định dạng email không hợp lệ.',
+            'phone.required' => 'Số điện thoại không được để trống.',
+            'phone.regex' => 'Số điện thoại không hợp lệ.',
+            'address_detail.required' => 'Địa chỉ chi tiết không được để trống.',
+            'address_detail.max' => 'Địa chỉ chi tiết không được quá 255 ký tự.',
+            'payment.required' => 'Bạn phải chọn phương thức thanh toán.',
+            'payment.in' => 'Phương thức thanh toán không hợp lệ.',
+        ]);
+
         try {
+            $websiteInfo = WebsiteInfo::first();
+            $phoneNumber = $websiteInfo->phone ?? 'N/A';
             $userId = Auth::id();
+            $cartItems = $request->input('cartItems', []);
+            $priceErrors = [];
+            $quantityErrors = [];
+
+
+            // Validate cart items
+            foreach ($cartItems as $item) {
+                $currentProduct = Product::where('id_sanpham', $item['product_id'])->first();
+
+                // Kiểm tra giá
+                $currentPrice = $currentProduct->gia_khuyen_mai > 0
+                    ? $currentProduct->gia_khuyen_mai
+                    : $currentProduct->gia;
+
+                if ($currentPrice != $item['price']) {
+                    $priceErrors[] = sprintf(
+                        "Sản phẩm '%s' có giá đã thay đổi từ %s₫ thành %s₫",
+                        $currentProduct->tensanpham,
+                        number_format($item['price']),
+                        number_format($currentPrice)
+                    );
+                }
+
+                // Kiểm tra số lượng
+                if ($currentProduct->soluong < $item['quantity']) {
+                    $quantityErrors[] = sprintf(
+                        "Sản phẩm '%s' chỉ còn %d sản phẩm (bạn đặt %d)",
+                        $currentProduct->tensanpham,
+                        $currentProduct->soluong,
+                        $item['quantity']
+                    );
+                }
+            }
+            if (!empty($priceErrors)) {
+                return redirect()->back()->with(
+                    'error',
+                    "Giá sản phẩm đã thay đổi:\n" . implode("\n", $priceErrors)
+                );
+            }
+
+            if (!empty($quantityErrors)) {
+                return redirect()->back()->with(
+                    'error',
+                    "Số lượng sản phẩm không đủ:\n" . implode("\n", $quantityErrors) . "\nXin vui lòng liên hệ: {$phoneNumber}"
+                );
+            }
+
 
             // Tính  tiền
             $cartItems = $request->input('cartItems', []);

@@ -46,7 +46,7 @@
                                             <label for="user-fullname" class="form-label">Full Name</label>
                                             <input type="text" class="form-control" id="user-fullname" name="hoten"
                                                 value="{{ Auth::user()->hoten }}">
-                                            </div>
+                                        </div>
                                         <div class="col-md-6">
                                             <label for="user-id" class="form-label">User ID</label>
                                             <input type="text" class="form-control" id="user-id" name="id_nguoidung"
@@ -77,7 +77,7 @@
                                         <div class="col-md-6">
                                             <label for="user-address" class="form-label">Address</label>
                                             <input type="text" class="form-control" id="user-address" name="diachi"
-                                            value="{{ Auth::user()->diachi }}">
+                                                value="{{ Auth::user()->diachi }}">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="user-phone" class="form-label">Phone</label>
@@ -107,7 +107,7 @@
             <div class="profile-tab-pane" style="display: none;">
                 <div class="favorite-page-container">
                     <div class="row">
-                        @forelse ($favorites as $favorite )
+                        @forelse ($favorites as $favorite)
                             <div class="col-md-4 mb-4">
                                 <div class="card">
                                     <img src="{{ asset('img/product/' . $favorite->image) }}" class="card-img-top"
@@ -117,7 +117,9 @@
                                         <p class="card-text text-muted">{{ number_format($favorite->gia, 0, ',', '.') }}đ
                                         </p>
                                         <div class="d-flex justify-content-end">
-                                            <button class="btn btn-sm btn-success" onclick="quickAddToCart('{{ $favorite->id_sanpham }}')">Thêm sản phẩm vào giỏ</button>
+                                            <button class="btn btn-sm btn-success"
+                                                onclick="quickAddToCart('{{ $favorite->id_sanpham }}')">Thêm sản phẩm vào
+                                                giỏ</button>
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +152,9 @@
                                         <p><strong>Điểm đánh giá:</strong> {{ $score->danhgia }}</p>
                                         <p><strong>Nội dung:</strong> {{ $score->noidung }}</p>
                                         <div class="d-flex justify-content-end">
-                                            <a href="{{ route('users.shop_details', ['slug' => $score->product->slug]) }}" class="btn btn-sm btn-primary">Chi tiết sản phẩm</a>                                        </div>
+                                            <a href="{{ route('users.shop_details', ['slug' => $score->product->slug]) }}"
+                                                class="btn btn-sm btn-primary">Chi tiết sản phẩm</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -297,9 +301,12 @@
                         if (response.success) {
                             alert('Đã hủy đơn hàng thành công');
                             // Ẩn nút hủy đơn hàng
-                            $('.btn-danger[onclick="cancelOrder(' + orderId + ')"]').hide();
+                            $('.btn-danger[data-order-id="' + orderId + '"]').hide();
                         } else {
                             alert(response.message || 'Có lỗi xảy ra');
+                            if (response.hideCancelButton) {
+                                $('.btn-danger[data-order-id="' + orderId + '"]').hide();
+                            }
                         }
                     },
                     error: function(xhr) {

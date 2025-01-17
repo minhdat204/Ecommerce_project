@@ -6,10 +6,16 @@
 @section('content')
     <style>
         .invalid-feedback {
-            color: red;
+            display: block;
+            color: #dc3545;
+            margin-top: 5px;
+        }
+
+        .is-invalid {
+            border-color: #dc3545;
         }
     </style>
-    <div >
+    <div>
         <div class="table-wrapper">
             @if (session('success'))
                 <div class="alert alert-success">
@@ -152,7 +158,8 @@
                                     </div>
 
                                     <form action="{{ route('admin.category.update', $category->id_danhmuc) }}"
-                                        method="POST" enctype="multipart/form-data">
+                                        method="POST" enctype="multipart/form-data" class="editCategoryForm"
+                                        id="editCategoryForm{{ $category->id_danhmuc }}">
                                         @csrf
                                         @method('PUT')
 
@@ -180,7 +187,6 @@
                                                         {{ $message }}
                                                     </div>
                                                 @enderror
-
                                             </div>
 
                                             <div class="form-group">
@@ -275,7 +281,8 @@
         style="{{ $errors->any() ? 'display: block' : '' }}">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data"
+                    id="addCategoryForm">
                     @csrf
                     <div class="modal-header">
                         <h4 class="modal-title">Thêm Danh Mục Mới</h4>
@@ -327,125 +334,101 @@
         </div>
     </div>
 
-    {{-- <script>
-        $(document).ready(function() {
-            // Hiển thị modal nếu có lỗi validation
-            @if ($errors->any())
-                @if (session('showModal') === true)
-                    $('#editCategoryModal').modal('show');
-                @else
-                    $('#addCategoryModal').modal('show');
-                @endif
-            @endif
 
-            // Tự động ẩn alert sau 5 giây
-            setTimeout(function() {
-                $('.alert').fadeOut('slow');
-            }, 5000);
-
-            // Reset form khi đóng modal
-            function resetModal(modalId) {
-                $(modalId).on('hidden.bs.modal', function() {
-                    $(this).find('form')[0].reset(); // Reset form
-                    $('.is-invalid').removeClass('is-invalid'); // Xóa class lỗi
-                    $('.invalid-feedback').remove(); // Xóa thông báo lỗi
-                    $('.alert').remove(); // Xóa alert
-                });
-            }
-            resetModal('#addCategoryModal');
-            resetModal('#editCategoryModal');
-
-            // Hiển thị preview ảnh khi chọn file
-            function setupImagePreview(inputSelector, previewSelector) {
-                $(inputSelector).change(function() {
-                    if (this.files && this.files[0]) {
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            $(previewSelector).html('<img src="' + e.target.result +
-                                '" class="img-thumbnail" style="max-height: 100px;">');
-                        }
-                        reader.readAsDataURL(this.files[0]);
-                    }
-                });
-            }
-            setupImagePreview('input[name="CategoryImage"]', '#imagePreview');
-        });
-    </script> --}}
 @endsection
-
 @push('scripts')
     <script>
-        // validate
         $(document).ready(function() {
-            // Hiển thị modal nếu có lỗi validation
+            // Hiển thị modal khi có lỗi validation
             @if ($errors->any())
-                @if (session('showModal') === true)
-                    $('#editCategoryModal').modal('show');
+                $('#addCategoryModal').modal('show');
+            @endif
+
+            // Hiển thị modal chỉnh sửa khi có lỗi trong form edit
+            @if (session('editId'))
+                $('#editCategoryModal{{ session('editId') }}').modal('show');
+            @endif
+        });
+    </script>
+@endpush
+{{-- @section('js_custom')
+    <script>
+        $(document).ready(function() {
+            // Form validation
+            function validateForm(formId) {
+                let isValid = true;
+
+                // Clear previous errors
+                $(formId + ' .invalid-feedback').remove();
+                $(formId + ' .is-invalid').removeClass('is-invalid');
+
+                // Validate Category Name
+                const categoryName = $(formId + ' input[name="CategoryName"]').val();
+                if (!categoryName) {
+                    showError('CategoryName', 'Tên danh mục không được để trống', formId);
+                    isValid = false;
+                }
+
+                // Validate Description
+                const description = $(formId + ' input[name="CategoryContent"]').val();
+                if (!description) {
+                    showError('CategoryContent', 'Mô tả không được để trống', formId);
+                    isValid = false;
+                }
+
+                // Validate Image for new category
+                if (formId === '#addCategoryForm') {
+                    const image = $(formId + ' input[name="CategoryImage"]')[0].files[0];
+                    if (!image) {
+                        showError('CategoryImage', 'Vui lòng chọn hình ảnh', formId);
+                        isValid = false;
+                    }
+                }
+
+                return isValid;
+            }
+
+            // Show error message
+            function showError(fieldName, message, formId) {
+                const field = $(formId + ` [name="${fieldName}"]`);
+                field.addClass('is-invalid');
+                field.after(`<div class="invalid-feedback">${message}</div>`);
+            }
+
+            // Add form submission
+            $('#addCategoryModal form').submit(function(e) {
+                if (!validateForm('#addCategoryModal form')) {
+                    e.preventDefault();
+                }
+            });
+
+            // Edit form submission 
+            $('.editCategoryForm').submit(function(e) {
+                if (!validateForm('#' + $(this).attr('id'))) {
+                    e.preventDefault();
+                }
+            });
+
+            // Show modal if there are validation errors from server
+            @if ($errors->any())
+                @if (session('editId'))
+                    $('#editCategoryModal{{ session('editId') }}').modal('show');
                 @else
                     $('#addCategoryModal').modal('show');
                 @endif
             @endif
 
-            // Tự động ẩn alert sau 5 giây
+            // Auto hide alerts
             setTimeout(function() {
                 $('.alert').fadeOut('slow');
             }, 5000);
 
-            // Reset form khi đóng modal
-            function resetModal(modalId) {
-                $(modalId).on('hidden.bs.modal', function() {
-                    $(this).find('form')[0].reset(); // Reset form
-                    $('.is-invalid').removeClass('is-invalid'); // Xóa class lỗi
-                    $('.invalid-feedback').remove(); // Xóa thông báo lỗi
-                    $('.alert').remove(); // Xóa alert
-                });
-            }
-            resetModal('#addCategoryModal');
-            resetModal('#editCategoryModal');
-
-            // Hiển thị preview ảnh khi chọn file
-            function setupImagePreview(inputSelector, previewSelector) {
-                $(inputSelector).change(function() {
-                    if (this.files && this.files[0]) {
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            $(previewSelector).html('<img src="' + e.target.result +
-                                '" class="img-thumbnail" style="max-height: 100px;">');
-                        }
-                        reader.readAsDataURL(this.files[0]);
-                    }
-                });
-            }
-            setupImagePreview('input[name="CategoryImage"]', '#imagePreview');
+            // Reset form on modal close
+            $('.modal').on('hidden.bs.modal', function() {
+                $(this).find('form')[0].reset();
+                $('.is-invalid').removeClass('is-invalid');
+                $('.invalid-feedback').remove();
+            });
         });
-
-
-        function deleteCategory(id) {
-            if (confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {
-                $.ajax({
-                    url: '/admin/category/' + id,
-                    type: 'DELETE',
-                    data: {
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            // Cập nhật giao diện
-                            $('#category-' + id).fadeOut();
-                            // Hoặc reload trang
-                            // window.location.reload();
-
-                            // Hiển thị thông báo
-                            alert(response.message);
-                        } else {
-                            alert('Có lỗi xảy ra: ' + response.message);
-                        }
-                    },
-                    error: function(xhr) {
-                        alert('Đã xảy ra lỗi!');
-                    }
-                });
-            }
-        }
     </script>
-@endpush
+@endsection --}}

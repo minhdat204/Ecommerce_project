@@ -58,7 +58,7 @@ class CategoryManagerController
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('showModal', true); // Thêm flag để hiển thị modal
+                ->with('showModal', true);
         }
         $slug = Str::slug($request->CategoryName, '-');
         if ($request->hasFile('CategoryImage')) {

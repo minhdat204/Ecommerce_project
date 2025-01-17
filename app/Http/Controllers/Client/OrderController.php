@@ -25,7 +25,7 @@ class OrderController
             if (!in_array($order->trangthai, ['pending', 'confirmed', 'processing'])) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Không thể hủy đơn hàng ở trạng thái này'
+                    'message' => 'Không thể hủy đơn hàng vì đã cập nhật ở trạng thái: ' . $order->trangthai,
                 ]);
             }
 

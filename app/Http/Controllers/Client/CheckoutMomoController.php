@@ -10,6 +10,7 @@ use App\Models\OrderDetail;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\WebsiteInfo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -27,7 +28,32 @@ class CheckoutMomoController extends Controller
 
     public function payWithMomo(Request $request)
     {
+        // Validate input fields
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email',
+            'phone' => [
+                'required',
+                'regex:/^(0[3|5|7|8|9])+([0-9]{8})$/'
+            ],
+            'address_detail' => 'required|string|max:255',
+            'payment' => 'required|in:cod,momo',
+        ], [
+            'name.required' => 'Họ và tên không được để trống.',
+            'name.max' => 'Họ và tên không được quá 100 ký tự.',
+            'email.required' => 'Email không được để trống.',
+            'email.email' => 'Định dạng email không hợp lệ.',
+            'phone.required' => 'Số điện thoại không được để trống.',
+            'phone.regex' => 'Số điện thoại không hợp lệ.',
+            'address_detail.required' => 'Địa chỉ chi tiết không được để trống.',
+            'address_detail.max' => 'Địa chỉ chi tiết không được quá 255 ký tự.',
+            'payment.required' => 'Bạn phải chọn phương thức thanh toán.',
+            'payment.in' => 'Phương thức thanh toán không hợp lệ.',
+        ]);
         try {
+            // DB::beginTransaction();
+            $websiteInfo = WebsiteInfo::first();
+            $phoneNumber = $websiteInfo->phone ?? 'N/A';
             $userId = Auth::id();
             $cartItems = $request->input('cartItems', []);
             $priceErrors = [];
@@ -71,7 +97,7 @@ class CheckoutMomoController extends Controller
             if (!empty($quantityErrors)) {
                 return redirect()->back()->with(
                     'error',
-                    "Số lượng sản phẩm không đủ:\n" . implode("\n", $quantityErrors)
+                    "Số lượng sản phẩm không đủ:\n" . implode("\n", $quantityErrors) . "\nXin vui lòng liên hệ: {$phoneNumber}"
                 );
             }
 
@@ -89,6 +115,7 @@ class CheckoutMomoController extends Controller
                 'tong_giam_gia' => $totalDiscount,
                 'phi_van_chuyen' => $totalShip,
                 'tong_thanh_toan' => $totalPayment,
+                'pt_thanhtoan' => 'momo',
                 'trangthai_thanhtoan' => 'pending',
                 'dia_chi_giao' => $request->input('address'),
                 'ten_nguoi_nhan' => $request->input('name'),
@@ -114,16 +141,17 @@ class CheckoutMomoController extends Controller
             $result = $this->momoService->createPayment($maDonHang, $totalPayment, $orderInfo);
 
             if ($result['resultCode'] == 0) {
+                DB::commit();
+
                 return redirect($result['payUrl']);
             }
             // Xóa đơn hàng nếu thanh toán thất bại
-            $this->deleteOrder($request->orderId);
-
+            // Nếu tạo thanh toán thất bại
+            DB::rollBack();
             return redirect()->back()->with('error', $result['message']);
         } catch (\Exception $e) {
             // Xóa đơn hàng nếu thanh toán thất bại
-
-            $this->deleteOrder($request->orderId);
+            DB::rollBack();
 
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -131,31 +159,42 @@ class CheckoutMomoController extends Controller
 
     public function momoReturn(Request $request)
     {
-
         if ($request->resultCode == 0 || $request->resultCode == 7002) {
             try {
-                Order::where('ma_don_hang', $request->orderId)
-                    ->update([
-                        'trangthai_thanhtoan' => 'paid',
-                    ]);
+                DB::beginTransaction();
 
-                // xóa giỏ hàng
+                // Cập nhật trạng thái đơn hàng
+                $updated = Order::where('ma_don_hang', $request->orderId)
+                    ->update(['trangthai_thanhtoan' => 'paid']);
+
+                if (!$updated) {
+                    throw new \Exception('Không tìm thấy đơn hàng');
+                }
+
+                // Xóa giỏ hàng
                 CartItem::join('gio_hang', 'gio_hang.id_giohang', '=', 'san_pham_gio_hang.id_giohang')
                     ->where('gio_hang.id_nguoidung', Auth::id())
                     ->delete();
+
+                DB::commit();
+                return redirect()->route('checkout.index')
+                    ->with('success', 'Đặt hàng thành công! Cảm ơn bạn đã mua hàng.');
             } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('MoMo return error: ' . $e->getMessage());
                 return redirect()->route('checkout.index')
                     ->with('error', 'Thanh toán thất bại. Vui lòng thử lại sau.');
             }
-            return redirect()->route('checkout.index')
-                ->with('success', 'Đặt hàng thành công! Cảm ơn bạn đã mua hàng.');
         }
-        // Xóa đơn hàng nếu thanh toán thất bại
-        $this->deleteOrder($request->orderId);
+
+        // Nếu thanh toán thất bại
+        if ($request->orderId) {
+            $this->deleteOrder($request->orderId);
+        }
+
         return redirect()->route('checkout.index')
             ->with('error', 'Thanh toán thất bại. Vui lòng thử lại sau.');
     }
-
     public function momoIPN(Request $request)
     {
         // Ghi log chi tiết yêu cầu từ MoMo
@@ -165,7 +204,7 @@ class CheckoutMomoController extends Controller
         $rawHash = "accessKey=" . config('momo.access_key') .
             "&amount=" . $request->amount .
             "&extraData=" . $request->extraData .
-            "&orderId=" . $request->orderId .
+            "&maDonHang=" . $request->maDonHang .
             "&orderInfo=" . $request->orderInfo .
             "&orderType=" . $request->orderType .
             "&partnerCode=" . $request->partnerCode .
@@ -193,26 +232,40 @@ class CheckoutMomoController extends Controller
     }
 
     // xóa đơn hàng, chi tiết đơn hàng
-    public function deleteOrder($orderId)
+    public function deleteOrder($maDonHang)
     {
-        // Sử dụng transaction để đảm bảo tính toàn vẹn dữ liệu
-        DB::transaction(function () use ($orderId) {
-            // Lấy chi tiết đơn hàng liên quan đến đơn hàng cần xóa
-            $orderDetails = OrderDetail::where('id_donhang', $orderId)->get();
+        try {
+            DB::beginTransaction();
 
-            // Duyệt qua từng chi tiết đơn hàng
+            // Lấy đơn hàng
+            $order = Order::where('ma_don_hang', $maDonHang)->first();
+
+            if (!$order) {
+                throw new \Exception('Không tìm thấy đơn hàng');
+            }
+
+            // Lấy chi tiết đơn hàng
+            $orderDetails = OrderDetail::where('id_donhang', $order->id_donhang)->get();
+
+            // Hoàn lại số lượng sản phẩm
             foreach ($orderDetails as $detail) {
-                // Cộng lại số lượng sản phẩm trong kho
                 Product::where('id_sanpham', $detail->id_sanpham)
                     ->increment('soluong', $detail->soluong);
             }
 
-            // Xóa tất cả các chi tiết đơn hàng
-            OrderDetail::where('id_donhang', $orderId)->delete();
+            // Xóa chi tiết đơn hàng
+            OrderDetail::where('id_donhang', $order->id_donhang)->delete();
 
             // Xóa đơn hàng
-            Order::where('id_donhang', $orderId)->delete();
-        });
+            $order->delete();
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Delete order error: ' . $e->getMessage());
+            return false;
+        }
     }
     // public function deleteCartItem($cartItemId)
     // {

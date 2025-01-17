@@ -40,6 +40,7 @@ class CartController extends Controller
             return $price * $item->soluong;
         });
     }
+
     public function index(Request $request)
     {
         $cart = $this->getOrCreateCart();
@@ -49,24 +50,10 @@ class CartController extends Controller
 
         // Lấy toàn bộ mục giỏ hàng trước để tính toán
         $allCartItems = $cartItemsQuery->get();
+        $overStockItems = $allCartItems->filter(function($item) {
+            return $item->soluong > $item->product->soluong;
+        });
 
-        if ($request->ajax()) {
-            $cartCount = $allCartItems->count();
-            $cartItemsData = $allCartItems->map(function($item) {
-                return [
-                    'id' => $item->id_sp_giohang,
-                    'product_name' => $item->product->tensanpham,
-                    'quantity' => $item->soluong,
-                    'stock' => $item->product->soluong,
-                    'price' => $item->product->gia_khuyen_mai ?? $item->product->gia
-                ];
-            });
-
-            return response()->json([
-                'items' => $cartItemsData,
-                'cart_count' => $cartCount
-            ]);
-        }
         // Phân trang dữ liệu sau khi đã tải
         $cartItems = $cartItemsQuery->paginate(3);
 
@@ -76,7 +63,7 @@ class CartController extends Controller
         $discount = $subTotal > 0 ? ($subTotal - $total) / $subTotal * 100 : 0;
 
 
-        return view('users.pages.shoping-cart', compact('cartItems', 'subTotal','total', 'discount'));
+        return view('users.pages.shoping-cart', compact('cartItems', 'subTotal','total', 'discount', 'overStockItems'));
     }
     public function addToCart(Request $request)
     {

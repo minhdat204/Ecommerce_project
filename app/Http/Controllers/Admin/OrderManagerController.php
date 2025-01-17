@@ -36,45 +36,47 @@ class OrderManagerController
             'processing' => 2,
             'shipping' => 3,
             'completed' => 4,
-            'cancelled' => 5
+            'cancelled' => 5,
+            'inactive' => 6
+
         ];
 
         $newStatus = $request->trangthai;
 
-        // Kiểm tra trạng thái hoàn thành hoặc hủy
+        // Kiểm tra trạng thái không thể thay đổi
         if ($order->trangthai == 'completed' || $order->trangthai == 'cancelled') {
-            return response()->json([
-                'error' => 'Không thể thay đổi trạng thái của đơn hàng đã hoàn thành hoặc đã hủy!'
-            ], 400);
+            return redirect()->back()->with('error', 'Không thể thay đổi trạng thái của đơn hàng đã hoàn thành hoặc đã hủy!');
         }
 
-        // Kiểm tra trạng thái lùi
+        // Kiểm tra trạng thái không thể lùi lại
         if ($statusOrder[$newStatus] < $statusOrder[$order->trangthai]) {
-            return response()->json([
-                'error' => 'Không thể chuyển về trạng thái trước đó!'
-            ], 400);
+            return redirect()->back()->with('error', 'Không thể chuyển về trạng thái trước đó!');
         }
 
+        // Cập nhật trạng thái đơn hàng
         $order->trangthai = $newStatus;
         $order->save();
 
-        return response()->json([
-            'success' => 'Cập nhật trạng thái thành công!'
-        ]);
+        return redirect()->back()->with('success', 'Cập nhật trạng thái thành công!');
     }
+
     public function destroy(Order $order)
     {
-        // dd($order);
-        // Kiểm tra trạng thái đơn hàng
-        if ($order->trangthai === 'cancelled') {
-            // Cập nhật trạng thái đơn hàng thành 'inactive'
-            $order->trangthai = 'inactive';
-            $order->save();
+        try {
+            // Kiểm tra trạng thái đơn hàng
+            if ($order->trangthai === 'cancelled') {
+                // Cập nhật trạng thái đơn hàng thành 'inactive'
+                $order->trangthai = 'inactive';
+                $order->save();
 
-            return redirect()->back()->with('success', 'Trạng thái đơn hàng đã được cập nhật!');
+                return redirect()->back()->with('success', 'Trạng thái đơn hàng đã được cập nhật!');
+            } else {
+                return redirect()->back()->with('error', 'Chỉ có thể xóa đơn hàng đã bị hủy!');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
-
     public function create()
     {
         //

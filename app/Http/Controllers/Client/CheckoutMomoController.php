@@ -10,6 +10,7 @@ use App\Models\OrderDetail;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\WebsiteInfo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -27,9 +28,32 @@ class CheckoutMomoController extends Controller
 
     public function payWithMomo(Request $request)
     {
+        // Validate input fields
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email',
+            'phone' => [
+                'required',
+                'regex:/^(0[3|5|7|8|9])+([0-9]{8})$/'
+            ],
+            'address_detail' => 'required|string|max:255',
+            'payment' => 'required|in:cod,momo',
+        ], [
+            'name.required' => 'Họ và tên không được để trống.',
+            'name.max' => 'Họ và tên không được quá 100 ký tự.',
+            'email.required' => 'Email không được để trống.',
+            'email.email' => 'Định dạng email không hợp lệ.',
+            'phone.required' => 'Số điện thoại không được để trống.',
+            'phone.regex' => 'Số điện thoại không hợp lệ.',
+            'address_detail.required' => 'Địa chỉ chi tiết không được để trống.',
+            'address_detail.max' => 'Địa chỉ chi tiết không được quá 255 ký tự.',
+            'payment.required' => 'Bạn phải chọn phương thức thanh toán.',
+            'payment.in' => 'Phương thức thanh toán không hợp lệ.',
+        ]);
         try {
             // DB::beginTransaction();
-
+            $websiteInfo = WebsiteInfo::first();
+            $phoneNumber = $websiteInfo->phone ?? 'N/A';
             $userId = Auth::id();
             $cartItems = $request->input('cartItems', []);
             $priceErrors = [];
@@ -73,7 +97,7 @@ class CheckoutMomoController extends Controller
             if (!empty($quantityErrors)) {
                 return redirect()->back()->with(
                     'error',
-                    "Số lượng sản phẩm không đủ:\n" . implode("\n", $quantityErrors)
+                    "Số lượng sản phẩm không đủ:\n" . implode("\n", $quantityErrors) . "\nXin vui lòng liên hệ: {$phoneNumber}"
                 );
             }
 
@@ -242,7 +266,8 @@ class CheckoutMomoController extends Controller
             Log::error('Delete order error: ' . $e->getMessage());
             return false;
         }
-    }    // public function deleteCartItem($cartItemId)
+    }
+    // public function deleteCartItem($cartItemId)
     // {
     //     try {
     //         DB::transaction(function () use ($cartItemId) {

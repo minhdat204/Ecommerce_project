@@ -2,6 +2,42 @@
 
 @section('content')
     <style>
+        .address-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .address-group>div {
+            flex: 1;
+        }
+
+        .form-floating>label {
+            z-index: 1;
+        }
+
+        .invalid-feedback {
+            display: none;
+            font-size: 80%;
+            color: #dc3545;
+            margin-top: 0.25rem;
+        }
+
+        .form-control.is-invalid,
+        .form-select.is-invalid {
+            border-color: #dc3545;
+        }
+
+        .form-select[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
+            pointer-events: none;
+        }
+
+        .address-detail {
+            margin-top: 1rem;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -231,6 +267,16 @@
                 <div class="col-lg-7">
                     <div class="card shadow-sm border-0 rounded-3">
                         <div class="card-body p-4">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
                             <h5 class="fw-bold mb-4">Thông Tin Giao Nhận Hàng</h5>
 
                             <div class="form-floating mb-3">
@@ -257,11 +303,44 @@
                             </div>
 
                             <div class="form-floating mb-4">
-                                <input type="text" id="address" name="address" class="form-control"
-                                    placeholder="Địa chỉ">
-                                <label for="address">Địa chỉ</label>
-                            </div>
+                                <div class="address-group">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="province" name="province">
+                                            <option value="79">Thành phố Hồ Chí Minh</option>
+                                        </select>
+                                        <label for="province">Tỉnh/Thành phố</label>
+                                    </div>
 
+                                    {{-- <div class="form-floating">
+                                        <select class="form-select" id="district" name="district">
+                                            <option value=" "></option>
+                                        </select>
+                                        <label for="district">Quận/Huyện <span class="text-danger">*</span></label>
+                                        <div class="invalid-feedback" id="districtError"></div>
+                                    </div>
+
+                                    <div class="form-floating">
+                                        <select class="form-select" id="ward" name="ward">
+                                            <option value=" "></option>
+                                        </select>
+                                        <label for="ward">Phường/Xã <span class="text-danger">*</span></label>
+                                        <div class="invalid-feedback" id="wardError"></div>
+                                    </div> --}}
+                                </div>
+
+                                <div class="address-detail">
+                                    <div class="form-floating">
+                                        <input type="text" id="address_detail" name="address_detail" class="form-control"
+                                            placeholder="Số nhà, tên tòa nhà, lô số">
+                                        <label for="address_detail">Số nhà, đường, phường, quận <span
+                                                class="text-danger">*</span></label>
+                                        <div class="invalid-feedback" id="addressDetailError"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Hidden input for full address -->
+                                <input type="hidden" id="address" name="address">
+                            </div>
                             <h5 class="fw-bold mb-3">Phương Thức Thanh Toán</h5>
                             <div class="payment-methods">
                                 <div class="form-check mb-3">
@@ -297,12 +376,14 @@
                             <h5 class="fw-bold mb-4">Đơn Hàng Của Bạn</h5>
 
                             <!-- Cart Items -->
-                            <div class="cart-items mb-4" style="max-height: 400px; overflow-y: auto;">
+                            <div class="cart-items mb-4" style="max-height: 600px; overflow-y: auto;">
                                 @forelse($cartItems as $item)
                                     @php
                                         $price = $item->product->gia_khuyen_mai ?? $item->product->gia;
                                         $quantity = $item->soluong;
-
+                                        $mainImage = $item->product->images->isNotEmpty()
+                                            ? $item->product->images->first()->duongdan
+                                            : 'img/products/default.jpg';
                                     @endphp
 
                                     <input type="hidden" name="cartItems[{{ $loop->index }}][product_id]"
@@ -315,8 +396,8 @@
 
                                     <div class="cart-item mb-3">
                                         <div class="d-flex align-items-center">
-                                            <img src="{{ $item->product->image }}" alt="{{ $item->product->tensanpham }}"
-                                                class="rounded-3 me-3"
+                                            <img src="{{ asset('storage/' . $mainImage) }}"
+                                                alt="{{ $item->product->tensanpham }}" class="rounded-3 me-3"
                                                 style="width: 80px; height: 80px; object-fit: cover;">
                                             <div class="flex-grow-1">
                                                 <h6 class="mb-1">{{ $item->product->tensanpham }}</h6>
@@ -336,37 +417,38 @@
                                         <p class="mt-2">Giỏ hàng của bạn đang trống</p>
                                     </div>
                                 @endforelse
-                            </div>
+                                <!-- Pagination -->
 
-                            <!-- Order Summary -->
-                            @if ($cartItems->isNotEmpty())
-                                <div class="order-summary bg-light p-3 rounded-3">
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <span class="text-muted">Tổng tiền hàng:</span>
-                                        <span>{{ number_format($cartItems->sum(fn($item) => ($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong), 0, ',', '.') }}₫</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <span class="text-muted">Phí giao hàng:</span>
-                                        <span>{{ number_format($totalShip, 0, ',', '.') }}₫</span>
-                                    </div>
-                                    <hr class="my-2">
-                                    <div class="d-flex justify-content-between">
-                                        <h6 class="fw-bold mb-0">Tổng thanh toán</h6>
-                                        <h6 class="fw-bold mb-0 text-primary">
-                                            {{ number_format($cartItems->sum(fn($item) => ($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong) + $totalShip, 0, ',', '.') }}₫
-                                        </h6>
-                                    </div>
+                                <div class="d-flex justify-content-center">
+                                    {{ $cartItems->appends(request()->query())->links('vendor.pagination') }}
                                 </div>
+                                <!-- Order Summary -->
+                                @if ($cartItems->isNotEmpty())
+                                    <div class="order-summary bg-light p-3 rounded-3">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="text-muted">Tổng tiền hàng:</span>
+                                            <span>{{ number_format($totalPrice, 0, ',', '.') }}₫</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="text-muted">Phí giao hàng:</span>
+                                            <span>{{ number_format($totalShip, 0, ',', '.') }}₫</span>
+                                        </div>
+                                        <hr class="my-2">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="fw-bold mb-0">Tổng thanh toán</h6>
+                                            <h6 class="fw-bold fs-5 text-primary">
+                                                {{ number_format($totalPrice + $totalShip, 0, ',', '.') }}₫
+                                            </h6>
+                                        </div>
+                                    </div>
 
-                                <input type="hidden" name="totalPrice"
-                                    value="{{ $cartItems->sum(fn($item) => ($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong) }}">
-                                <input type="hidden" name="totalShip" value="{{ $totalShip }}">
-                                <input type="hidden" name="totalPayment"
-                                    value="{{ $cartItems->sum(fn($item) => ($item->product->gia_khuyen_mai ?? $item->product->gia) * $item->soluong) + $totalShip }}">
-                            @endif
+                                    <input type="hidden" name="totalPrice" value="{{ $totalPrice }}">
+                                    <input type="hidden" name="totalShip" value="{{ $totalShip }}">
+                                    <input type="hidden" name="totalPayment" value="{{ $totalPrice }}">
+                                @endif
+                            </div>
                         </div>
                     </div>
-                </div>
             </form>
         </div>
 
@@ -420,6 +502,78 @@
 @endsection
 @push('scripts')
     <script>
+        // validation thông tin đặt hàng
+
+        // Hàm hiển thị lỗi
+        function showError(element, message) {
+            element.classList.add('is-invalid');
+            element.nextElementSibling.textContent = message; // invalid-feedback
+        }
+
+        // Hàm xóa lỗi
+        function clearError(element) {
+            element.classList.remove('is-invalid');
+            element.nextElementSibling.textContent = '';
+        }
+
+        // Hàm kiểm tra định dạng email
+        function validateEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('checkoutForm');
+            const email = document.getElementById('email');
+            const addressDetail = document.getElementById('address_detail');
+
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+
+                // Validate email
+                if (!email.value.trim() || !validateEmail(email.value)) {
+                    isValid = false;
+                    showError(email, 'Vui lòng nhập email hợp lệ.');
+                } else {
+                    clearError(email);
+                }
+
+                // Validate address detail
+                if (!addressDetail.value.trim()) {
+                    isValid = false;
+                    showError(addressDetail, 'Vui lòng nhập địa chỉ chi tiết.');
+                } else {
+                    clearError(addressDetail);
+                }
+
+                // Nếu tất cả đều hợp lệ, gửi form
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+        });
+        // thêm địa chỉ
+        document.addEventListener('DOMContentLoaded', function() {
+            const provinceSelect = document.getElementById('province');
+            const addressDetailInput = document.getElementById('address_detail');
+            const addressInput = document.getElementById('address');
+
+            // Cập nhật địa chỉ đầy đủ
+            const updateFullAddress = () => {
+                const province = provinceSelect.options[provinceSelect.selectedIndex]?.text || '';
+                const detail = addressDetailInput.value.trim();
+
+                const fullAddress = [detail, province].filter(Boolean).join(', ');
+                addressInput.value = fullAddress;
+            };
+
+            // Gán sự kiện khi nhập địa chỉ chi tiết
+            addressDetailInput.addEventListener('input', updateFullAddress);
+
+            // Load tỉnh/thành phố khi trang được tải
+            updateFullAddress();
+        });
+
         function submitCheckoutForm() {
             const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
             const form = document.getElementById('checkoutForm');

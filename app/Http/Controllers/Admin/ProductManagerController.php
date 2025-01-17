@@ -12,18 +12,15 @@ use Illuminate\Support\Facades\DB;
 
 class ProductManagerController
 {
-    // Hiển thị danh sách sản phẩm
     public function index(Request $request)
     {
         $search = $request->input('search');
 
-        // Bắt đầu truy vấn với eager loading category và images
         $products = Product::with(['category', 'images'])
             ->when($search, function ($query, $search) {
-                // Áp dụng tìm kiếm nếu có
                 $query->where('tensanpham', 'like', '%' . $search . '%');
             })
-            // Lọc sản phẩm có trạng thái không phải 'inactive'
+            ->orderBy('created_at', 'desc')
             ->where('trangthai', '!=', 'inactive')
             ->paginate(15);
 
@@ -31,22 +28,20 @@ class ProductManagerController
     }
 
 
-    // Hiển thị form thêm mới sản phẩm
     public function create()
     {
-        $categories = Category::all();  // Lấy tất cả danh mục
+        $categories = Category::all();  
         return view('admin.pages.product.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
-        // Validate dữ liệu
         $request->validate([
             'tensanpham' => 'required|string|max:255',
             'slug' => 'required|string',
             'mota' => 'required|string',
             'thongtin_kythuat' => 'required|string',
-            'id_danhmuc' => 'required|string', // Dữ liệu truyền vào là tên danh mục
+            'id_danhmuc' => 'required|string', 
             'gia' => 'required|numeric|min:0',
             'gia_khuyen_mai' => 'nullable|numeric|min:0|lt:gia',
             'donvitinh' => 'required|string',
@@ -55,13 +50,11 @@ class ProductManagerController
             'trangthai' => 'required|string',
             'luotxem' => 'nullable|numeric',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate ảnh
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', 
         ]);
 
-        // Lấy id_danhmuc từ tendanhmuc (tên danh mục)
-        $category = Category::where('tendanhmuc', $request->id_danhmuc)->first(); // Tìm danh mục theo tên
+        $category = Category::where('tendanhmuc', $request->id_danhmuc)->first(); 
         if (!$category) {
-            // Nếu không tìm thấy danh mục, trả về lỗi
             return redirect()->back()->withErrors(['id_danhmuc' => 'Danh mục không tồn tại.']);
         }
         $tensanpham = $request->tensanpham;
@@ -89,20 +82,16 @@ class ProductManagerController
         $product->luotxem = $request->luotxem ?? 0;
         $product->save();
 
-        // Xử lý hình ảnh
         if ($request->hasFile('images')) {
             $images = $request->file('images');
             foreach ($images as $image) {
-                // Lưu ảnh vào thư mục storage/app/public/img/products
                 $imagePath = $image->store('img/products', 'public');
 
-                // Lưu đường dẫn hình ảnh vào bảng hinh_anh_san_pham
                 $productImage = new ProductImage();
-                $productImage->id_sanpham = $product->id_sanpham; // Giả sử bảng có khóa ngoại id_sanpham
+                $productImage->id_sanpham = $product->id_sanpham; 
                 $productImage->duongdan = $imagePath;
-                $productImage->alt = $request->tensanpham; // Hoặc tùy chọn khác
+                $productImage->alt = $request->tensanpham; 
 
-                // Bỏ qua việc lưu `created_at` và `updated_at` nếu sử dụng Eloquent, vì đã có time stamp tự động
                 $productImage->save();
             }
         }

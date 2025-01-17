@@ -8,34 +8,19 @@
                 @csrf
 
                 <!-- Các trường thông tin sản phẩm -->
-                <div class="mb-3">
-                    <label for="tensanpham" class="form-label">Tên Sản Phẩm</label>
-                    <input type="text" class="form-control @error('tensanpham') is-invalid @enderror" id="tensanpham" name="tensanpham" value="{{ old('tensanpham') }}" required>
+                <div class="form-group">
+                    <label for="tensanpham">Tên sản phẩm</label>
+                    <input type="text" name="tensanpham" id="tensanpham" class="form-control" 
+                        value="{{ old('tensanpham', $product->tensanpham ?? '') }}" required>
                     @error('tensanpham')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="slug" class="form-label"></label>
-                    <input type="hidden" id="slug" name="slug">
+                    <input type="hidden" id="slug" name="slug" >
                 </div>
-
-        <script>
-            // Chuyển tên sản phẩm thành slug tự động
-            document.getElementById('tensanpham').addEventListener('input', function () {
-                const slug = this.value
-                    .toLowerCase()
-                    .trim()
-                    .normalize('NFD') // Chuẩn hóa Unicode
-                    .replace(/[\u0300-\u036f]/g, '') // Loại bỏ dấu
-                    .replace(/đ/g, 'd') // Thay "đ" thành "d"
-                    .replace(/[^a-z0-9\s-]/g, '') // Loại bỏ ký tự đặc biệt
-                    .replace(/\s+/g, '-') // Thay khoảng trắng bằng dấu "-"
-                    .replace(/-+/g, '-'); // Loại bỏ dấu "-" liên tiếp
-                document.getElementById('slug').value = slug;
-            });
-        </script>
 
             <div class="mb-3">
                 <label for="mota" class="form-label">Mô Tả</label>

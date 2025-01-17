@@ -1,5 +1,5 @@
 @extends('users.layouts.layout')
-
+@section('title', 'Trang chủ')
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/slideshow.css')}}">
     <link rel="stylesheet" href="{{asset('css/services.css')}}">

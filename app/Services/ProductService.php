@@ -7,7 +7,7 @@ use App\Models\Product;
 
 class ProductService
 {
-    // slider : Lấy 3 sản phẩm có đánh giá tốt nhất và giảm giá nhiều nhất
+    // slider : Lấy 3 sản phẩm có (40% đánh giá tốt nhất + 20% lượt xem + 40% giảm giá)
     public function getSliderProducts($take = 3)
     {
         return Product::select([
@@ -27,7 +27,8 @@ class ProductService
                 $query->where('danhgia', '>=', 4); //với từng sản phẩm có trong bảng comments, đếm số lượng đánh giá >= 4
             }])
             ->orderByRaw('
-                ((danh_gia_tich_cuc * 0.6) +
+                ((danh_gia_tich_cuc * 0.4) +
+                (luotxem * 0.2) +
                 (((gia - COALESCE(gia_khuyen_mai, gia)) / gia * 100) * 0.4)) DESC
             ')
             ->take($take)

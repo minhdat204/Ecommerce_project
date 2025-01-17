@@ -1,5 +1,7 @@
 @extends('Admin.Layout.Layout')
 
+@section('title', 'Chi tiết sản phẩm')
+
 @section('namepage', 'Chi tiết sản phẩm')
 
 @section('content')

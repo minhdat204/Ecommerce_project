@@ -1,7 +1,8 @@
 @extends('Admin.Layout.Layout')
+@section('title', 'Quản lý Liên Hệ')
 @section('namepage', 'Quản lý Liên Hệ')
 @section('content')
-    <div class="container">
+    <div >
         <div class="table-wrapper">
             @if (session('success'))
                 <div class="alert alert
@@ -46,11 +47,11 @@
                             <td>{{ $contact->noidung }}</td>
                             <td>
                                 @if ($contact->trangthai == 'new')
-                                    <p style="color:Tomato;">Chưa phản hồi</p>
+                                    <div style="color:Tomato;">Chưa phản hồi</div>
                                 @elseif($contact->trangthai == 'processing')
-                                    <p style="color:Tomato;">Chưa phản hồi</p>
+                                    <div style="color:Tomato;">Chưa phản hồi</div>
                                 @elseif($contact->trangthai == 'resolved')
-                                    <p style="color:green;">Đã phản hồi</p>
+                                    <div style="color:green;">Đã phản hồi</div>
                                 @endif
 
                             </td>

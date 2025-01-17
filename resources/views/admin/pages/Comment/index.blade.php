@@ -1,6 +1,7 @@
 @extends('Admin.Layout.Layout')
+@section('title', 'Quản lý Bình Luận')
 @section('content')
-    <div class="container">
+    <div >
         <div class="table-wrapper">
             @if(session('success'))
                 <div class="alert alert-success">

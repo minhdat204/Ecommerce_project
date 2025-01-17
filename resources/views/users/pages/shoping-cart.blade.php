@@ -1,11 +1,18 @@
 @extends('users.layouts.layout')
+
+@section('title', 'Giỏ hàng')
+
 @section('content')
     <!-- Shopping Cart Section Begin -->
     <section class="shoping-cart spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    @include('users.partials.shoping-cart.table-cart')
+                    {{-- input lưu số lượng sản phẩm trong giỏ hàng để kiểm tra khi thay đổi số lượng --}}
+                    <input type="hidden" id="overStockCount" value="{{ $overStockItems->count() }}">
+                    <div class="shoping__cart__table">
+                        @include('users.partials.shoping-cart.table-cart')
+                    </div>
                 </div>
             </div>
             <div class="row">

@@ -1,9 +1,11 @@
 @extends('Admin.Layout.Layout')
 
+@section('title', 'Quản lý sản phẩm')
+
 @section('namepage', 'Dashboard')
 
 @section('content')
-    <div class="container">
+    <div >
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">

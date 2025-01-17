@@ -1,5 +1,7 @@
 @extends('users.layouts.layout')
 
+@section('title', 'Giới thiệu')
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/blog.css') }}">
 @endpush

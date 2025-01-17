@@ -1,4 +1,6 @@
 @extends('users.layouts.layout')
+
+@section('title', $Product->tensanpham)
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/comment.css') }}" type="text/css">
 @endpush
@@ -9,16 +11,18 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__pic">
-                        <div class="product__details__pic__item">
+                        <div class="product__details__pic__item image-remove-bg">
                             <img class="product__details__pic__item--large"
                                 src="{{ asset('storage/' . ($Product->images->isNotEmpty() ? $Product->images->first()->duongdan : 'img/products/default.jpg')) }}"
                                 alt="{{ $Product->tensanpham }}">
                         </div>
                         <div class="product__details__pic__slider owl-carousel">
                             @foreach($Product->images as $image)
+                            <div class="image-remove-bg">
                                 <img data-imgbigurl="{{ asset('storage/' . $image->duongdan) }}"
                                     src="{{ asset('storage/' . $image->duongdan) }}"
                                     alt="{{ $Product->tensanpham }}">
+                            </div>
                             @endforeach
                         </div>
                     </div>
@@ -33,19 +37,26 @@
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star-half-o"></i>
-                            <span>(18 reviews)</span>
+                            <span>({{ $totalReviews }} đánh giá)</span>
                         </div>
                         <!-- phần giá -->
                         <div class="product__details__price">
-                            @if ($Product->gia_khuyen_mai)
-                                ${{ $Product->gia_khuyen_mai }}
-                                <span>${{ $Product->gia }}</span>
+                            @if ($Product->gia_khuyen_mai !== null && $Product->gia_khuyen_mai >= 0)
+                                {{ number_format($Product->gia_khuyen_mai, 0, ',', '.') }}đ
+                                <span>{{ number_format($Product->gia, 0, ',', '.') }}đ</span>
                             @else
-                                ${{ $Product->gia }}
+                                {{ number_format($Product->gia, 0, ',', '.') }}đ
                             @endif
                         </div>
-                        <!-- phần mô tả -->
-                        <p>{{ $Product->mota }}</p>
+                        <!-- phần mô tả ngắn -->
+                        {{-- <p>{!! nl2br(e(Str::limit($Product->mota, 300, '...'))) !!}</p> --}}
+                        <p><?php
+                            $mota = $Product->mota;
+                            $sentences = preg_split('/(?<=[.?!])\s+/', $mota); // Chia mô tả thành các câu
+                            $first_three_sentences = implode(' ', array_slice($sentences, 0, 3)); // Lấy 3 câu đầu
+                            echo nl2br(e($first_three_sentences)); // In ra với định dạng line break
+                            ?></p>
+                        <!-- phần số lượng -->
                         <div class="product__details__quantity">
                             <div class="quantity">
                                 <div class="pro-qty">
@@ -72,18 +83,19 @@
                             </button>
                         </div>
                         <ul>
-                            <li><b>Availability</b>
+                            <li><b>Tình Trạng</b>
                                 <span>
                                     @if ($Product->soluong > 0)
-                                        <span class="stock-status in-stock">In Stock ({{ $Product->soluong }} items)</span>
+                                        <span class="stock-status in-stock">Còn hàng ({{ $Product->soluong }} sản phẩm)</span>
                                     @else
-                                        <span class="stock-status out-of-stock">Out of Stock</span>
+                                        <span class="stock-status out-of-stock">Hết hàng</span>
                                     @endif
                                 </span>
                             </li>
-                            <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
-                            <li><b>Weight</b> <span>0.5 kg</span></li>
-                            <li><b>Share on</b>
+                            <li><b>Giao hàng</b> <span>01 ngày vận chuyển. <samp>Free pickup today!</samp></span></li>
+                            {{-- <li><b>Trọng lượng</b> <span>0.5 kg</span></li> --}}
+                            <li><b>Xuất xứ</b> <span><samp>{{$Product->xuatxu}}</samp></span></li>
+                            <li><b>Chia sẻ</b>
                                 <div class="share">
                                     <a href="#"><i class="fa fa-facebook"></i></a>
                                     <a href="#"><i class="fa fa-twitter"></i></a>
@@ -99,60 +111,48 @@
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-                                    aria-selected="true">Description</a>
+                                    aria-selected="true">Mô tả</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
-                                    aria-selected="false">Information</a>
+                                    aria-selected="false">Thông tin</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
-                                    aria-selected="false">Reviews <span>({{$totalReviews}})</span></a>
+                                    aria-selected="false">Đánh giá <span>({{$totalReviews}})</span></a>
                             </li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tabs-1" role="tabpanel">
                                 <div class="product__details__tab__desc">
-                                    <h6>Products Infomation</h6>
-                                    <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                                        Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus. Vivamus
-                                        suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam sit amet quam
-                                        vehicula elementum sed sit amet dui. Donec rutrum congue leo eget malesuada.
-                                        Vivamus suscipit tortor eget felis porttitor volutpat. Curabitur arcu erat,
-                                        accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a
-                                        pellentesque nec, egestas non nisi. Vestibulum ac diam sit amet quam vehicula
-                                        elementum sed sit amet dui. Vestibulum ante ipsum primis in faucibus orci luctus
-                                        et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam
-                                        vel, ullamcorper sit amet ligula. Proin eget tortor risus.</p>
-                                    <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
-                                        ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
-                                        elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
-                                        porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
-                                        nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.
-                                        Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Sed
-                                        porttitor lectus nibh. Vestibulum ac diam sit amet quam vehicula elementum
-                                        sed sit amet dui. Proin eget tortor risus.</p>
+                                    <h6>Mô tả sản phẩm</h6>
+                                    <div class="product-description">
+                                        @if(strlen($Product->mota) > 300)
+                                            <div class="description-container">
+                                                <p class="description-short">
+                                                    {{ Str::limit($Product->mota, 300, '...') }}
+                                                </p>
+                                                <p class="description-full">
+                                                    {{-- {!! nl2br(e($Product->mota)) !!} --}}
+                                                    {{ $Product->mota }}
+                                                </p>
+                                            </div>
+                                            <button class="read-more-btn" onclick="toggleDescription(this)">
+                                                <span class="text">Xem thêm</span>
+                                                <i class="fa fa-chevron-down icon"></i>
+                                            </button>
+                                        @else
+                                            <div class="description-text">
+                                                {!! nl2br(e($Product->mota)) !!}
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-2" role="tabpanel">
                                 <div class="product__details__tab__desc">
-                                    <h6>Products Infomation</h6>
-                                    <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                                        Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
-                                        Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
-                                        sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
-                                        eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
-                                        Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
-                                        sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
-                                        diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
-                                        ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-                                        Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
-                                        Proin eget tortor risus.</p>
-                                    <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
-                                        ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
-                                        elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
-                                        porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
-                                        nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.</p>
+                                    <h6>Thông tin sản phẩm<h6>
+                                    <p>{{$Product->thongtin_kythuat}}</p>
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-3" role="tabpanel">
@@ -227,7 +227,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title related__product__title">
-                        <h2>Related Product</h2>
+                        <h2>Sản phẩm liên quan</h2>
                     </div>
                 </div>
             </div>
@@ -235,17 +235,27 @@
                 @foreach ($relatedProducts as $product)
                     <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="product__item">
-                            <div class="product__item__pic set-bg"
+                            <div class="product__item__pic set-bg bg-blend"
                                 data-setbg="{{ asset('storage/' . ($product->images->isNotEmpty() ? $product->images->first()->duongdan : 'img/products/default.jpg')) }}">
+                                @if ($product->gia_khuyen_mai !== null && $product->gia_khuyen_mai >= 0)
+                                    <div class="product__discount__percent">-{{floor(($product->gia - $product->gia_khuyen_mai) / $product->gia * 100)}}%</div>
+                                @endif
                                 <ul class="product__item__pic__hover">
                                     @include('users.partials.pic-hover', ['product' => $product])
                                 </ul>
                             </div>
                             <div class="product__item__text">
-                                <h6><a
-                                        href="{{ route('users.shop_details', $product->slug) }}">{{ $product->tensanpham }}</a>
-                                </h6>
-                                <h5>${{ $product->gia }}</h5>
+                                <h6><a href="{{ route('users.shop_details', $product->slug) }}">{{ $product->tensanpham }}</a></h6>
+                                <h5>
+                                    <div class="product__item__price">
+                                        @if ($product->gia_khuyen_mai !== null && $product->gia_khuyen_mai >= 0)
+                                            {{ number_format($product->gia_khuyen_mai, 0, ',', '.') }}đ
+                                            <span>{{ number_format($product->gia, 0, ',', '.') }}đ</span>
+                                        @else
+                                            {{ number_format($product->gia, 0, ',', '.') }}đ
+                                        @endif
+                                    </div>
+                                </h5>
                             </div>
                         </div>
                     </div>

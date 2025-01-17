@@ -1,16 +1,57 @@
 @extends('Admin.Layout.Layout')
-@section('namepage', 'Orders')
+
+@section('title', 'Quản lý Đơn Hàng')
 
 @section('content')
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #64748b;
-            --success-color: #16a34a;
-            --warning-color: #eab308;
-            --danger-color: #dc2626;
-            --background-color: #f1f5f9;
-            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        .status-select {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            min-width: 140px;
+            appearance: none;
+            text-align: center;
+        }
+
+        /* Status Colors */
+        /* Ghi đè màu sắc cho từng trạng thái */
+        .status-pending {
+            background-color: #FFE4B5 !important;
+            /* Màu pastel nhẹ hơn */
+            color: #FFA500 !important;
+            /* Đổi màu chữ */
+            border-color: #FFE4B5 !important;
+        }
+
+        .status-processing {
+            background-color: #D1C4E9 !important;
+            color: #5E35B1 !important;
+            border-color: #D1C4E9 !important;
+        }
+
+        .status-shipping {
+            background-color: #E1BEE7 !important;
+            color: #8E24AA !important;
+            border-color: #E1BEE7 !important;
+        }
+
+        .status-completed {
+            background-color: #C8E6C9 !important;
+            color: #388E3C !important;
+            border-color: #C8E6C9 !important;
+        }
+
+        .status-cancelled {
+            background-color: #FFCDD2 !important;
+            color: #D32F2F !important;
+            border-color: #FFCDD2 !important;
+        }
+
+        /* Ghi đè để xóa màu khi mở dropdown */
+        .status-select:focus option {
+            background-color: #ffffff !important;
+            color: #333333 !important;
         }
 
         .filters {
@@ -26,207 +67,16 @@
             border: 1px solid #e2e8f0;
             border-radius: 0.5rem;
             background: white;
-            color: var(--secondary-color);
+            color: #64748b;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .filter-btn:hover,
         .filter-btn.active {
-            background: var(--primary-color);
+            background: #2563eb;
             color: white;
-            border-color: var(--primary-color);
-        }
-
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 500;
-            font-size: 0.875rem;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .status-pending {
-            background-color: #FEF3C7;
-            color: #D97706;
-            border: 1px solid #F59E0B;
-        }
-
-        .status-confirmed {
-            background-color: #DBEAFE;
-            color: #2563EB;
-            border: 1px solid #3B82F6;
-        }
-
-        .status-processing {
-            background-color: #E0E7FF;
-            color: #4F46E5;
-            border: 1px solid #6366F1;
-        }
-
-        .status-shipping {
-            background-color: #F3E8FF;
-            color: #7C3AED;
-            border: 1px solid #8B5CF6;
-        }
-
-        .status-completed {
-            background-color: #DCFCE7;
-            color: #16A34A;
-            border: 1px solid #22C55E;
-        }
-
-        .status-cancelled {
-            background-color: #FEE2E2;
-            color: #DC2626;
-            border: 1px solid #EF4444;
-        }
-
-        .status-select {
-            border: 2px solid #E5E7EB;
-            border-radius: 8px;
-            padding: 8px;
-            width: 100%;
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,...");
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-        }
-
-        .status-select:focus {
-            outline: none;
-            border-color: #3B82F6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .status-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .status-badge {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 500;
-            font-size: 0.875rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .status-badge:after {
-            content: '▼';
-            font-size: 10px;
-        }
-
-        .status-options {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 1000;
-            display: none;
-            min-width: 160px;
-            padding: 8px 0;
-            margin: 4px 0 0;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .status-option {
-            padding: 8px 16px;
-            cursor: pointer;
-        }
-
-        .status-option:hover {
-            background-color: #f3f4f6;
-        }
-
-        /* Status Colors */
-        .status-pending {
-            background-color: #FEF3C7;
-            color: #D97706;
-        }
-
-        .status-pending {
-            background: #FEF3C7 !important;
-            color: #D97706 !important;
-            border: 1px solid #F59E0B !important;
-        }
-
-        .status-processing {
-            background: #E0E7FF !important;
-            color: #4F46E5 !important;
-            border: 1px solid #6366F1 !important;
-        }
-
-        .status-shipping {
-            background: #F3E8FF !important;
-            color: #7C3AED !important;
-            border: 1px solid #8B5CF6 !important;
-        }
-
-        .status-completed {
-            background: #DCFCE7 !important;
-            color: #16A34A !important;
-            border: 1px solid #22C55E !important;
-        }
-
-        .status-cancelled {
-            background: #FEE2E2 !important;
-            color: #DC2626 !important;
-            border: 1px solid #EF4444 !important;
-        }
-
-        .status-select {
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #ddd;
-            background-color: white;
-            cursor: pointer;
-            width: 140px;
-        }
-
-        .status-select:focus {
-            outline: none;
-            border-color: #4CAF50;
-        }
-
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 500;
-            font-size: 0.875rem;
-            display: inline-block;
-        }
-
-        /* Status Colors */
-        .status-pending {
-            background: #FEF3C7;
-            color: #D97706;
-        }
-
-        .status-processing {
-            background: #E0E7FF;
-            color: #4F46E5;
-        }
-
-        .status-shipping {
-            background: #F3E8FF;
-            color: #7C3AED;
-        }
-
-        .status-completed {
-            background: #DCFCE7;
-            color: #16A34A;
-        }
-
-        .status-cancelled {
-            background: #FEE2E2;
-            color: #DC2626;
+            border-color: #2563eb;
         }
     </style>
     @php
@@ -238,10 +88,24 @@
             'cancelled' => 5,
         ];
     @endphp
-    <div class="container">
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    <div>
         <div class="table-wrapper">
             <!-- Tiêu đề bảng -->
+
             <div class="table-title">
+
                 <div class="row">
                     <div class="col-sm-6">
                         <h2>Quản lý <b>Đơn Hàng</b></h2>
@@ -275,6 +139,11 @@
                             class="filter-btn {{ request('status') == 'cancelled' ? 'active' : '' }}">
                             Đã hủy
                         </a>
+                        <a href="{{ route('admin.order.index', ['status' => 'inactive']) }}"
+                            class="filter-btn {{ request('status') == 'inactive' ? 'active' : '' }}">
+                            Đã xóa
+                        </a>
+
                     </div>
                 </div>
                 <div class="col-sm">
@@ -353,10 +222,11 @@
                                     @csrf
                                     @method('PUT')
                                     <select name="trangthai" class="status-select" onchange="this.form.submit()">
-                                        <option value="pending" {{ $order->trangthai == 'pending' ? 'selected' : '' }}>
+                                        <option value="pending"
+                                            class="status-pending"{{ $order->trangthai == 'pending' ? 'selected' : '' }}>
                                             Chờ xử lý
                                         </option>
-                                        <option value="processing"
+                                        <option value="processing" class="status-processing"
                                             {{ $order->trangthai == 'processing' ? 'selected' : '' }}>
                                             Đang xử lý
                                         </option>
@@ -369,6 +239,10 @@
                                         <option value="cancelled" {{ $order->trangthai == 'cancelled' ? 'selected' : '' }}>
                                             Đã hủy
                                         </option>
+                                        <option value="" {{ $order->trangthai == 'inactive' ? 'selected' : '' }}>
+                                            Đã xóa
+                                        </option>
+
                                     </select>
                                 </form>
                             </td>
@@ -481,61 +355,101 @@
             });
         });
 
-        $(document).ready(function() {
-            $('.status-select').change(function() {
-                const form = $(this).closest('form');
-                const currentStatus = $(this).data('current');
-                const newStatus = $(this).val();
 
-                $.ajax({
-                    url: form.attr('action'),
-                    method: 'POST',
-                    data: form.serialize(),
-                    success: function(response) {
-                        toastr.success(response.success);
-                        location.reload();
-                    },
-                    error: function(xhr) {
-                        const response = xhr.responseJSON;
-                        toastr.error(response.error);
-                        // Reset về trạng thái cũ
-                        $(this).val(currentStatus);
-                    }
-                });
+        // $(document).ready(function() {
+        //     $('.status-select').change(function() {
+        //         const form = $(this).closest('form');
+        //         const currentStatus = $(this).data('current');
+        //         const newStatus = $(this).val();
 
-                return false;
-            });
-        });
+        //         if (confirm('Bạn có chắc muốn thay đổi trạng thái đơn hàng?')) {
+        //             $.ajax({
+        //                 url: form.attr('action'),
+        //                 method: 'POST',
+        //                 data: {
+        //                     _token: $('meta[name="csrf-token"]').attr('content'),
+        //                     trangthai: newStatus
+        //                 },
+        //                 success: function(response) {
+        //                     if (response.success) {
+        //                         // Chỉ hiển thị thông báo thành công
+        //                         toastr.info('Trạng thái đã được cập nhật.');
+        //                     } else {
+        //                         // Reset trạng thái nhưng không hiển thị thông báo lỗi
+        //                         $(this).val(currentStatus);
+        //                     }
+        //                 },
+        //                 error: function() {
+        //                     toastr.error('Có lỗi xảy ra trong quá trình cập nhật!');
+        //                     $(this).val(currentStatus); // Reset trạng thái nếu gặp lỗi
+        //                 }
+        //             });
+        //         } else {
+        //             $(this).val(currentStatus); // Reset trạng thái nếu không xác nhận
+        //         }
+        //     });
+        // });
 
-        $(document).ready(function() {
-            // ...existing checkbox code...
+        // $(document).ready(function() {
+        //     $('.status-select').change(function() {
+        //         const form = $(this).closest('form');
+        //         const currentStatus = $(this).data('current');
+        //         const newStatus = $(this).val();
 
-            // Handle status change
-            $('.status-select').change(function(e) {
-                e.preventDefault();
-                const form = $(this).closest('form');
-                const select = $(this);
-                const currentStatus = select.find('option:selected').val();
+        //         $.ajax({
+        //             url: form.attr('action'),
+        //             method: 'POST',
+        //             data: form.serialize(),
+        //             success: function(response) {
+        //                 toastr.success(response.success);
+        //                 location.reload();
+        //             },
+        //             error: function(xhr) {
+        //                 const response = xhr.responseJSON;
+        //                 toastr.error(response.error);
+        //                 // Reset về trạng thái cũ
+        //                 $(this).val(currentStatus);
+        //             }
+        //         });
 
-                if (confirm('Bạn có chắc muốn thay đổi trạng thái đơn hàng?')) {
-                    $.ajax({
-                        url: form.attr('action'),
-                        method: 'POST',
-                        data: form.serialize(),
-                        success: function(response) {
-                            toastr.success(response.success);
-                        },
-                        error: function(xhr) {
-                            const response = xhr.responseJSON;
-                            toastr.error(response.error);
-                            select.val(currentStatus); // Reset về giá trị cũ
-                        }
-                    });
-                } else {
-                    select.val(currentStatus); // Reset nếu không confirm
-                }
-            });
-        });
+        //         return false;
+        //     });
+        // });
+
+        // $(document).ready(function() {
+        //     $('.status-select').change(function() {
+        //         const form = $(this).closest('form');
+        //         const currentStatus = $(this).data('current');
+        //         const newStatus = $(this).val();
+
+        //         if (confirm('Bạn có chắc muốn thay đổi trạng thái đơn hàng?')) {
+        //             $.ajax({
+        //                 url: form.attr('action'),
+        //                 method: 'POST',
+        //                 data: {
+        //                     _token: $('meta[name="csrf-token"]').attr('content'),
+        //                     trangthai: newStatus
+        //                 },
+        //                 success: function(response) {
+        //                     if (response.success) {
+        //                         toastr.success(response.message);
+        //                         location.reload();
+        //                     } else {
+        //                         toastr.error('Cập nhật thất bại!');
+        //                         $(this).val(currentStatus);
+        //                     }
+        //                 },
+        //                 error: function(xhr) {
+        //                     const response = xhr.responseJSON;
+        //                     toastr.error(response.error || 'Có lỗi xảy ra!');
+        //                     $(this).val(currentStatus);
+        //                 }
+        //             });
+        //         } else {
+        //             $(this).val(currentStatus); // Reset nếu không confirm
+        //         }
+        //     });
+        // });
     </script>
 
     <!-- Add Toastr -->

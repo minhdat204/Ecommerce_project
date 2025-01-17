@@ -130,7 +130,7 @@
                             </li>
                         </ul>
                         <div class="header__top__right__language">
-                            <div class="header__cart__price">Giỏ hàng: <span id="cart-total">{{ Auth::check() && Auth::user()->cart ? number_format(Auth::user()->cart->cartItems->sum(function($item) { return $item->soluong * $item->product->gia_khuyen_mai ?? $item->product->gia; }), 0, ',', '.') : 0 }}đ</span></div>
+                            <div class="header__cart__price">Giỏ hàng: <span id="cart-total">{{ Auth::check() && Auth::user()->cart ? number_format(Auth::user()->cart->cartItems->sum(function($item) { return $item->soluong * ($item->product->gia_khuyen_mai !== null && $item->product->gia_khuyen_mai >= 0 ? $item->product->gia_khuyen_mai : $item->product->gia); }), 0, ',', '.') : 0 }}đ</span></div>
                         </div>
                         <div class="header__top__right__auth">
                             @auth
@@ -149,9 +149,7 @@
                                         <a class="dropdown-item" href="{{ route('profile.index') }}">
                                             <i class="fa fa-user-circle"></i> Tài khoản của tôi
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('orders.detail', ['id' => 'latest']) }}">
-                                            <i class="fa fa-shopping-basket"></i> Đơn hàng của tôi
-                                        </a>
+                                      
                                         <div class="dropdown-divider"></div>
                                         <form class="logout-form" onsubmit="logout(event)">
                                             @csrf
@@ -223,7 +221,7 @@
                                 <i class="fa fa-phone"></i>
                             </div>
                             <div class="hero__search__phone__text">
-                                <h5>+65 11.188.888</h5>
+                                <h5>{{App\Models\WebsiteInfo::first()->phone}}</h5>
                                 <span>support 24/7 time</span>
                             </div>
                         </div>

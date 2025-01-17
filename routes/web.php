@@ -34,7 +34,7 @@ Route::middleware('check.user')->group(function () {
     Route::resource('profile', ProfileController::class)->names([
         'index'   => 'profile.index',
     ]);
-
+    Route::delete('/favorites/{id}', [ProfileController::class, 'destroy'])->name('favorites.destroy');
     //order
     Route::get('/orders/{id}', [OrderController::class, 'orderDetail'])->name('orders.detail');
     Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
@@ -49,7 +49,7 @@ Route::middleware('check.user')->group(function () {
     Route::get('/shop', [ProductController::class, 'index'])->name('users.shop');
     Route::get('/shop/category/{slug}', [ProductController::class, 'showCategory'])->name('shop.category');
     Route::get('/shop/search', [ProductController::class, 'search'])->name('shop.search');
-    Route::get('/shop-detail/{slug}', [ProductController::class, 'show'])->name('users.shop_details');
+    Route::get('/shop/{slug}', [ProductController::class, 'show'])->name('users.shop_details');
 
     //blog
     Route::get('/blogs', [BlogController::class, 'index'])->name('users.blogs');

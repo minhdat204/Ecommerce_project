@@ -973,9 +973,10 @@ ol {
 	padding: 0 20px;
 	bottom: 20px;
 	text-align: center;
+
 }
 
-.categories__item h5 a {
+.categories__item h5 span {
 	font-size: 18px;
 	color: #1c1c1c;
 	font-weight: 700;
@@ -1165,6 +1166,19 @@ ol {
 .featured__item__text h5 {
 	color: #252525;
 	font-weight: 700;
+}
+
+.featured__item__text .featured__item__price {
+	font-size: 18px;
+	color: #1c1c1c;
+	font-weight: 700;
+}
+
+.featured__item__text .featured__item__price span {
+	display: inline-block;
+	font-weight: 400;
+	text-decoration: line-through;
+	margin-left: 10px;
 }
 
 /*---------------------
@@ -1763,6 +1777,20 @@ ol {
 	bottom: 20px;
 }
 
+.product__item .product__discount__percent {
+	height: 45px;
+	width: 45px;
+	background: #dd2222;
+	border-radius: 50%;
+	font-size: 14px;
+	color: #ffffff;
+	line-height: 45px;
+	text-align: center;
+	position: absolute;
+	left: 15px;
+	top: 15px;
+}
+
 .product__item__pic {
 	height: 270px;
 	position: relative;
@@ -2011,6 +2039,9 @@ ol {
 	margin-left: 10px;
 }
 .product__details__text p {
+    color: #6f6f6f;
+    font-size: 16px;
+    line-height: 1.6;
 	margin-bottom: 45px;
 }
 
@@ -2211,6 +2242,83 @@ ol {
 	color: #666666;
 }
 
+
+.product-description {
+    position: relative;
+    margin: 20px 0;
+}
+
+.description-container {
+    position: relative;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.description-short {
+    margin-bottom: 10px;
+}
+
+.description-full {
+    display: none;
+    margin-bottom: 10px;
+}
+
+.read-more-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    color: #7fad39;
+    cursor: pointer;
+    padding: 5px 20px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.read-more-btn .text {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.read-more-btn:hover {
+    color: #5a8027;
+}
+
+.read-more-btn .icon {
+    transition: transform 0.3s;
+}
+
+.read-more-btn.active .icon {
+    transform: rotate(180deg);
+}
+
+.description-text {
+    line-height: 1.6;
+    color: #6f6f6f;
+}
+
+/* Add fade effect */
+.description-container:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(transparent, #ffffff);
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+.description-container.expanded:after {
+    opacity: 0;
+}
 /*---------------------
   Shop Details
 -----------------------*/
@@ -2280,6 +2388,7 @@ ol {
 	color: #1c1c1c;
 	font-weight: 700;
 	width: 100px;
+    line-height: 1.2;
 }
 
 .shoping__cart__price span{
@@ -2421,6 +2530,23 @@ ol {
 	text-align: center;
 }
 
+.item__status {
+    width: 150px;
+}
+
+.item__status .in-stock {
+    color: #7fad39;
+}
+
+.item__status .out-stock {
+    color: #dd2222;
+}
+
+.check {
+    background: #fff3f3;
+}
+
+
 /*---------------------
   Favorites
 -----------------------*/
@@ -2478,6 +2604,7 @@ ol {
     color: #1c1c1c;
     font-weight: 700;
     width: 150px;
+    line-height: 1.2;
 }
 
 .favorite__price span {
@@ -2779,6 +2906,11 @@ ol {
 	letter-spacing: 2px;
 	width: 100%;
 	margin-top: 10px;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.6;
 }
 
 /*---------------------
@@ -4391,3 +4523,51 @@ ol {
     background: #f8f9fa;
     font-weight: 700;
 }
+
+/* Dat: set bg*/
+.catebg-blend, .bg-blend {
+    background-blend-mode: darken;
+    background-color: #f5f5f5;
+    background-position: center;
+    background-size: 90%;
+    transition: background-color 0.3s ease;
+}
+
+.catebg-blend:hover {
+    background-color: #e0e0e0;
+}
+
+.image-remove-bg {
+	background-color: #f5f5f5;
+	mix-blend-mode: multiply;
+	isolation: isolate;
+	border-radius: 8px;
+	padding: 10px;
+	overflow: hidden;
+}
+
+.image-remove-bg img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	mix-blend-mode: multiply;
+	filter: contrast(1.1) brightness(1.1);
+}
+
+.img-cart-favorites {
+    /* background-color: #f5f5f5; */
+    mix-blend-mode: darken;
+    isolation: isolate;
+    /* border-radius: 8px; */
+    padding: 10px;
+    /* overflow: hidden; */
+    display: inline-block;
+}
+.img-cart-favorites img {
+    display: block;
+    max-width: 100%;
+    height: 100px;
+    mix-blend-mode: multiply;
+    filter: contrast(1.1) brightness(1.1);
+}
+

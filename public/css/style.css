@@ -4566,7 +4566,7 @@ ol {
 .img-cart-favorites img {
     display: block;
     max-width: 100%;
-    height: auto;
+    height: 100px;
     mix-blend-mode: multiply;
     filter: contrast(1.1) brightness(1.1);
 }

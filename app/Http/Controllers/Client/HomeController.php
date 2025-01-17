@@ -32,7 +32,6 @@ class HomeController
         //hiển thị 1 số danh mục sản phẩm có trong cơ sở dữ liệu, với công thức là lấy 4 danh mục có nhiều sản phẩm nhất
         $categories = $this->productService->getCategories();
 
-
         return view('users.pages.home', compact('slider', 'best_selling_products', 'new_products', 'categories'));
     }
 }

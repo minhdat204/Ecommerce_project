@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 class StatisticalManagerController
 {
     // index2
+    // Khoa
     public function index(Request $request)
     {
         // Tổng quan thống kê
@@ -82,6 +83,8 @@ class StatisticalManagerController
         ]);
     }
 
+
+    // Minh , Nam
     public function sales(Request $request)
     {
         $startDate = $request->input('start_date'); // Ngày bắt đầu

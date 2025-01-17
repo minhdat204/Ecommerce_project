@@ -159,7 +159,8 @@ class ProductManagerController
     $product->trangthai = $request->trangthai === 'active' ? 1 : 0;
     $product->save();
 
-    // Xử lý hình ảnh mới nếu có
+    
+
     if ($request->hasFile('images')) {
         foreach ($request->file('images') as $image) {
             $imagePath = $image->store('img/products', 'public');

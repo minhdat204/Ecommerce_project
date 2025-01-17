@@ -35,18 +35,20 @@ class ProfileController extends Controller
         // Lấy danh sách đơn hàng
         $orders = Order::with(['orderDetails.product'])
             ->where('id_nguoidung', $user)
-            ->paginate(2);
+            ->paginate(10);
         return view('users.pages.profile', compact('user', 'favorites', 'scores', 'orders'));
     }
     public function show($userId)
     {
         return view('users.pages.profile', compact('user', 'favorites', 'scores'));
     }
-    public function edit(string $id) {
+    public function edit(string $id)
+    {
         $user = User::findOrFail($id);
-            return view('profile.edit', compact('user', 'favorites', 'scores'));
+        return view('profile.edit', compact('user', 'favorites', 'scores'));
     }
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'hoten' => 'required|string|max:50', 
             'gioitinh' => 'required|in:male,female',
@@ -70,6 +72,3 @@ class ProfileController extends Controller
     }
     return redirect()->route('profile.index')->with('error', 'Product not found in favorites');
 }
-
-
-} 

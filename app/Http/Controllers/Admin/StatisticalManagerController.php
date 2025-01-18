@@ -55,7 +55,6 @@ class StatisticalManagerController
                 return $item;
             });
 
-        // Truy vấn để lấy 10 sản phẩm bán chạy nhất theo thời gian (week/month/year)
         $productSales = DB::table('chi_tiet_don_hang')
             ->join('san_pham', 'san_pham.id_sanpham', '=', 'chi_tiet_don_hang.id_sanpham')
             ->join('don_hang', 'don_hang.id_donhang', '=', 'chi_tiet_don_hang.id_donhang')
@@ -70,7 +69,6 @@ class StatisticalManagerController
                 return $item;
             });
 
-        // Trả dữ liệu về dưới dạng JSON
         return response()->json([
             'salesData' => $salesData,
             'productSales' => $productSales,

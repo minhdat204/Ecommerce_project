@@ -14,12 +14,14 @@ class StatisticalManagerController
     // index2
     public function index(Request $request)
     {
+        // Tổng quan thống kê
         $totalSales = Order::where('trangthai', 'completed')->sum('tong_thanh_toan');
         $totalOrders = Order::count();
         $totalProductsSold = OrderDetail::sum('soluong');
         $totalProducts = Product::count();
 
 
+        // Xử lý dữ liệu doanh thu
         return view('admin.pages.statistics.index2', compact(
             'totalSales',
             'totalOrders',
@@ -29,8 +31,10 @@ class StatisticalManagerController
     }
     public function getSalesData(Request $request)
     {
+        // Lấy thông tin khoảng thời gian từ query string
         $timePeriod = $request->input('timePeriod');
 
+        // Dữ liệu mặc định cho tuần, tháng, năm
         if ($timePeriod === 'week') {
             $startDate = now()->subDays(7);  // 7 ngày qua
             $endDate = now();
@@ -44,6 +48,7 @@ class StatisticalManagerController
             return response()->json(['error' => 'Invalid time period'], 400);
         }
 
+        // Truy vấn để lấy dữ liệu doanh thu theo thời gian (week/month/year)
         $salesData = Order::whereBetween('created_at', [$startDate, $endDate])
             ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, DAY(created_at) as day, SUM(tong_thanh_toan) as total_sales')
             ->groupBy('year', 'month', 'day')
@@ -55,6 +60,7 @@ class StatisticalManagerController
                 return $item;
             });
 
+        // Truy vấn để lấy 10 sản phẩm bán chạy nhất theo thời gian (week/month/year)
         $productSales = DB::table('chi_tiet_don_hang')
             ->join('san_pham', 'san_pham.id_sanpham', '=', 'chi_tiet_don_hang.id_sanpham')
             ->join('don_hang', 'don_hang.id_donhang', '=', 'chi_tiet_don_hang.id_donhang')
@@ -69,6 +75,7 @@ class StatisticalManagerController
                 return $item;
             });
 
+        // Trả dữ liệu về dưới dạng JSON
         return response()->json([
             'salesData' => $salesData,
             'productSales' => $productSales,

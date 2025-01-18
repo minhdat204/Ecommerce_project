@@ -14,7 +14,6 @@ class StatisticalManagerController
     // index2
     public function index(Request $request)
     {
-        // Tổng quan thống kê
         $totalSales = Order::where('trangthai', 'completed')->sum('tong_thanh_toan');
         $totalOrders = Order::count();
         $totalProductsSold = OrderDetail::sum('soluong');
@@ -31,7 +30,6 @@ class StatisticalManagerController
     }
     public function getSalesData(Request $request)
     {
-        // Lấy thông tin khoảng thời gian từ query string
         $timePeriod = $request->input('timePeriod');
 
         // Dữ liệu mặc định cho tuần, tháng, năm

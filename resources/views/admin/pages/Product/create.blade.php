@@ -101,6 +101,10 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="form-group">
+                            <label for="images">Thêm hình ảnh mới</label>
+                            <input type="file" name="images[]" id="images" class="form-control" multiple>
+                        </div>
             <div class="mb-3">
                 {{-- <label for="images" class="form-label">Hình Ảnh</label>
                 <input type="file" class="form-control @error('images') is-invalid @enderror" id="images" name="images[]" multiple accept="image/*">

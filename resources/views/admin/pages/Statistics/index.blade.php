@@ -9,15 +9,14 @@
 @section('content')
     <!-- Form lọc theo thời gian -->
     <form action="{{ route('admin.statistics.sales') }}" method="GET" class="date-filter-form">
-        <label for="start_date" class="form-label">Ngày bắt đầu:</label>
-        <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="form-input">
+    <label for="start_date">Ngày bắt đầu:</label>
+    <input type="date" name="start_date" id="start_date" value="{{ $startDate }}">
 
-        <label for="end_date" class="form-label">Ngày kết thúc:</label>
-        <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="form-input">
+    <label for="end_date">Ngày kết thúc:</label>
+    <input type="date" name="end_date" id="end_date" value="{{ $endDate }}">
 
-        <button type="submit" class="form-button">Lọc</button>
-    </form>
-
+    <button type="submit">Lọc</button>
+</form>
     <p><strong>Doanh thu theo ngày:</strong></p>
 
     <!-- Hiển thị biểu đồ doanh thu -->

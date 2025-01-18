@@ -14,14 +14,12 @@ class StatisticalManagerController
     // index2
     public function index(Request $request)
     {
-        // Tổng quan thống kê
         $totalSales = Order::where('trangthai', 'completed')->sum('tong_thanh_toan');
         $totalOrders = Order::count();
         $totalProductsSold = OrderDetail::sum('soluong');
         $totalProducts = Product::count();
 
 
-        // Xử lý dữ liệu doanh thu
         return view('admin.pages.statistics.index2', compact(
             'totalSales',
             'totalOrders',

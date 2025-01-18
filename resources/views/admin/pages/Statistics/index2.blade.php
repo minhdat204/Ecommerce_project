@@ -73,28 +73,28 @@
 
     <div class="stats-container">
         <div class="stat-card">
-            <div class="stat-title">Tổng doanh thu</div>
+            {{-- <div class="stat-title">Tổng doanh thu</div> --}}
             <div class="stat-circle">
                 <canvas id="salesChart"></canvas>
                 <div class="stat-value">{{ number_format($totalSales) }} </div>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-title">Tổng đơn hàng</div>
+            {{-- <div class="stat-title">Tổng đơn hàng</div> --}}
             <div class="stat-circle">
                 <canvas id="ordersChart"></canvas>
                 <div class="stat-value">{{ $totalOrders }}</div>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-title">Sản phẩm đã bán</div>
+            {{-- <div class="stat-title">Sản phẩm đã bán</div> --}}
             <div class="stat-circle">
                 <canvas id="soldChart"></canvas>
                 <div class="stat-value">{{ $totalProductsSold }}</div>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-title">Tổng sản phẩm</div>
+            {{-- <div class="stat-title">Tổng sản phẩm</div> --}}
             <div class="stat-circle">
                 <canvas id="productsChart"></canvas>
                 <div class="stat-value">{{ $totalProducts }}</div>

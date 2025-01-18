@@ -29,8 +29,10 @@ class StatisticalManagerController
     }
     public function getSalesData(Request $request)
     {
+        // Lấy thông tin khoảng thời gian từ query string
         $timePeriod = $request->input('timePeriod');
 
+        // Dữ liệu mặc định cho tuần, tháng, năm
         if ($timePeriod === 'week') {
             $startDate = now()->subDays(7);  // 7 ngày qua
             $endDate = now();

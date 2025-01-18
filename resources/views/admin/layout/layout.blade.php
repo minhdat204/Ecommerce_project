@@ -18,11 +18,8 @@
     <link href="{{ asset('Admin/css/startmin.css') }}" rel="stylesheet">
     <link href="{{ asset('Admin/css/morris.css') }}" rel="stylesheet">
     <link href="{{ asset('Admin/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
-    <!-- Core JS Libraries -->
-    <!-- Core JS Libraries -->
-    <!-- Core JS Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script> <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -80,6 +77,10 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <i class="fa fa-user fa-fw"></i> {{ Auth::user()->hoten }} <b class="caret"></b>
                         </a>
+                        <form action="{{ route('admin.logout') }}" method="post">
+                            @csrf
+                            <button type="submit"><i class="fa fa-sign-out fa-fw"></i> Logout</button>
+                        </form>
                         <ul class="dropdown-menu dropdown-user">
                             <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
                             <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>

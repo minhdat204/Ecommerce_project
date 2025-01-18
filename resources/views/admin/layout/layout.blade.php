@@ -18,11 +18,11 @@
     <link href="{{ asset('Admin/css/startmin.css') }}" rel="stylesheet">
     <link href="{{ asset('Admin/css/morris.css') }}" rel="stylesheet">
     <link href="{{ asset('Admin/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+    <!-- Core JS Libraries -->
+    <!-- Core JS Libraries -->
+    <!-- Core JS Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script> <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -85,7 +85,7 @@
                             <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
                             <li class="divider"></li>
                             <li>
-                                <form action="{{route('admin.logout')}}" method="post">
+                                <form action="{{ route('admin.logout') }}" method="post">
                                     @csrf
                                     <button type="submit"><i class="fa fa-sign-out fa-fw"></i> Logout</button>
                                 </form>
@@ -170,16 +170,18 @@
     @endif
 
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="{{ asset('Admin/js/bootstrap.min.js') }}"></script>
     <!-- Metis Menu Plugin JavaScript -->
     <script src="{{ asset('Admin/js/metisMenu.min.js') }}"></script>
     <!-- Custom Theme JavaScript -->
     <script src="{{ asset('Admin/js/startmin.js') }}"></script>
-    <!-- ckditor -->
+    <!-- CKEditor -->
     <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+    @stack('scripts')
 
-    @yield('js_custom')
 </body>
 
 </html>

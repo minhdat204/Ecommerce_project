@@ -8,10 +8,6 @@
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h4>Chỉnh sửa sản phẩm</h4>
-                </div>
                 <div class="card-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -22,7 +18,12 @@
                             </ul>
                         </div>
                     @endif
-
+                    <div class="container mt-4">
+                    <!-- Hiển thị số lượng sản phẩm trong giỏ hàng -->
+                                        <div class="card-header">
+                                            <h3 class="text-center">Số lượng giỏ hàng đang chứa sản phẩm: <strong>{{ number_format($count) }}</strong></h3>
+                                            <h3 class="text-center">Thời gian chỉnh sửa gần nhất nhất: <strong>{{$thoigian}}</strong></h3>
+                                        </div>
                     <form action="{{ route('admin.product.update', $product->id_sanpham) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -34,13 +35,10 @@
                                    value="{{ old('tensanpham', $product->tensanpham) }}" required>
                         </div>
 
-                        <!-- Slug -->
                         <div class="form-group">
-                            <label for="slug">Slug</label>
-                            <input type="text" name="slug" id="slug" class="form-control"
-                                   value="{{ old('slug', $product->slug) }}" required>
-                        </div>
-
+                            <label for="slug"></label>
+                            <input type="hidden" id="slug" name="slug" value="{{ old('slug', $product->slug) }}">
+                            </div>
                         <!-- Mô tả -->
                         <div class="form-group">
                             <label for="mota">Mô tả</label>
@@ -111,31 +109,58 @@
                             </select>
                         </div>
 
-                        <!-- Hình ảnh hiện tại -->
-                        <div class="form-group">
-                            <label>Hình ảnh hiện tại</label>
-                            <div>
-                                @foreach ($product->images as $image)
-                                    <img src="{{ asset('storage/' . $image->duongdan) }}" alt="{{ $image->alt }}" class="img-thumbnail" width="150">
-                                @endforeach
-                            </div>
-                        </div>
-
                         <!-- Thêm hình ảnh mới -->
                         <div class="form-group">
                             <label for="images">Thêm hình ảnh mới</label>
                             <input type="file" name="images[]" id="images" class="form-control" multiple>
                         </div>
-
-                        <!-- Nút hành động -->
                         <div class="form-group text-center">
-                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                            <!-- Nút mở Modal xác nhận -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmUpdateModal">Lưu thay đổi</button>
                             <a href="{{ route('admin.product.index') }}" class="btn btn-secondary">Hủy</a>
-                        </div>
+                        </div>                
+<!-- Modal Xác Nhận -->
+<div id="confirmUpdateModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmUpdateModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="confirmUpdateForm" action="{{ route('admin.product.update', $product->id_sanpham) }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmUpdateModalLabel">Xác nhận thay đổi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn lưu thay đổi? </p>
+                    <p>Việc thay đổi sẽ ảnh hưởng tới một số giỏ hàng!</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="confirmUpdateBtn">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        // Khi nhấn "Xác nhận" trong modal
+        $('#confirmUpdateBtn').click(function() {
+            // Gửi form cập nhật sản phẩm khi nhấn Xác nhận
+            $('form').submit(); // Gửi form chính
+        });
+    });
+</script>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @endsection

@@ -29,10 +29,8 @@ class StatisticalManagerController
     }
     public function getSalesData(Request $request)
     {
-        // Lấy thông tin khoảng thời gian từ query string
         $timePeriod = $request->input('timePeriod');
 
-        // Dữ liệu mặc định cho tuần, tháng, năm
         if ($timePeriod === 'week') {
             $startDate = now()->subDays(7);  // 7 ngày qua
             $endDate = now();
@@ -46,7 +44,6 @@ class StatisticalManagerController
             return response()->json(['error' => 'Invalid time period'], 400);
         }
 
-        // Truy vấn để lấy dữ liệu doanh thu theo thời gian (week/month/year)
         $salesData = Order::whereBetween('created_at', [$startDate, $endDate])
             ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, DAY(created_at) as day, SUM(tong_thanh_toan) as total_sales')
             ->groupBy('year', 'month', 'day')

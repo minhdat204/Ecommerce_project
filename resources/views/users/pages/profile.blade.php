@@ -1,5 +1,5 @@
 @extends('users.layouts.layout')
-
+@section('title', 'Profile')
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -107,11 +107,16 @@
                     @forelse ($favorites as $favorite)
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="{{ asset('img/product/' . $favorite->image) }}" class="card-img-top"
-                                    alt="{{ $favorite->tensanpham }}" style="height: 150px; object-fit: cover;">
+                                <img src="{{ asset('storage/' . ($favorite->product->images->isNotEmpty() ? $favorite->product->images->first()->duongdan : 'img/products/default.jpg')) }}" class="card-img-top"
+                                    alt="{{ $favorite->product->tensanpham }}" style="height: 150px; object-fit: cover;">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $favorite->tensanpham }}</h5>
-                                    <p class="card-text text-muted">{{ number_format($favorite->gia, 0, ',', '.') }}đ</p>
+                                    <p class="card-text text-muted">
+                                        @if($favorite->product->gia_khuyen_mai != 0)
+                                        {{ number_format($favorite->product->gia_khuyen_mai) }}đ
+                                    @else
+                                        {{ number_format($favorite->product->gia) }}đ
+                                    @endif                                    </p>
                                     <div class="d-flex justify-content-between">
                                         <button class="btn btn-sm btn-success me-auto"
                                             onclick="quickAddToCart('{{ $favorite->id_sanpham }}')">
@@ -175,7 +180,7 @@
                     </div>
                 @endforelse
             </div>
-            
+
         </div>
     </div>
     <div class="pagination-container mt-4">
@@ -327,4 +332,4 @@
             });
         }
     }
-</script> 
+</script>

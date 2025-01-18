@@ -50,15 +50,15 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'hoten' => 'required|string|max:50', 
+            'hoten' => 'required|string|max:50',
             'gioitinh' => 'required|in:male,female',
             'diachi' => 'nullable|string|max:50',
-            'sodienthoai' => 'nullable|digits:10|numeric', 
+            'sodienthoai' => 'nullable|digits:10|numeric',
         ], [
         ]);
         $user = Auth::user();
         $user->update($request->only(['hoten', 'gioitinh', 'diachi', 'sodienthoai']));
-    
+
         return back()->with('success', 'Information updated successfully!');
     }
     public function destroy(string $id)
@@ -71,4 +71,5 @@ class ProfileController extends Controller
         return redirect()->route('profile.index')->with('success', 'Favorited Product has been removed');
     }
     return redirect()->route('profile.index')->with('error', 'Product not found in favorites');
+}
 }

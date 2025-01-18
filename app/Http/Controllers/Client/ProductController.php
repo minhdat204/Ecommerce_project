@@ -106,18 +106,6 @@ class ProductController
         //kiểm tra danh mục đó có thuộc tính danh mục cha không, nếu có cột id_danhmuc_cha thì laf danh mục con, neếu null thì làf cha
         $isParentCategory = is_null($category->id_danhmuc_cha);
 
-        // //nếu ko phải thì chỉ hiển thị ds sp trog 1 mục, có thì hiển thị all danh mục con
-        // if(!$isParentCategory)
-        //     $query = $product->where('id_danhmuc', $category->id_danhmuc);
-        // else {
-        //     //lấy danh mục cha và tất cả danh mục con
-        //     $categoryIds = Category::where('id_danhmuc_cha', $category->id_danhmuc)
-        //         ->pluck('id_danhmuc')
-        //         ->push($category->id_danhmuc)
-        //         ->toArray();
-        //     //lấy tất cả sản phẩm của danh mục cha và danh mục con
-        //     $query = Product::whereIn('id_danhmuc', $categoryIds);
-        // }
         $query = $this->getProductCategory($products, $slug);
         //lấy số lượng sản phẩm
         $productsCount = $query->count();

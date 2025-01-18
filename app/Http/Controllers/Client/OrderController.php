@@ -19,7 +19,7 @@ class OrderController
     public function cancel(Request $request, $orderId)
     {
         try {
-            $order = Order::findOrFail($orderId);
+            $order = Order::with('orderDetails.product')->findOrFail($orderId);
 
             // Kiểm tra trạng thái trước khi hủy
             if (!in_array($order->trangthai, ['pending', 'confirmed', 'processing'])) {
@@ -29,12 +29,19 @@ class OrderController
                 ]);
             }
 
+            // Hoàn số lượng sản phẩm vào kho
+            foreach ($order->orderDetails as $detail) {
+                $product = $detail->product;
+                $product->soluong += $detail->soluong;
+                $product->save();
+            }
+
             $order->trangthai = 'cancelled';
             $order->save();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Đã hủy đơn hàng thành công'
+                'message' => 'Đã hủy đơn hàng và hoàn số lượng sản phẩm vào kho thành công'
             ]);
         } catch (\Exception $e) {
             return response()->json([

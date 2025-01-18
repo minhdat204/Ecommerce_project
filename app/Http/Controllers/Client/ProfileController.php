@@ -29,7 +29,7 @@ class ProfileController extends Controller
             ->paginate(12);
         $scores = Comment::with('product')
             ->where('id_nguoidung', $user)
-            ->select('noidung', 'id_sanpham', 'danhgia','created_at')
+            ->select('noidung', 'id_sanpham', 'danhgia', 'created_at')
             ->orderBy('created_at', 'desc')
             ->simplePaginate(12);
         // Lấy danh sách đơn hàng
@@ -54,22 +54,21 @@ class ProfileController extends Controller
             'gioitinh' => 'required|in:male,female',
             'diachi' => 'nullable|string|max:50',
             'sodienthoai' => 'nullable|digits:10|numeric',
-        ], [
-        ]);
+        ], []);
         $user = Auth::user();
         $user->update($request->only(['hoten', 'gioitinh', 'diachi', 'sodienthoai']));
 
         return back()->with('success', 'Information updated successfully!');
     }
     public function destroy(string $id)
-{
-    $favorite = FavoriteProduct::where('id_nguoidung', Auth::id())
-        ->where('id_sanpham', $id)
-        ->first();
-    if ($favorite) {
-        $favorite->delete();
-        return redirect()->route('profile.index')->with('success', 'Favorited Product has been removed');
+    {
+        $favorite = FavoriteProduct::where('id_nguoidung', Auth::id())
+            ->where('id_sanpham', $id)
+            ->first();
+        if ($favorite) {
+            $favorite->delete();
+            return redirect()->route('profile.index')->with('success', 'Favorited Product has been removed');
+        }
+        return redirect()->route('profile.index')->with('error', 'Product not found in favorites');
     }
-    return redirect()->route('profile.index')->with('error', 'Product not found in favorites');
-}
 }

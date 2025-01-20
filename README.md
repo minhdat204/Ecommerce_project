@@ -1,114 +1,73 @@
-# Ecommerce_project
-Đồ án Web - CDTH22WEBB
+# Website Thương Mại Điện Tử Ogani 🛒
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="300"></a></p>
+## Tổng Quan Dự Án
+Ogani là nền tảng thương mại điện tử hiện đại chuyên về các sản phẩm hữu cơ và thực phẩm tươi sống. Được xây dựng bằng Laravel và MySQL, website này mang đến trải nghiệm mua sắm mượt mà cho khách hàng đang tìm kiếm các sản phẩm hữu cơ chất lượng.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 🎯 Tính Năng Chính
 
-## About Laravel
+### Dành Cho Khách Hàng
+- **Duyệt Sản Phẩm**
+  - Điều hướng theo danh mục
+  - Tìm kiếm nâng cao
+  - Lọc và sắp xếp sản phẩm
+  - Thông tin chi tiết sản phẩm
+  - Gợi ý sản phẩm liên quan
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects.
+- **Trải Nghiệm Mua Sắm**
+  - Giỏ hàng thân thiện người dùng
+  - Tính toán giá thời gian thực
+  - 2 phương thức thanh toán
+  - Chức năng danh sách yêu thích
 
-## Project Setup
+- **Quản Lý Tài Khoản**
+  - Đăng ký và đăng nhập an toàn
+  - Quản lý hồ sơ cá nhân
+  - Lịch sử đơn hàng
+  - Sổ địa chỉ
+  - Quản lý danh sách yêu thích
 
-### Prerequisites
-- PHP >= 7.3
-- Composer
-- Node.js & NPM
+### Dành Cho Quản Trị Viên
+- **Quản Lý Sản Phẩm**
+  - Thêm/Sửa/Xóa sản phẩm
+  - Quản lý danh mục
 
-### Installation
+- **Quản Lý Đơn Hàng**
+  - Xử lý đơn hàng
+  - Cập nhật trạng thái
+  - Liên lạc với khách hàng
+  - Tạo hóa đơn
+  - Theo dõi thanh toán
 
-1. **Clone the repository**:
-    ```bash
-    git clone https://github.com/minhdat204/Ecommerce_project.git
-    cd Ecommerce_project
-    ```
+## 💻 Công Nghệ Sử Dụng
+- **Backend**
+  - Laravel Framework
+  - PHP 8.0+
+  - MySQL Database
 
-2. **Install PHP dependencies**:
-    ```bash
-    composer install
-    ```
+- **Frontend**
+  - HTML5, CSS3, JavaScript
+  - Bootstrap
+  - jQuery
+  - AJAX
+  - Thiết kế responsive
 
-3. **Install Node dependencies**:
-    ```bash
-    npm install
-    ```
+- **Bảo Mật**
+  - Xác thực người dùng
+  - Mã hóa dữ liệu
+  - Bảo vệ XSS
+  - Bảo vệ CSRF
+  - Xử lý thanh toán an toàn
 
-4. **Copy .env file**:
-    ```bash
-    cp .env.example .env
-    ```
+## 🎨 Đặc Điểm Thiết Kế
+- Giao diện hiện đại và sạch sẽ
+- Bố cục thích ứng di động
+- Điều hướng thân thiện người dùng
+- Hiển thị sản phẩm tối ưu
+- Quy trình thanh toán trực quan
 
-5. **Generate application key**:
-    ```bash
-    php artisan key:generate
-    ```
-
-6. **Configure your environment variables in `.env`**:
-    - Set your database credentials
-    - Set other necessary configurations
-
-7. **Run database migrations**:
-    ```bash
-    php artisan migrate
-    ```
-
-8. **Run the development server**:
-    ```bash
-    php artisan serve
-    ```
-
-### Additional Commands
-- **Compile assets**:
-    ```bash
-    npm run dev
-    ```
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🚀 Phát Triển Tương Lai
+- Hỗ trợ đa ngôn ngữ
+- Hệ thống đề xuất nâng cao
+- Phát triển ứng dụng di động
+- Tích hợp mạng xã hội
+- Bảng điều khiển phân tích nâng cao

@@ -71,3 +71,51 @@ Ogani là nền tảng thương mại điện tử hiện đại chuyên về c�
 - Phát triển ứng dụng di động
 - Tích hợp mạng xã hội
 - Bảng điều khiển phân tích nâng cao
+
+### Cài đặt
+
+1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/minhdat204/Ecommerce_project.git
+    cd Ecommerce_project
+    ```
+
+2. **Install PHP dependencies**:
+    ```bash
+    composer install
+    ```
+
+3. **Install Node dependencies**:
+    ```bash
+    npm install
+    ```
+
+4. **Copy .env file**:
+    ```bash
+    cp .env.example .env
+    ```
+
+5. **Generate application key**:
+    ```bash
+    php artisan key:generate
+    ```
+
+6. **Configure your environment variables in `.env`**:
+    - Set your database credentials
+    - Set other necessary configurations
+
+7. **Run database migrations**:
+    ```bash
+    php artisan migrate
+    ```
+
+8. **Run the development server**:
+    ```bash
+    php artisan serve
+    ```
+
+### Additional Commands
+- **Compile assets**:
+    ```bash
+    npm run dev
+    ```

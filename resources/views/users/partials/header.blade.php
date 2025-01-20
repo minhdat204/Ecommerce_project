@@ -114,13 +114,13 @@
                 <div class="col-lg-5">
                     <div class="header__cart">
                         <ul>
-                            {{-- <li>
+                            <li>
                                 @auth
                                     <a href="{{ route('favorites.index') }}"><i class="fa fa-heart"></i> <span id="favorite-count">{{ Auth::user()->favoriteProducts ? Auth::user()->favoriteProducts->count() : 0 }}</span></a>
                                 @else
                                     <a href="#" onclick="openModal('/favorites')"><i class="fa fa-heart"></i> <span>0</span></a>
                                 @endauth
-                            </li> --}}
+                            </li>
                             <li>
                                 @auth
                                     <a href="{{route('cart.index')}}"><i class="fa fa-shopping-bag"></i> <span id="cart-count">{{ Auth::check() && Auth::user()->cart ? Auth::user()->cart->cartItems->count() : 0 }}</span></a>

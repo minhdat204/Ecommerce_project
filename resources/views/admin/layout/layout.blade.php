@@ -18,19 +18,91 @@
     <link href="{{ asset('Admin/css/startmin.css') }}" rel="stylesheet">
     <link href="{{ asset('Admin/css/morris.css') }}" rel="stylesheet">
     <link href="{{ asset('Admin/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
-    <!-- Core JS Libraries -->
-    <!-- Core JS Libraries -->
-    <!-- Core JS Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script> <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <!-- jQuery -->
+
     @yield('css_custom')
 </head>
+<style>
+    .admin-nav__dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        /* min-width: 220px; */
+        background: #fff;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        display: none;
+        /* margin-top: 5px; */
+        padding: 8px 0;
+    }
+
+    .admin-nav__dropdown-item {
+        list-style: none;
+        margin: 2px 0;
+    }
+
+    .admin-nav__dropdown-link {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        color: #4a5568;
+        text-decoration: none;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+
+    .admin-nav__dropdown-link:hover {
+        background: #f8f9fa;
+        color: #2b6cb0;
+        padding-left: 24px;
+    }
+
+    .admin-nav__dropdown-divider {
+        height: 1px;
+        background: #edf2f7;
+        margin: 8px 0;
+    }
+
+    .admin-nav__logout-form {
+        padding: 0;
+        margin: 0;
+    }
+
+    .admin-nav__logout-btn {
+        width: 100%;
+        padding: 12px 20px;
+        border: none;
+        background: none;
+        text-align: left;
+        color: #e53e3e;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+    }
+
+    .admin-nav__logout-btn:hover {
+        background: #fff5f5;
+        padding-left: 24px;
+    }
+
+    .admin-nav__icon {
+        margin-right: 12px;
+        width: 16px;
+        color: inherit;
+    }
+</style>
+</style>
 
 <body>
     @if (Route::currentRouteName() !== 'Admin.login')
@@ -80,19 +152,30 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <i class="fa fa-user fa-fw"></i> {{ Auth::user()->hoten }} <b class="caret"></b>
                         </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
-                            <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
-                            <li class="divider"></li>
-                            <li>
-                                <form action="{{ route('admin.logout') }}" method="post">
-                                    @csrf
-                                    <button type="submit"><i class="fa fa-sign-out fa-fw"></i> Logout</button>
-                                </form>
 
+                        <ul class="admin-nav__dropdown">
+                            <li class="admin-nav__dropdown-item">
+                                <a href="#" class="admin-nav__dropdown-link">
+                                    <i class="fa fa-user fa-fw admin-nav__icon"></i> User Profile
+                                </a>
+                            </li>
+                            <li class="admin-nav__dropdown-item">
+                                <a href="#" class="admin-nav__dropdown-link">
+                                    <i class="fa fa-gear fa-fw admin-nav__icon"></i> Settings
+                                </a>
+                            </li>
+                            <li class="admin-nav__dropdown-divider"></li>
+                            <li class="admin-nav__dropdown-item">
+                                <form action="{{ route('admin.logout') }}" method="post" class="admin-nav__logout-form">
+                                    @csrf
+                                    <button type="submit" class="admin-nav__logout-btn">
+                                        <i class="fa fa-sign-out fa-fw admin-nav__icon"></i> Logout
+                                    </button>
+                                </form>
                             </li>
                         </ul>
                     </li>
+
                 </ul>
             </nav>
 
@@ -180,6 +263,27 @@
     <script src="{{ asset('Admin/js/startmin.js') }}"></script>
     <!-- CKEditor -->
     <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.dropdown-toggle').click(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).siblings('.admin-nav__dropdown').fadeToggle(200);
+            });
+
+            $(document).click(function(e) {
+                if (!$(e.target).closest('.dropdown').length) {
+                    $('.admin-nav__dropdown').fadeOut(200);
+                }
+            });
+
+            $(document).keyup(function(e) {
+                if (e.key === "Escape") {
+                    $('.admin-nav__dropdown').fadeOut(200);
+                }
+            });
+        });
+    </script>
     @stack('scripts')
 
 </body>

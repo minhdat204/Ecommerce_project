@@ -50,15 +50,28 @@ class StatisticalManagerController
         }
 
         // Truy vấn để lấy dữ liệu doanh thu theo thời gian (week/month/year)
+        // Truy vấn doanh thu từ bảng `Order`
         $salesData = Order::whereBetween('created_at', [$startDate, $endDate])
-            ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, DAY(created_at) as day, SUM(tong_thanh_toan) as total_sales')
-            ->groupBy('year', 'month', 'day')
-            ->orderBy('created_at', 'ASC')
+            ->selectRaw(
+                'YEAR(created_at) as year, 
+         MONTH(created_at) as month, 
+         DAY(created_at) as day, 
+         SUM(
+            CASE 
+                WHEN pt_thanhtoan = "momo" AND trangthai_thanhtoan = "paid" THEN tong_tien_hang 
+                WHEN pt_thanhtoan = "cod" AND trangthai = "completed" THEN tong_tien_hang 
+                ELSE 0 
+            END
+         ) as total_sales' // Tính tổng doanh thu dựa trên điều kiện
+            )
+            ->groupBy('year', 'month', 'day') // Gom nhóm theo ngày, tháng, năm
+            ->orderBy('created_at', 'ASC')    // Sắp xếp dữ liệu tăng dần theo ngày
             ->get()
             ->map(function ($item) {
-                $item->formatted_date = "{$item->day}/{$item->month}/{$item->year}";
-                $item->formatted_sales = number_format($item->total_sales) . ' VND';
-                return $item;
+                // Định dạng dữ liệu trả về
+                $item->formatted_date = "{$item->day}/{$item->month}/{$item->year}"; // Định dạng ngày kiểu dd/mm/yyyy
+                $item->formatted_sales = number_format($item->total_sales) . ' VND'; // Định dạng doanh thu với đơn vị tiền tệ
+                return $item; // Trả về đối tượng đã được định dạng
             });
 
         // Truy vấn để lấy 10 sản phẩm bán chạy nhất theo thời gian (week/month/year)
@@ -86,22 +99,22 @@ class StatisticalManagerController
 
     // Minh , Nam
     public function sales(Request $request)
-{
-    $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
-    $endDate = $request->input('end_date', now()->toDateString());
+    {
+        $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
+        $endDate = $request->input('end_date', now()->toDateString());
 
-    $salesData = Order::whereBetween('created_at', [$startDate, $endDate])
-        ->selectRaw('DATE(created_at) as formatted_date, SUM(tong_thanh_toan) as total_sales')
-        ->groupBy('formatted_date')
-        ->orderBy('formatted_date', 'ASC')
-        ->get()
-        ->map(function ($item) {
-            $item->formatted_sales = number_format($item->total_sales) . ' VND'; 
-            return $item;
-        });
+        $salesData = Order::whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw('DATE(created_at) as formatted_date, SUM(tong_thanh_toan) as total_sales')
+            ->groupBy('formatted_date')
+            ->orderBy('formatted_date', 'ASC')
+            ->get()
+            ->map(function ($item) {
+                $item->formatted_sales = number_format($item->total_sales) . ' VND';
+                return $item;
+            });
 
-    return view('admin.pages.statistics.index', compact('salesData', 'startDate', 'endDate'));
-}
+        return view('admin.pages.statistics.index', compact('salesData', 'startDate', 'endDate'));
+    }
 
 
     public function productSales(Request $request)
@@ -111,15 +124,15 @@ class StatisticalManagerController
 
         $query = DB::table('chi_tiet_don_hang')
             ->join('san_pham', 'san_pham.id_sanpham', '=', 'chi_tiet_don_hang.id_sanpham')
-            ->join('don_hang', 'don_hang.id_donhang', '=', 'chi_tiet_don_hang.id_donhang') 
+            ->join('don_hang', 'don_hang.id_donhang', '=', 'chi_tiet_don_hang.id_donhang')
             ->select('san_pham.tensanpham', DB::raw('SUM(chi_tiet_don_hang.soluong) as total_sales'))
             ->groupBy('san_pham.tensanpham');
 
         if ($startDate) {
-            $query->whereDate('don_hang.created_at', '>=', $startDate); 
+            $query->whereDate('don_hang.created_at', '>=', $startDate);
         }
         if ($endDate) {
-            $query->whereDate('don_hang.created_at', '<=', $endDate); 
+            $query->whereDate('don_hang.created_at', '<=', $endDate);
         }
 
         $productSales = $query->get();

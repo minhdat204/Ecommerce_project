@@ -272,6 +272,123 @@ function logout(e) {
     });
 }
 
+/* ĐẰNG KÝ */
+function validateRegistrationForm(formData) {
+    let isValid = true;
+    const errors = {};
+
+    // Required field validation
+    if (!formData.get('register_name')) {
+        errors.register_name = 'Vui lòng nhập họ tên';
+        isValid = false;
+    }
+
+    if (!formData.get('register_email')) {
+        errors.register_email = 'Vui lòng nhập email';
+        isValid = false;
+    } else if (!isValidEmail(formData.get('register_email'))) {
+        errors.register_email = 'Email không hợp lệ';
+        isValid = false;
+    }
+
+    if (!formData.get('register_password')) {
+        errors.register_password = 'Vui lòng nhập mật khẩu';
+        isValid = false;
+    } else if (!isValidPassword(formData.get('register_password'))) {
+        errors.register_password = 'Mật khẩu phải có ít nhất 6 ký tự';
+        isValid = false;
+    }
+
+    if (formData.get('register_password') !== formData.get('register_password_confirmation')) {
+        errors.register_password_confirmation = 'Xác nhận mật khẩu không khớp';
+        isValid = false;
+    }
+
+    return { isValid, errors };
+}
+
+/* ĐĂNG KÝ */
+function signup(e) {
+    e.preventDefault();
+    const form = e.target;
+    const button = document.getElementById('signup-btn');
+    const formData = new FormData(form);
+
+    // Clear previous errors
+    clearErrors();
+
+    // Validate form
+    const { isValid, errors } = validateRegistrationForm(formData);
+
+    if (!isValid) {
+        Object.keys(errors).forEach(key => {
+            showError(form.querySelector(`[name="${key}"]`), errors[key]);
+        });
+        return;
+    }
+
+    button.disabled = true;
+    button.innerHTML = 'Đang đăng ký...';
+
+    fetch('/register', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            notification('Đăng ký thành công', 'success');
+            setTimeout(() => {
+                showLogin();
+            }, 1000);
+        } else {
+            if(data.errors) {
+                Object.keys(data.errors).forEach(key => {
+                    showError(form.querySelector(`[name="${key}"]`), data.errors[key][0]);
+                });
+            } else {
+                notification(data.message || "Có lỗi xảy ra", 'error');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        notification('Có lỗi xảy ra khi đăng ký', 'error');
+    })
+    .finally(() => {
+        button.disabled = false;
+        button.innerHTML = 'ĐĂNG KÝ';
+    });
+}
+
+// xử lý realtime validation cho form đăng ký
+document.querySelector('input[name="password"]').addEventListener('input', function() {
+    const password = this.value.trim();
+    const errorElement = document.getElementById('register_password-error');
+    validateInput(this, errorElement, password, isValidPassword, 'Mật khẩu phải có ít nhất 6 ký tự');
+});
+
+// Validation helper function
+function validateInput(input, errorElement, value, validationFn, errorMessage) {
+    if (value === '') {
+        input.classList.remove('error');
+        errorElement.style.display = 'none';
+    } else if (!validationFn(value)) {
+        input.classList.add('error');
+        errorElement.style.display = 'block';
+        errorElement.textContent = errorMessage;
+    } else {
+        input.classList.remove('error');
+        errorElement.style.display = 'none';
+    }
+}
+
+
+
 // TUỲ CHỌN: Xử lý đăng xuất bằng async/await và try/catch
 async function handleLogout(e) {
     e.preventDefault();

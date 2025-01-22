@@ -40,15 +40,6 @@
         </div>
 
         <div class="form-group">
-            <label class="form-label">Username <span class="required">*</span></label>
-            <input type="text" name="tendangnhap" class="form-input @error('tendangnhap') is-invalid @enderror"
-                   value="{{ old('tendangnhap') }}" placeholder="Enter your Username" required>
-            @error('tendangnhap')
-                <span class="invalid-feedback">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <div class="form-group">
             <label class="form-label">Password <span class="required">*</span></label>
             <div class="password-field">
                 <input type="password" name="matkhau" class="form-input @error('matkhau') is-invalid @enderror"

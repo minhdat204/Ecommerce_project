@@ -3,6 +3,8 @@
 ## Tổng Quan Dự Án
 Ogani là nền tảng thương mại điện tử hiện đại chuyên về các sản phẩm hữu cơ và thực phẩm tươi sống. Được xây dựng bằng Laravel và MySQL, website này mang đến trải nghiệm mua sắm mượt mà cho khách hàng đang tìm kiếm các sản phẩm hữu cơ chất lượng.
 
+🔗 [Link website](http://ogani-shop.wuaze.com)
+
 ![Demo của ứng dụng](demo.png)
 
 ## 🎯 Tính Năng Chính
